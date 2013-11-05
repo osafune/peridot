@@ -23,7 +23,7 @@ Features
 - USB給電のみで動作OK (過電流保護回路搭載)
 - Arduinoシールドの流用可能(動作条件あり)
 - オープンソース (クリエイティブコモンズ・CC BY 2.1)
-
+  
 - Configuration from the Android / Chrome.
 - Provides access to the FPGA inside of a USB serial interface via.
 - ALTERA CycloneIV E(EP4CE6E22C8N)
@@ -48,7 +48,7 @@ FPGAのJTAGピンが配置されています。
 シールドへの電源供給とリセット信号が出力されます。電源は3.3V/100mA、USB 5V/100mAが使用できます。最大電流はUSBホストで制限されます。
 - Digital I/O
 FPGAのI/Oピンが配置されています。3.3Vを超える電圧を印加しないで下さい。
-
+  
 - Manual RESET Key
 Manual reset of the entire system.
 - JTAG Connector
@@ -66,14 +66,15 @@ I/O pins of the FPGA are located. Do not apply a voltage of more than 3.3V.
 Board block diagram and schematic
 ---------------------------------
 ![PERIDOT Block diagram](https://lh3.googleusercontent.com/-XpoVXE45BRU/UnhcutSOYOI/AAAAAAAAFss/-6QsIh6Is40/w700-h327-no/peridot_block.png)
-(*1) ASDIはスタンドアロンモードでのみ有効になります。
-(*2) スタンドアロンモードではリコンフィグキーになります。
 
-(*1) ASDI is only available in stand-alone mode.<br />
-(*2) It becomes the reconfiguration key in stand-alone mode.<
+(\*1) ASDIはスタンドアロンモードでのみ有効になります。
+(\*2) スタンドアロンモードではリコンフィグキーになります。
+
+(\*1) ASDI is only available in stand-alone mode.
+(\*2) It becomes the reconfiguration key in stand-alone mode.
 
 
-![Board schematic](https://drive.google.com/file/d/0Bw0BfOQoAOEEQVNYVk9Ga09zV0U/edit?usp=sharing)
+[Board schematic](https://github.com/osafune/peridot/blob/master/pcb/peridot_pcb_ver1.0.pdf)
 
 
 License
