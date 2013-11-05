@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preferences>
+ <debug showDebugMenu="0" showDebugLogEntries="0" />
+ <systemtable filter="AvalonMM and Conduit">
+  <columns>
+   <connections preferredWidth="95" />
+   <irq preferredWidth="34" />
+   <baseaddress preferredWidth="109" />
+   <endaddress preferredWidth="84" />
+   <export preferredWidth="137" />
+   <description preferredWidth="184" />
+   <name preferredWidth="168" />
+   <opcodeName preferredWidth="86" />
+  </columns>
+ </systemtable>
+ <clocktable>
+  <columns>
+   <clockname preferredWidth="350" />
+   <clocksource preferredWidth="348" />
+   <frequency preferredWidth="334" />
+  </columns>
+ </clocktable>
+ <window width="1404" height="998" x="263" y="14" />
+ <library
+   expandedCategories="Library/Bridges/Memory-Mapped,Library/Bridges,Library,Project" />
+ <hdlexample language="VHDL" />
+ <generation synthesis="VERILOG" />
+</preferences>

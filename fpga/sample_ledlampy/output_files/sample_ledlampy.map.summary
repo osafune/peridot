@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Sun Nov 03 00:21:38 2013
+Quartus II 64-Bit Version : 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition
+Revision Name : sample_ledlampy
+Top-level Entity Name : sample_ledlampy
+Family : Cyclone IV E
+Total logic elements : 39
+    Total combinational functions : 39
+    Dedicated logic registers : 28
+Total registers : 28
+Total pins : 3
+Total virtual pins : 0
+Total memory bits : 0
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 0

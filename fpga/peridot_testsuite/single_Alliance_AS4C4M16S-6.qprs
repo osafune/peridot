@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ip>
+ <presets version="12.1">
+  <preset
+     name="single Alliance AS4C4M16S-6"
+     kind="altera_avalon_new_sdram_controller"
+     version="13.0.1.99.2"
+     description="Alliance Memory 64Mbit(4Mx16) 166MHz">
+   <parameter name="dataWidth" value="16" />
+   <parameter name="TRFC" value="63.0" />
+   <parameter name="initRefreshCommands" value="2" />
+   <parameter name="TRCD" value="21.0" />
+   <parameter name="numberOfChipSelects" value="1" />
+   <parameter name="rowWidth" value="12" />
+   <parameter name="casLatency" value="2" />
+   <parameter name="refreshPeriod" value="15.625" />
+   <parameter name="powerUpDelay" value="200.0" />
+   <parameter name="numberOfBanks" value="4" />
+   <parameter name="TAC" value="6.0" />
+   <parameter name="generateSimulationModel" value="false" />
+   <parameter name="TWR" value="14.0" />
+   <parameter name="TRP" value="21.0" />
+   <parameter name="columnWidth" value="8" />
+  </preset>
+ </presets>
+</ip>

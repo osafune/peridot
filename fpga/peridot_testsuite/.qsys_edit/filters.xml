@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filters version="13.0sp1">
+ <filter name="Clock">
+  <rule what="INTERFACE_TYPE" how="IS" value="clock" set="any" />
+ </filter>
+ <filter name="Reset">
+  <rule what="INTERFACE_TYPE" how="IS" value="reset" set="any" />
+ </filter>
+ <filter name="AvalonMM and Conduit">
+  <rule what="INTERFACE_TYPE" how="IS" value="avalon" set="any" />
+  <rule what="INTERFACE_TYPE" how="IS" value="avalon_tristate" set="any" />
+  <rule what="INTERFACE_TYPE" how="IS" value="conduit" set="any" />
+  <rule what="INTERFACE_TYPE" how="IS" value="tristate_conduit" set="any" />
+ </filter>
+</filters>

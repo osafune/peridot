@@ -1,0 +1,233 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1200mV 85C Model Setup 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.985
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Setup 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 13.754
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Setup 'SCI_SCLK'
+Slack : 38.067
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Setup 'altera_reserved_tck'
+Slack : 46.544
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.429
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 0.447
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'altera_reserved_tck'
+Slack : 0.453
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'SCI_SCLK'
+Slack : 0.485
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Recovery 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 5.214
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Recovery 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 21.522
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Recovery 'altera_reserved_tck'
+Slack : 47.745
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'altera_reserved_tck'
+Slack : 1.613
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 2.011
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 3.005
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 4.693
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.832
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 12.208
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'SCI_SCLK'
+Slack : 41.338
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'altera_reserved_tck'
+Slack : 49.449
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 1.419
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 14.390
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'SCI_SCLK'
+Slack : 38.117
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'altera_reserved_tck'
+Slack : 46.963
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.382
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 0.400
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'altera_reserved_tck'
+Slack : 0.401
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'SCI_SCLK'
+Slack : 0.430
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Recovery 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 5.554
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Recovery 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 21.832
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Recovery 'altera_reserved_tck'
+Slack : 48.045
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'altera_reserved_tck'
+Slack : 1.442
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 1.799
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 2.673
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 4.670
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.835
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 12.172
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'SCI_SCLK'
+Slack : 41.249
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'altera_reserved_tck'
+Slack : 49.322
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 5.909
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 20.145
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'SCI_SCLK'
+Slack : 40.753
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'altera_reserved_tck'
+Slack : 48.867
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.151
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 0.154
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'altera_reserved_tck'
+Slack : 0.183
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'SCI_SCLK'
+Slack : 0.199
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Recovery 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 7.807
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Recovery 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 23.393
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Recovery 'altera_reserved_tck'
+Slack : 49.309
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'altera_reserved_tck'
+Slack : 0.678
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 0.915
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 1.344
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'inst_syspll|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 4.733
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.423
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'inst_peripll|altpll_component|auto_generated|pll1|clk[2]'
+Slack : 12.237
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'SCI_SCLK'
+Slack : 40.814
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'altera_reserved_tck'
+Slack : 49.299
+TNS   : 0.000
+
+------------------------------------------------------------
