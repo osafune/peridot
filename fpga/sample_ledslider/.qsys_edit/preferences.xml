@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preferences>
+ <debug showDebugMenu="0" />
+ <systemtable>
+  <columns>
+   <connections preferredWidth="79" />
+   <irq preferredWidth="34" />
+   <name preferredWidth="208" />
+   <endaddress preferredWidth="109" />
+  </columns>
+ </systemtable>
+ <clocktable>
+  <columns>
+   <clockname preferredWidth="186" />
+   <clocksource preferredWidth="185" />
+   <frequency preferredWidth="166" />
+  </columns>
+ </clocktable>
+ <window width="1546" height="836" x="163" y="79" />
+ <library
+   expandedCategories="Project/Bridges,Project,Library/Peripherals/Microcontroller Peripherals,Library,Library/Peripherals" />
+ <hdlexample language="VHDL" />
+ <generation synthesis="VHDL" block_symbol_file="1" />
+</preferences>
