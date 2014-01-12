@@ -77,6 +77,13 @@ Board block diagram and schematic
 [Board schematic](https://github.com/osafune/peridot/blob/master/pcb/peridot_pcb_ver1.0.pdf)
 
 
+Pinout diagram
+---------------------------------
+
+![PERIDOT Pinout diagram](https://lh6.googleusercontent.com/-iF6dey_d6Ok/UtMTmXdj_eI/AAAAAAAAFwE/gqmaHL69SV0/w703-h555-no/PERIDOT_PINOUT.png)
+<a href="https://github.com/osafune/peridot/blob/master/pcb/PERIDOT_PINOUT.png" target=_blank>Large size</a>
+
+
 License
 -----------------
 PERIDOT Hardware is released under the [Creative Commons,CC BY 2.1 JP](http://creativecommons.org/licenses/by/2.1/jp/legalcode)
