@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>PERIDOT sample</title>
+
+		<style type="text/css">
+			* {font-size : 10pt;}
+			h2 {font-size: 120%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
+			h3 {font-size: 100%; color: #4c4c4c;}
+		</style>
+
+		<script type="text/javascript" src="canarium.js" charset="Shift_JIS"></script>
+		<script type="text/javascript" src="sample_ledslider_rbf.js" charset="Shift_JIS"></script>
+<!--
+		<script type="text/javascript" src="canarium_utf8.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="sample_ledslider_rbf_utf8.js" charset="UTF-8"></script>
+-->
+		<script type="text/javascript" src="main.js" charset="Shift_JIS"></script>
+	</head>
+	<body>
+		<img src="img/physicaloid-banner.png" border=0 align=right />
+		<h2>PERIDOT sample</h2>
+		LED Slider<br />
+		<br />
+
+		<h3>Serial Port</h3>
+		<div>
+			<img id="waitingicon" src="img/dummy_1x1.png" border=0 width=24 height=24 align=top />
+			<select id="ports"></select>
+			<input type="button" id="connect" value="Connect" />
+			<input type="button" id="scanport" value="ReScan Port" /><br />
+		</div>
+
+		<h3>Configuration</h3>
+		<div>
+			<img id="configicon" src="img/dummy_1x1.png" border=0 width=24 height=24 align=top />
+			<input type="button" id="config" value="Configuration" disabled />
+			<span id="sysid"></span><br />
+		</div>
+
+		<h3>START LED</h3>
+		<div>
+			ˆÃ <input id="ledrange" type="range" min=0 max=255 disabled /> –¾
+		</div>
+
+  </body>
+</html>
+

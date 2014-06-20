@@ -1,0 +1,17 @@
+﻿{
+  "name": "PERIDOT sample",
+  "description": "PERIDOT Project / LED sample",
+  "version": "0.9",
+  "icons": {
+    "16": "img/physicaloid-16.png",
+	"128": "img/physicaloid-128.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "permissions": [
+    "serial"
+  ]
+}

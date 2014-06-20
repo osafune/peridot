@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>PERIDOT Monitor</title>
+
+		<style type="text/css">
+			* {font-size : 10pt;}
+			h2 {font-size: 120%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
+			h3 {font-size: 100%; color: #4c4c4c;}
+		</style>
+
+		<script type="text/javascript" src="canarium.js" charset="Shift_JIS"></script>
+		<script type="text/javascript" src="main.js" charset="Shift_JIS"></script>
+	</head>
+	<body>
+		<img src="img/physicaloid-banner.png" border=0 align=right />
+		<h2>PERIDOT Monitor</h2>
+		<br />
+		<br />
+
+		<h3>Serial Port</h3>
+		<div>
+			<img id="waitingicon" src="img/dummy_1x1.png" border=0 width=24 height=24 align=top />
+			<select id="ports"></select>
+			<input type="button" id="connect" value="Connect" />
+			<input type="button" id="scanport" value="ReScan Port" /><br />
+		</div>
+
+		<h3>Configuration</h3>
+		<div>
+			<img id="configicon" src="img/dummy_1x1.png" border=0 width=24 height=24 align=top />
+			<input type="button" id="config" value="Configuration" disabled />
+			<input type="file" id="rbffiles" name="file" /><br />
+
+			<img src="img/dummy_1x1.png" border=0 width=24 height=1 align=top />
+			<span id="sysid">SYSID : </span><br />
+		</div>
+
+		<h3>I/O Access</h3>
+		<div>
+			ADDRESS : 0x<input type="text" id="avm_address" size=8 maxlength=8 value="10000100" />
+			, DATA : 0x<input type="text" id="avm_data" size=8 maxlength=8 value="1" /><br />
+			<input type="button" id="avm_iord" value="I/O Read" />
+			<input type="button" id="avm_iowr" value="I/O Write" />
+		</div>
+
+		<h3>Memory Dump</h3>
+		<div>
+			<div>
+				ADDRESS : 0x<input type="text" id="mem_address" size=8 maxlength=8 value="00000000" />
+				<input type="button" id="avm_read" value="Memory Dump" />
+				<input type="button" id="avm_write" value="Test Write" />
+			</div><div>
+				<textarea cols="63" rows="19" id="mem_dumpdata" readonly></textarea>
+			</div>
+		</div>
+
+  </body>
+</html>
+
