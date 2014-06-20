@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<title>Physicaloid FPGA - 'PERIDOT'</title>
+<title>'PERIDOT' - Simple & Compact FPGA board</title>
 
 <STYLE type="text/css">
 <!--
@@ -33,35 +33,30 @@ div.heading h2 {
 </head>
 <body>
 
-<h1 color:>Physicaloid FPGA - 'PERIDOT'</h1>
+<h1 color:>'PERIDOT' - Simple & Compact FPGA board</h1>
+
 <div class="heading"><h2>Overview</h2></div>
-<p>PERIDOT(ペリドット)はPhysicaloidに対応したArduinoフォームファクタのFPGA基板です。<br />
-Physicaloidライブラリを利用することで、AndroidやGoogle Chromeからのフィジカルコンピューティングを可能にします。</p>
-<p>'PERIDOT' is a FPGA board Arduino form factor corresponding to the Physicaloid.<br />
-By taking advantage of Physicaloid library, allowing you to physical computing from Google Chrome and Android.</p>
-<p><img src="https://lh6.googleusercontent.com/-RWdnQPTTfdc/UnhUNfMT-sI/AAAAAAAAFr4/ZsmrO3t93lI/w668-h376-no/physicaloid_wp2_1920x1080.jpg" alt="Welcome to Physicaloid" /></p>
+<p>PERIDOT(ペリドット)プロジェクトとは、シンプル＆コンパクトをコンセプトに開発中の新しいFPGAボードと、その統合開発環境です。<br />
+このFPGAボードはArduinoフォームファクタで、Arduino向けに作られたシールドと互換製があります。
+開発環境はWebベースのクラウドコンパイラとChromeアプリケーションで構築されており、OSを問わない新しい開発スタイルを提供します。<br />
+また、FPGAボードには標準で通信ブロックも組み込まれています。
+オープン・ソースで公開されているライブラリを利用して、ChromeアプリケーションやAndroidアプリケーションからも簡単にアクセスすることができます。</p>
+<p><img src="https://lh6.googleusercontent.com/-dpi_AESyN_w/U5TCeTNYXiI/AAAAAAAAG3E/FCWlJFilgqQ/w700-h368-no/DSC02480.jpg" alt="Welcome to Physicaloid" /></p>
+
 <div class="heading"><h2>Features</h2></div>
 <ul>
-<li>Android/Chromeからのコンフィグレーション</li>
-<li>USBシリアルインターフェース経由でのFPGA内部へのアクセス</li>
+<li>Chromeアプリケーションからの直接コンフィグレーション</li>
+<li>JavaScriptからFPGA内部へのアクセス可能(Chrome Package Apps利用)</li>
+<li>公開されたプロトコルにより、各種ネイティブアプリからも利用可能</li>
 <li>ALTERA CycloneIV E(EP4CE6E22C8N)搭載</li>
-<li>64Mbit SDRAM (up to 133MHz)搭載</li>
+<li>64Mbit SDRAM搭載</li>
 <li>28本のユーザーI/O</li>
 <li>スタンドアロン動作をサポート</li>
 <li>USB給電のみで動作OK (過電流保護回路搭載)</li>
 <li>Arduinoシールドの流用可能(動作条件あり)</li>
 <li>オープンソース (クリエイティブコモンズ・CC BY 2.1)</li>
-<br />
-<li>Configuration from the Android / Chrome.</li>
-<li>Provides access to the FPGA inside of a USB serial interface via.</li>
-<li>ALTERA CycloneIV E(EP4CE6E22C8N)</li>
-<li>64Mbit SDRAM (up to 133MHz)</li>
-<li>User I/O of the 28 pins</li>
-<li>Support a stand-alone operation.</li>
-<li>Only USB power supply (On-board overcurrent protection).</li>
-<li>Possible diversion of Arduino shield (Due or later).</li>
-<li>Open-source (Creative Commons, CC BY 2.1)</li>
 </ul>
+
 <div class="heading"><h2>Interface</h2></div>
 <p><img src="https://lh3.googleusercontent.com/-mjnC-a-mvtM/UnhcuaqQL0I/AAAAAAAAFso/zZeyUkh4efw/w600-h468-no/peridot_board_connector.png" alt="PERIDOT Board Connector" /></p>
 <ul>
@@ -75,31 +70,18 @@ FPGAのJTAGピンが配置されています。
 シールドへの電源供給とリセット信号が出力されます。電源は3.3V/100mA、USB 5V/100mAが使用できます。最大電流はUSBホストで制限されます。
 <li>Digital I/O</li>
 FPGAのI/Oピンが配置されています。3.3Vを超える電圧を印加しないで下さい。<br />
-<br />
-<li>Manual RESET Key</li>
-Manual reset of the entire system.
-<li>JTAG Connector</li>
-JTAG pins of the FPGA are located.
-<li>Config MODE Selector</li>
-Switching configuration mode of the board.<br />
-Set the AS side when operating in a stand-alone. Set PS side when performing configuration in Physicaloid library from the host.
-<li>Power supply and RESET</li>
-It outputs a reset signal and power supply to the shield.<br />
-Power can be used 3.3V/100mA, USB 5V/100mA. Maximum current is limited by the USB host.
-<li>Digital I/O</li>
-I/O pins of the FPGA are located. Do not apply a voltage of more than 3.3V.
 </ul>
+<p><img src="https://lh5.googleusercontent.com/-iF6dey_d6Ok/UtMTmXdj_eI/AAAAAAAAFwE/gqmaHL69SV0/w1139-h899-no/PERIDOT_PINOUT.png" alt="PERIDOT Pinout diagram" width=600 height=473/></p>
+
 <div class="heading"><h2>Board block diagram and schematic</h2></div>
 <p><img src="https://lh3.googleusercontent.com/-XpoVXE45BRU/UnhcutSOYOI/AAAAAAAAFss/-6QsIh6Is40/w700-h327-no/peridot_block.png" alt="PERIDOT Block diagram" /></p>
 <p>(*1) ASDIはスタンドアロンモードでのみ有効になります。<br />
 (*2) スタンドアロンモードではリコンフィグキーになります。<br /></p>
-<p>(*1) ASDI is only available in stand-alone mode.<br />
-(*2) It becomes the reconfiguration key in stand-alone mode.<br /></p>
 <p><a href="https://drive.google.com/file/d/0Bw0BfOQoAOEEQVNYVk9Ga09zV0U/edit?usp=sharing">Board schematic</a></p>
 <div class="heading"><h2>License</h2></div>
 <p>PERIDOT Hardware is released under the <a href="http://creativecommons.org/licenses/by/2.1/jp/legalcode">Creative Commons,CC BY 2.1 JP</a></p>
 <p><img src="http://creativecommons.jp/wp/wp-content/uploads/2009/10/by.png" alt="CC BY" /></p>
 
-<div align=right style="color:#006b6b;"><strong>(C)2013 <a href="http://www.physicaloid.com">WWW.PHYSICALOID.COM</a></strong></div>
+<div align=right style="color:#006b6b;"><strong>(C)2014 J-7SYSTEM Works</strong></div>
 </body>
 </html>

@@ -1,78 +1,55 @@
-Physicaloid FPGA - 'PERIDOT'
+'PERIDOT' - Simple & Compact FPGA board
 ============================
 
 Overview
 -----------------
-PERIDOT(ƒyƒŠƒhƒbƒg)‚ÍPhysicaloid‚É‘Î‰‚µ‚½ArduinoƒtƒH[ƒ€ƒtƒ@ƒNƒ^‚ÌFPGAŠî”Â‚Å‚·B
-Physicaloidƒ‰ƒCƒuƒ‰ƒŠ‚ğ—˜—p‚·‚é‚±‚Æ‚ÅAAndroid‚âGoogle Chrome‚©‚ç‚ÌƒtƒBƒWƒJƒ‹ƒRƒ“ƒsƒ…[ƒeƒBƒ“ƒO‚ğ‰Â”\‚É‚µ‚Ü‚·B
+PERIDOT(ãƒšãƒªãƒ‰ãƒƒãƒˆ)ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã¨ã¯ã€ã‚·ãƒ³ãƒ—ãƒ«ï¼†ã‚³ãƒ³ãƒ‘ã‚¯ãƒˆã‚’ã‚³ãƒ³ã‚»ãƒ—ãƒˆã«é–‹ç™ºä¸­ã®æ–°ã—ã„FPGAãƒœãƒ¼ãƒ‰ã¨ã€ãã®çµ±åˆé–‹ç™ºç’°å¢ƒã§ã™ã€‚
+ã“ã®FPGAãƒœãƒ¼ãƒ‰ã¯Arduinoãƒ•ã‚©ãƒ¼ãƒ ãƒ•ã‚¡ã‚¯ã‚¿ã§ã€Arduinoå‘ã‘ã«ä½œã‚‰ã‚ŒãŸã‚·ãƒ¼ãƒ«ãƒ‰ã¨äº’æ›è£½ãŒã‚ã‚Šã¾ã™ã€‚  
+é–‹ç™ºç’°å¢ƒã¯Webãƒ™ãƒ¼ã‚¹ã®ã‚¯ãƒ©ã‚¦ãƒ‰ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã¨Chromeã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§æ§‹ç¯‰ã•ã‚Œã¦ãŠã‚Šã€OSã‚’å•ã‚ãªã„æ–°ã—ã„é–‹ç™ºã‚¹ã‚¿ã‚¤ãƒ«ã‚’æä¾›ã—ã¾ã™ã€‚
+ã¾ãŸã€PERIDOTãƒœãƒ¼ãƒ‰ã«ã¯æ¨™æº–ã§é€šä¿¡ãƒ–ãƒ­ãƒƒã‚¯ã‚‚çµ„ã¿è¾¼ã¾ã‚Œã¦ã„ã¾ã™ã€‚ã‚ªãƒ¼ãƒ—ãƒ³ãƒ»ã‚½ãƒ¼ã‚¹ã§å…¬é–‹ã•ã‚Œã¦ã„ã‚‹ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’åˆ©ç”¨ã—ã¦ã€Chromeã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚„Androidã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‹ã‚‰ç°¡å˜ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 
-'PERIDOT' is a FPGA board Arduino form factor corresponding to the Physicaloid.
-By taking advantage of Physicaloid library, allowing you to physical computing from Google Chrome and Android.
-
-![Welcome to Physicaloid](https://lh6.googleusercontent.com/-RWdnQPTTfdc/UnhUNfMT-sI/AAAAAAAAFr4/ZsmrO3t93lI/w668-h376-no/physicaloid_wp2_1920x1080.jpg)
+![Welcome to PERIDOT](https://lh6.googleusercontent.com/-dpi_AESyN_w/U5TCeTNYXiI/AAAAAAAAG3E/FCWlJFilgqQ/w600-h316-no/DSC02480.jpg)
 
 
 Features
 -----------------
-- Android/Chrome‚©‚ç‚ÌƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“
-- USBƒVƒŠƒAƒ‹ƒCƒ“ƒ^[ƒtƒF[ƒXŒo—R‚Å‚ÌFPGA“à•”‚Ö‚ÌƒAƒNƒZƒX
-- ALTERA CycloneIV E (EP4CE6E22C8N)“‹Ú
-- 64Mbit SDRAM (up to 133MHz)“‹Ú
-- 28–{‚Ìƒ†[ƒU[I/O
-- ƒXƒ^ƒ“ƒhƒAƒƒ““®ì‚ğƒTƒ|[ƒg
-- USB‹‹“d‚Ì‚İ‚Å“®ìOK (‰ß“d—¬•ÛŒì‰ñ˜H“‹Ú)
-- ArduinoƒV[ƒ‹ƒh‚Ì—¬—p‰Â”\(“®ìğŒ‚ ‚è)
-- ƒI[ƒvƒ“ƒ\[ƒX (ƒNƒŠƒGƒCƒeƒBƒuƒRƒ‚ƒ“ƒYECC BY 2.1)
-  
-- Configuration from the Android / Chrome.
-- Provides access to the FPGA inside of a USB serial interface via.
-- ALTERA CycloneIV E(EP4CE6E22C8N)
-- 64Mbit SDRAM (up to 133MHz)
-- User I/O of the 28 pins
-- Support a stand-alone operation.
-- Only USB power supply (On-board overcurrent protection).
-- Possible diversion of Arduino shield (Due or later).
-- Open-source (Creative Commons, CC BY 2.1)
+* Android/Chromeã‹ã‚‰ã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
+* USBã‚·ãƒªã‚¢ãƒ«ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹çµŒç”±ã§ã®FPGAå†…éƒ¨ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹
+* ALTERA CycloneIV E (EP4CE6E22C8N)æ­è¼‰
+* 64Mbit SDRAM (up to 133MHz)æ­è¼‰
+* 28æœ¬ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼I/O
+* ã‚¹ã‚¿ãƒ³ãƒ‰ã‚¢ãƒ­ãƒ³å‹•ä½œã‚’ã‚µãƒãƒ¼ãƒˆ
+* USBçµ¦é›»ã®ã¿ã§å‹•ä½œOK (éé›»æµä¿è­·å›è·¯æ­è¼‰)
+* Arduinoã‚·ãƒ¼ãƒ«ãƒ‰ã®æµç”¨å¯èƒ½(å‹•ä½œæ¡ä»¶ã‚ã‚Š)
+* ã‚ªãƒ¼ãƒ—ãƒ³ã‚½ãƒ¼ã‚¹ (ã‚¯ãƒªã‚¨ã‚¤ãƒ†ã‚£ãƒ–ã‚³ãƒ¢ãƒ³ã‚ºãƒ»CC BY 2.1)
 
 
 Interface
 -----------------
 ![PERIDOT Board Connector](https://lh3.googleusercontent.com/-mjnC-a-mvtM/UnhcuaqQL0I/AAAAAAAAFso/zZeyUkh4efw/w600-h468-no/peridot_board_connector.png)
-- Manual RESET Key
-ƒVƒXƒeƒ€‘S‘Ì‚Ìƒ}ƒjƒ…ƒAƒ‹ƒŠƒZƒbƒg‚ğs‚¢‚Ü‚·B
-- JTAG Connector
-FPGA‚ÌJTAGƒsƒ“‚ª”z’u‚³‚ê‚Ä‚¢‚Ü‚·B
-- Config MODE Selector
-ƒ{[ƒh‚ÌƒRƒ“ƒtƒBƒOƒ‚[ƒh‚ğØ‚è‘Ö‚¦‚Ü‚·BƒXƒ^ƒ“ƒhƒAƒƒ“‚Å“®ì‚³‚¹‚éê‡‚ÍAS‘¤‚ÉAƒzƒXƒg‚©‚çPhysicaloidƒ‰ƒCƒuƒ‰ƒŠ‚ÅƒRƒ“ƒtƒBƒO‚ğs‚¤ê‡‚ÍPS‘¤‚ÉƒZƒbƒg‚µ‚Ü‚·B
-- Power supply and RESET
-ƒV[ƒ‹ƒh‚Ö‚Ì“dŒ¹‹Ÿ‹‹‚ÆƒŠƒZƒbƒgM†‚ªo—Í‚³‚ê‚Ü‚·B“dŒ¹‚Í3.3V/100mAAUSB 5V/100mA‚ªg—p‚Å‚«‚Ü‚·BÅ‘å“d—¬‚ÍUSBƒzƒXƒg‚Å§ŒÀ‚³‚ê‚Ü‚·B
-- Digital I/O
-FPGA‚ÌI/Oƒsƒ“‚ª”z’u‚³‚ê‚Ä‚¢‚Ü‚·B3.3V‚ğ’´‚¦‚é“dˆ³‚ğˆó‰Á‚µ‚È‚¢‚Å‰º‚³‚¢B
-  
-- Manual RESET Key
-Manual reset of the entire system.
-- JTAG Connector
-JTAG pins of the FPGA are located.
-- Config MODE Selector
-Switching configuration mode of the board.
-Set the AS side when operating in a stand-alone. Set PS side when performing configuration in Physicaloid library from the host.
-- Power supply and RESET
-It outputs a reset signal and power supply to the shield.
-Power can be used 3.3V/100mA, USB 5V/100mA. Maximum current is limited by the USB host.
-- Digital I/O
-I/O pins of the FPGA are located. Do not apply a voltage of more than 3.3V.
+
+* Manual RESET Key  
+ã‚·ã‚¹ãƒ†ãƒ å…¨ä½“ã®ãƒãƒ‹ãƒ¥ã‚¢ãƒ«ãƒªã‚»ãƒƒãƒˆã‚’è¡Œã„ã¾ã™ã€‚
+
+* JTAG Connector  
+FPGAã®JTAGãƒ”ãƒ³ãŒé…ç½®ã•ã‚Œã¦ã„ã¾ã™ã€‚
+
+* Config MODE Selector  
+ãƒœãƒ¼ãƒ‰ã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¢ãƒ¼ãƒ‰ã‚’åˆ‡ã‚Šæ›¿ãˆã¾ã™ã€‚ã‚¹ã‚¿ãƒ³ãƒ‰ã‚¢ãƒ­ãƒ³ã§å‹•ä½œã•ã›ã‚‹å ´åˆã¯ASå´ã«ã€ãƒ›ã‚¹ãƒˆã‹ã‚‰Physicaloidãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§ã‚³ãƒ³ãƒ•ã‚£ã‚°ã‚’è¡Œã†å ´åˆã¯PSå´ã«ã‚»ãƒƒãƒˆã—ã¾ã™ã€‚
+
+* Power supply and RESET  
+ã‚·ãƒ¼ãƒ«ãƒ‰ã¸ã®é›»æºä¾›çµ¦ã¨ãƒªã‚»ãƒƒãƒˆä¿¡å·ãŒå‡ºåŠ›ã•ã‚Œã¾ã™ã€‚é›»æºã¯3.3V/100mAã€USB 5V/100mAãŒä½¿ç”¨ã§ãã¾ã™ã€‚æœ€å¤§é›»æµã¯USBãƒ›ã‚¹ãƒˆã§åˆ¶é™ã•ã‚Œã¾ã™ã€‚
+
+* Digital I/O  
+FPGAã®I/Oãƒ”ãƒ³ãŒé…ç½®ã•ã‚Œã¦ã„ã¾ã™ã€‚3.3Vã‚’è¶…ãˆã‚‹é›»åœ§ã‚’å°åŠ ã—ãªã„ã§ä¸‹ã•ã„ã€‚
 
 
 Board block diagram and schematic
 ---------------------------------
 ![PERIDOT Block diagram](https://lh3.googleusercontent.com/-XpoVXE45BRU/UnhcutSOYOI/AAAAAAAAFss/-6QsIh6Is40/w700-h327-no/peridot_block.png)
 
-(\*1) ASDI‚ÍƒXƒ^ƒ“ƒhƒAƒƒ“ƒ‚[ƒh‚Å‚Ì‚İ—LŒø‚É‚È‚è‚Ü‚·B
-(\*2) ƒXƒ^ƒ“ƒhƒAƒƒ“ƒ‚[ƒh‚Å‚ÍƒŠƒRƒ“ƒtƒBƒOƒL[‚É‚È‚è‚Ü‚·B
-
-(\*1) ASDI is only available in stand-alone mode.
-(\*2) It becomes the reconfiguration key in stand-alone mode.
-
+(\*1) ASDIã¯ã‚¹ã‚¿ãƒ³ãƒ‰ã‚¢ãƒ­ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§ã®ã¿æœ‰åŠ¹ã«ãªã‚Šã¾ã™ã€‚  
+(\*2) ã‚¹ã‚¿ãƒ³ãƒ‰ã‚¢ãƒ­ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§ã¯ãƒªã‚³ãƒ³ãƒ•ã‚£ã‚°ã‚­ãƒ¼ã«ãªã‚Šã¾ã™ã€‚  
 
 [Board schematic](https://github.com/osafune/peridot/blob/master/pcb/peridot_pcb_ver1.0.pdf)
 
@@ -81,10 +58,11 @@ Pinout diagram
 ---------------------------------
 
 ![PERIDOT Pinout diagram](https://lh6.googleusercontent.com/-iF6dey_d6Ok/UtMTmXdj_eI/AAAAAAAAFwE/gqmaHL69SV0/w703-h555-no/PERIDOT_PINOUT.png)
-<a href="https://github.com/osafune/peridot/blob/master/pcb/PERIDOT_PINOUT.png" target=_blank>Large size</a>
+[Large size](https://github.com/osafune/peridot/blob/master/pcb/PERIDOT_PINOUT.png)
 
 
 License
 -----------------
-PERIDOT Hardware is released under the [Creative Commons,CC BY 2.1 JP](http://creativecommons.org/licenses/by/2.1/jp/legalcode)
-![CC BY](http://creativecommons.jp/wp/wp-content/uploads/2009/10/by.png)
+PERIDOT Hardware is released under the [Creative Commons,CC BY 2.1 JP](http://creativecommons.org/licenses/by/2.1/jp/legalcode)  
+![CC BY](http://creativecommons.jp/wp/wp-content/uploads/2009/10/by.png)  
+
