@@ -57,7 +57,7 @@ Board block diagram and schematic
 Pinout diagram
 ---------------------------------
 
-![PERIDOT Pinout diagram](https://lh6.googleusercontent.com/-iF6dey_d6Ok/UtMTmXdj_eI/AAAAAAAAFwE/gqmaHL69SV0/w703-h555-no/PERIDOT_PINOUT.png)
+![PERIDOT Pinout diagram](https://lh3.googleusercontent.com/-XxlwNOIA3iY/U6i-dM-9mwI/AAAAAAAAHAc/RHRm6UER750/w700-h565-no/PERIDOT_PINOUT.png)
 [Large size](https://github.com/osafune/peridot/blob/master/pcb/PERIDOT_PINOUT.png)
 
 
