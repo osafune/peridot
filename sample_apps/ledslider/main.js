@@ -5,9 +5,6 @@
 // コンフィグレーションするRBF先 
 var rbfurl = "https://dl.dropboxusercontent.com/u/68933379/peridot/lib/peridot/sample_ledslider/sample_ledslider_top.rbf";
 
-// RBFバイナリオブジェクトを生成(URL取得に失敗した場合) 
-//var rbfbin = new sample_ledslider_rbf();
-
 // PERIDOTオブジェクトを生成 
 var myps = new Canarium();
 
@@ -152,6 +149,8 @@ function configSetup() {
 	// 実行 
 	document.getElementById('configicon').src="img/loading02_r2_c4.gif";
 	xhr.send();
+
+//	doconfig(null);
 }
 
 

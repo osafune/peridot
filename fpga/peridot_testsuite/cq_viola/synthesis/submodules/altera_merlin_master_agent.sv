@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.0sp1/ip/merlin/altera_merlin_master_agent/altera_merlin_master_agent.sv#1 $
+// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_master_agent/altera_merlin_master_agent.sv#1 $
 // $Revision: #1 $
-// $Date: 2013/03/07 $
+// $Date: 2013/08/11 $
 // $Author: swbranch $
 
 // --------------------------------------
@@ -69,7 +69,9 @@ module altera_merlin_master_agent
               PKT_DEST_ID_L        = 0,
               PKT_RESPONSE_STATUS_L = 110,
               PKT_RESPONSE_STATUS_H = 111,
-              ST_DATA_W             = 112,
+			  PKT_ORI_BURST_SIZE_L  = 112,
+			  PKT_ORI_BURST_SIZE_H  = 114,
+              ST_DATA_W             = 115,
               ST_CHANNEL_W          = 1,
 
     // -------------------
@@ -216,7 +218,8 @@ module altera_merlin_master_agent
         cp_data[PKT_DATA_H     :PKT_DATA_L       ]         = av_writedata;
         cp_data[PKT_BYTEEN_H   :PKT_BYTEEN_L     ]         = av_byteenable;
         cp_data[PKT_BURST_SIZE_H:PKT_BURST_SIZE_L]         = burstsize_sig;
-        cp_data[PKT_BURST_TYPE_H:PKT_BURST_TYPE_L]         = bursttype_value;
+		cp_data[PKT_ORI_BURST_SIZE_H:PKT_ORI_BURST_SIZE_L] = burstsize_sig;
+        cp_data[PKT_BURST_TYPE_H:PKT_BURST_TYPE_L] 		   = bursttype_value;
         cp_data[PKT_SRC_ID_H   :PKT_SRC_ID_L     ]         = id_int[PKT_SRC_ID_W-1:0];
         cp_data[PKT_THREAD_ID_H:PKT_THREAD_ID_L  ]         = '0;
         cp_data[PKT_CACHE_H    :PKT_CACHE_L      ]         = CACHE_VALUE[3:0];

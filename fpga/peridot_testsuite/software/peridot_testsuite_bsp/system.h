@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_e' in SOPC Builder design 'cq_viola'
  * SOPC Builder design path: C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_testsuite/cq_viola.sopcinfo
  *
- * Generated: Wed Oct 23 13:31:34 JST 2013
+ * Generated: Wed Nov 06 08:46:03 JST 2013
  */
 
 /*
@@ -62,7 +62,7 @@
 
 #define ALT_CPU_ARCHITECTURE "altera_nios2_qsys"
 #define ALT_CPU_BIG_ENDIAN 0
-#define ALT_CPU_BREAK_ADDR 0xfff0820
+#define ALT_CPU_BREAK_ADDR 0x0fff0820
 #define ALT_CPU_CPU_FREQ 100000000u
 #define ALT_CPU_CPU_ID_SIZE 1
 #define ALT_CPU_CPU_ID_VALUE 0x00000000
@@ -71,7 +71,7 @@
 #define ALT_CPU_DCACHE_LINE_SIZE 0
 #define ALT_CPU_DCACHE_LINE_SIZE_LOG2 0
 #define ALT_CPU_DCACHE_SIZE 0
-#define ALT_CPU_EXCEPTION_ADDR 0xf000020
+#define ALT_CPU_EXCEPTION_ADDR 0x0f000020
 #define ALT_CPU_FLUSHDA_SUPPORTED
 #define ALT_CPU_FREQ 100000000
 #define ALT_CPU_HARDWARE_DIVIDE_PRESENT 0
@@ -85,7 +85,7 @@
 #define ALT_CPU_ICACHE_SIZE 0
 #define ALT_CPU_INST_ADDR_WIDTH 0x1c
 #define ALT_CPU_NAME "nios2_e"
-#define ALT_CPU_RESET_ADDR 0xf000000
+#define ALT_CPU_RESET_ADDR 0x0f000000
 
 
 /*
@@ -94,7 +94,7 @@
  */
 
 #define NIOS2_BIG_ENDIAN 0
-#define NIOS2_BREAK_ADDR 0xfff0820
+#define NIOS2_BREAK_ADDR 0x0fff0820
 #define NIOS2_CPU_FREQ 100000000u
 #define NIOS2_CPU_ID_SIZE 1
 #define NIOS2_CPU_ID_VALUE 0x00000000
@@ -103,7 +103,7 @@
 #define NIOS2_DCACHE_LINE_SIZE 0
 #define NIOS2_DCACHE_LINE_SIZE_LOG2 0
 #define NIOS2_DCACHE_SIZE 0
-#define NIOS2_EXCEPTION_ADDR 0xf000020
+#define NIOS2_EXCEPTION_ADDR 0x0f000020
 #define NIOS2_FLUSHDA_SUPPORTED
 #define NIOS2_HARDWARE_DIVIDE_PRESENT 0
 #define NIOS2_HARDWARE_MULTIPLY_PRESENT 0
@@ -115,7 +115,7 @@
 #define NIOS2_ICACHE_LINE_SIZE_LOG2 0
 #define NIOS2_ICACHE_SIZE 0
 #define NIOS2_INST_ADDR_WIDTH 0x1c
-#define NIOS2_RESET_ADDR 0xf000000
+#define NIOS2_RESET_ADDR 0x0f000000
 
 
 /*

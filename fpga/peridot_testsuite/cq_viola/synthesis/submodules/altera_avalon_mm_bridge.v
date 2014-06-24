@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.0sp1/ip/merlin/altera_avalon_mm_bridge/altera_avalon_mm_bridge.v#1 $
+// $Id: //acds/rel/13.1/ip/merlin/altera_avalon_mm_bridge/altera_avalon_mm_bridge.v#1 $
 // $Revision: #1 $
-// $Date: 2013/03/07 $
+// $Date: 2013/08/11 $
 // $Author: swbranch $
 // --------------------------------------
 // Avalon-MM pipeline bridge
@@ -155,8 +155,6 @@ module altera_avalon_mm_bridge
                 wr_reg_waitrequest <= cmd_waitrequest;
 
                 if (wait_rise) begin
-                    use_reg <= 1'b1;
-
                     wr_reg_writedata  <= s0_writedata;
                     wr_reg_byteenable <= s0_byteenable;
                     wr_reg_address    <= s0_address;
@@ -168,7 +166,11 @@ module altera_avalon_mm_bridge
 
                 // stop using the buffer when waitrequest is low
                 if (~cmd_waitrequest)
-                    use_reg <= 1'b0;
+                     use_reg <= 1'b0;
+                else if (wait_rise) begin
+                    use_reg <= 1'b1;
+                end     
+
             end
         end
      

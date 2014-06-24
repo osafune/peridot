@@ -1,4 +1,4 @@
-//Legal Notice: (C)2013 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2014 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -203,7 +203,7 @@ module cq_viola_systimer (
   assign stop_strobe = writedata[3] && control_wr_strobe;
   assign start_strobe = writedata[2] && control_wr_strobe;
   assign control_continuous = control_register[1];
-  assign control_interrupt_enable = control_register;
+  assign control_interrupt_enable = control_register[0];
   assign status_wr_strobe = chipselect && ~write_n && (address == 0);
 
 endmodule

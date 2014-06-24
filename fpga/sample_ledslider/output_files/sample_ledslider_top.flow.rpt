@@ -1,5 +1,5 @@
 Flow report for sample_ledslider_top
-Thu Nov 07 10:25:05 2013
+Tue Jun 24 16:19:17 2014
 Quartus II 64-Bit Version 13.1.0 Build 162 10/23/2013 SJ Web Edition
 
 
@@ -40,15 +40,15 @@ applicable agreement for further details.
 +---------------------------------------------------------------------------------+
 ; Flow Summary                                                                    ;
 +------------------------------------+--------------------------------------------+
-; Flow Status                        ; Successful - Thu Nov 07 10:25:01 2013      ;
+; Flow Status                        ; Successful - Tue Jun 24 16:19:13 2014      ;
 ; Quartus II 64-Bit Version          ; 13.1.0 Build 162 10/23/2013 SJ Web Edition ;
 ; Revision Name                      ; sample_ledslider_top                       ;
 ; Top-level Entity Name              ; sample_ledslider_top                       ;
 ; Family                             ; Cyclone IV E                               ;
 ; Device                             ; EP4CE6E22C8                                ;
 ; Timing Models                      ; Final                                      ;
-; Total logic elements               ; 560 / 6,272 ( 9 % )                        ;
-;     Total combinational functions  ; 477 / 6,272 ( 8 % )                        ;
+; Total logic elements               ; 564 / 6,272 ( 9 % )                        ;
+;     Total combinational functions  ; 481 / 6,272 ( 8 % )                        ;
 ;     Dedicated logic registers      ; 308 / 6,272 ( 5 % )                        ;
 ; Total registers                    ; 308                                        ;
 ; Total pins                         ; 9 / 92 ( 10 % )                            ;
@@ -64,7 +64,7 @@ applicable agreement for further details.
 +-------------------+----------------------+
 ; Option            ; Setting              ;
 +-------------------+----------------------+
-; Start date & time ; 11/07/2013 10:24:47  ;
+; Start date & time ; 06/24/2014 16:18:57  ;
 ; Main task         ; Compilation          ;
 ; Revision Name     ; sample_ledslider_top ;
 +-------------------+----------------------+
@@ -75,7 +75,7 @@ applicable agreement for further details.
 +-------------------------------------+--------------------------------------------------------------------+---------------+---------------------------------------------------+------------+
 ; Assignment Name                     ; Value                                                              ; Default Value ; Entity Name                                       ; Section Id ;
 +-------------------------------------+--------------------------------------------------------------------+---------------+---------------------------------------------------+------------+
-; COMPILER_SIGNATURE_ID               ; 202818018146334.138378748706744                                    ; --            ; --                                                ; --         ;
+; COMPILER_SIGNATURE_ID               ; 202818018146334.140359433710884                                    ; --            ; --                                                ; --         ;
 ; IP_TOOL_ENV                         ; Qsys                                                               ; --            ; altera_avalon_sc_fifo                             ; --         ;
 ; IP_TOOL_ENV                         ; Qsys                                                               ; --            ; altera_merlin_master_agent                        ; --         ;
 ; IP_TOOL_ENV                         ; Qsys                                                               ; --            ; altera_merlin_master_translator                   ; --         ;
@@ -141,7 +141,7 @@ applicable agreement for further details.
 ; PROJECT_OUTPUT_DIRECTORY            ; output_files                                                       ; --            ; --                                                ; --         ;
 ; SLD_FILE                            ; pwm_control_core/synthesis/pwm_control_core.regmap                 ; --            ; --                                                ; --         ;
 ; SLD_FILE                            ; pwm_control_core/synthesis/pwm_control_core.debuginfo              ; --            ; --                                                ; --         ;
-; SLD_INFO                            ; QSYS_NAME pwm_control_core HAS_SOPCINFO 1 GENERATION_ID 1383785759 ; --            ; pwm_control_core                                  ; --         ;
+; SLD_INFO                            ; QSYS_NAME pwm_control_core HAS_SOPCINFO 1 GENERATION_ID 1403594279 ; --            ; pwm_control_core                                  ; --         ;
 ; SOPCINFO_FILE                       ; pwm_control_core/synthesis/../../pwm_control_core.sopcinfo         ; --            ; --                                                ; --         ;
 ; SYNTHESIS_ONLY_QIP                  ; On                                                                 ; --            ; --                                                ; --         ;
 +-------------------------------------+--------------------------------------------------------------------+---------------+---------------------------------------------------+------------+
@@ -152,11 +152,11 @@ applicable agreement for further details.
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis      ; 00:00:05     ; 1.0                     ; 567 MB              ; 00:00:04                           ;
-; Fitter                    ; 00:00:06     ; 1.0                     ; 1140 MB             ; 00:00:07                           ;
-; Assembler                 ; 00:00:01     ; 1.0                     ; 458 MB              ; 00:00:01                           ;
-; TimeQuest Timing Analyzer ; 00:00:03     ; 1.0                     ; 535 MB              ; 00:00:03                           ;
-; Total                     ; 00:00:15     ; --                      ; --                  ; 00:00:15                           ;
+; Analysis & Synthesis      ; 00:00:05     ; 1.0                     ; 569 MB              ; 00:00:05                           ;
+; Fitter                    ; 00:00:06     ; 1.6                     ; 1131 MB             ; 00:00:07                           ;
+; Assembler                 ; 00:00:01     ; 1.0                     ; 455 MB              ; 00:00:01                           ;
+; TimeQuest Timing Analyzer ; 00:00:03     ; 1.0                     ; 531 MB              ; 00:00:03                           ;
+; Total                     ; 00:00:15     ; --                      ; --                  ; 00:00:16                           ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 

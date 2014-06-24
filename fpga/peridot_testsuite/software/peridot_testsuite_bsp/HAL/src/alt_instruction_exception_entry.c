@@ -64,7 +64,8 @@ int alt_instruction_exception_entry (alt_u32 exception_pc)
  * that handler if it has been registered. Absent a handler, it will
  * break break or hang as discussed below.
  */
-int alt_instruction_exception_entry (alt_u32 exception_pc)
+int 
+alt_instruction_exception_entry (alt_u32 exception_pc)
 {
   alt_u32 cause, badaddr;
 
@@ -155,7 +156,7 @@ int alt_instruction_exception_entry (alt_u32 exception_pc)
 #endif /* NIOS2_HAS_DEBUG_STUB */
   }
 
-  /* // We should not get here. Remove compiler warning. */
+  /* We should not get here. Remove compiler warning. */
   return NIOS2_EXCEPTION_RETURN_REISSUE_INST;
 }
 
@@ -169,10 +170,10 @@ int alt_instruction_exception_entry (alt_u32 exception_pc)
  * this is a convenience routine to easily test the validity of that
  * argument in your handler.
  *
- * Note that this routine will return false (0) for cause '12',
- * TLB miss. This is because there are four exception types that
- * share that cause, two of which do not have a valid BADADDR. You
- * must determine BADADDR's validity for these.
+ * Note that this routine will return false (0) for causes 
+ * NIOS2_EXCEPTION_TLB_MISS and NIOS2_EXCEPTION_ECC_TLB_ERR.
+ * You must read the TLBMISC.D field to determine if BADADDR
+ * is valid for these (valid if TLBMISC.D = 1).
  *
  * Arguments:
  * cause:  The 5-bit exception cause field of the EXCEPTIONS register,
@@ -182,21 +183,23 @@ int alt_instruction_exception_entry (alt_u32 exception_pc)
  * Return: 1: BADADDR (bad_addr argument to handler) is valid
  *         0: BADADDR is not valid
  */
-int alt_exception_cause_generated_bad_addr(alt_exception_cause cause)
+int 
+alt_exception_cause_generated_bad_addr(alt_exception_cause cause)
 {
   switch (cause) {
   case NIOS2_EXCEPTION_SUPERVISOR_ONLY_DATA_ADDR:
-    return 1;
   case NIOS2_EXCEPTION_MISALIGNED_DATA_ADDR:
-    return 1;
   case NIOS2_EXCEPTION_MISALIGNED_TARGET_PC:
-    return 1;
   case NIOS2_EXCEPTION_TLB_READ_PERM_VIOLATION:
-    return 1;
   case NIOS2_EXCEPTION_TLB_WRITE_PERM_VIOLATION:
-    return 1;
   case NIOS2_EXCEPTION_MPU_DATA_REGION_VIOLATION:
+  case NIOS2_EXCEPTION_ECC_DATA_ERR:
     return 1;
+
+  case NIOS2_EXCEPTION_TLB_MISS:
+  case NIOS2_EXCEPTION_ECC_TLB_ERR:
+    return 0;
+
   default:
     return 0;
   }

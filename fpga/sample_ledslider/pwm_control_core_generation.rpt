@@ -4,12 +4,12 @@ Progress: Loading sample_ledslider/pwm_control_core.qsys
 Progress: Reading input file
 Progress: Adding clk_0 [clock_source 13.1]
 Progress: Parameterizing module clk_0
-Progress: Adding physicaloid_bridge [physicaloid_avalon_bridge 0.9]
-Progress: Parameterizing module physicaloid_bridge
 Progress: Adding sysid [altera_avalon_sysid_qsys 13.1]
 Progress: Parameterizing module sysid
 Progress: Adding pwmdata [altera_avalon_pio 13.1]
 Progress: Parameterizing module pwmdata
+Progress: Adding peridot_bridge [peridot_avalon_bridge 0.9]
+Progress: Parameterizing module peridot_bridge
 Progress: Building connections
 Progress: Parameterizing connections
 Progress: Validating
@@ -25,12 +25,12 @@ Progress: Loading sample_ledslider/pwm_control_core.qsys
 Progress: Reading input file
 Progress: Adding clk_0 [clock_source 13.1]
 Progress: Parameterizing module clk_0
-Progress: Adding physicaloid_bridge [physicaloid_avalon_bridge 0.9]
-Progress: Parameterizing module physicaloid_bridge
 Progress: Adding sysid [altera_avalon_sysid_qsys 13.1]
 Progress: Parameterizing module sysid
 Progress: Adding pwmdata [altera_avalon_pio 13.1]
 Progress: Parameterizing module pwmdata
+Progress: Adding peridot_bridge [peridot_avalon_bridge 0.9]
+Progress: Parameterizing module peridot_bridge
 Progress: Building connections
 Progress: Parameterizing connections
 Progress: Validating
@@ -51,12 +51,12 @@ Info: merlin_clock_and_reset_bridge_transform: After transform: 24 modules, 93 c
 Info: merlin_hierarchy_transform: After transform: 5 modules, 11 connections
 Info: merlin_mm_transform: After transform: 5 modules, 11 connections
 Info: reset_adaptation_transform: After transform: 6 modules, 13 connections
-Info: physicaloid_bridge: "pwm_control_core" instantiated physicaloid_avalon_bridge "physicaloid_bridge"
 Info: sysid: "pwm_control_core" instantiated altera_avalon_sysid_qsys "sysid"
 Info: pwmdata: Starting RTL generation for module 'pwm_control_core_pwmdata'
-Info: pwmdata:   Generation command is [exec C:/develop/altera/13.1/quartus/bin/perl/bin/perl.exe -I C:/develop/altera/13.1/quartus/bin/perl/lib -I C:/develop/altera/13.1/quartus/sopc_builder/bin/europa -I C:/develop/altera/13.1/quartus/sopc_builder/bin/perl_lib -I C:/develop/altera/13.1/quartus/sopc_builder/bin -I C:/develop/altera/13.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/develop/altera/13.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- C:/develop/altera/13.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=pwm_control_core_pwmdata --dir=C:/Users/Regulus/AppData/Local/Temp/alt6016_2796694109032493383.dir/0003_pwmdata_gen/ --quartus_dir=C:/develop/altera/13.1/quartus --verilog --config=C:/Users/Regulus/AppData/Local/Temp/alt6016_2796694109032493383.dir/0003_pwmdata_gen//pwm_control_core_pwmdata_component_configuration.pl  --do_build_sim=0  ]
+Info: pwmdata:   Generation command is [exec C:/develop/altera/13.1/quartus/bin/perl/bin/perl.exe -I C:/develop/altera/13.1/quartus/bin/perl/lib -I C:/develop/altera/13.1/quartus/sopc_builder/bin/europa -I C:/develop/altera/13.1/quartus/sopc_builder/bin/perl_lib -I C:/develop/altera/13.1/quartus/sopc_builder/bin -I C:/develop/altera/13.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/develop/altera/13.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- C:/develop/altera/13.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=pwm_control_core_pwmdata --dir=C:/Users/Regulus/AppData/Local/Temp/alt6245_4260503622896497080.dir/0002_pwmdata_gen/ --quartus_dir=C:/develop/altera/13.1/quartus --verilog --config=C:/Users/Regulus/AppData/Local/Temp/alt6245_4260503622896497080.dir/0002_pwmdata_gen//pwm_control_core_pwmdata_component_configuration.pl  --do_build_sim=0  ]
 Info: pwmdata: Done RTL generation for module 'pwm_control_core_pwmdata'
 Info: pwmdata: "pwm_control_core" instantiated altera_avalon_pio "pwmdata"
+Info: peridot_bridge: "pwm_control_core" instantiated peridot_avalon_bridge "peridot_bridge"
 Info: pipeline_bridge_swap_transform: After transform: 20 modules, 62 connections
 Info: No custom instruction connections, skipping transform 
 Info: merlin_initial_interconnect_transform: After transform: 0 modules, 0 connections
@@ -70,9 +70,9 @@ Info: No Avalon connections, skipping transform
 Info: merlin_hierarchy_transform: After transform: 20 modules, 62 connections
 Info: mm_interconnect_0: "pwm_control_core" instantiated altera_merlin_interconnect_wrapper "mm_interconnect_0"
 Info: rst_controller: "pwm_control_core" instantiated altera_reset_controller "rst_controller"
-Info: physicaloid_bridge_avalon_master_translator: "mm_interconnect_0" instantiated altera_merlin_master_translator "physicaloid_bridge_avalon_master_translator"
+Info: peridot_bridge_avalon_master_translator: "mm_interconnect_0" instantiated altera_merlin_master_translator "peridot_bridge_avalon_master_translator"
 Info: sysid_control_slave_translator: "mm_interconnect_0" instantiated altera_merlin_slave_translator "sysid_control_slave_translator"
-Info: physicaloid_bridge_avalon_master_translator_avalon_universal_master_0_agent: "mm_interconnect_0" instantiated altera_merlin_master_agent "physicaloid_bridge_avalon_master_translator_avalon_universal_master_0_agent"
+Info: peridot_bridge_avalon_master_translator_avalon_universal_master_0_agent: "mm_interconnect_0" instantiated altera_merlin_master_agent "peridot_bridge_avalon_master_translator_avalon_universal_master_0_agent"
 Info: sysid_control_slave_translator_avalon_universal_slave_0_agent: "mm_interconnect_0" instantiated altera_merlin_slave_agent "sysid_control_slave_translator_avalon_universal_slave_0_agent"
 Info: sysid_control_slave_translator_avalon_universal_slave_0_agent_rsp_fifo: "mm_interconnect_0" instantiated altera_avalon_sc_fifo "sysid_control_slave_translator_avalon_universal_slave_0_agent_rsp_fifo"
 Info: addr_router: "mm_interconnect_0" instantiated altera_merlin_router "addr_router"
@@ -84,6 +84,6 @@ Info: cmd_xbar_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "
 Info: rsp_xbar_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_xbar_demux"
 Info: rsp_xbar_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_xbar_mux"
 Info: Reusing file C:/PROJECT/Physicaloid/c85_peridot/fpga/sample_ledslider/pwm_control_core/synthesis/submodules/altera_merlin_arbitrator.sv
-Info: pwm_control_core: Done "pwm_control_core" with 18 modules, 29 files, 458072 bytes
+Info: pwm_control_core: Done "pwm_control_core" with 18 modules, 29 files, 456008 bytes
 Info: ip-generate succeeded.
 Info: Finished: Create HDL design files for synthesis

@@ -6,7 +6,7 @@
    version="1.0"
    description=""
    tags=""
-   categories="" />
+   categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
    element $${FILENAME}
@@ -28,7 +28,7 @@
          type = "String";
       }
    }
-   element physicaloid_bridge
+   element peridot_bridge
    {
       datum _sortIndex
       {
@@ -72,7 +72,7 @@
  <parameter name="globalResetBus" value="false" />
  <parameter name="hdlLanguage" value="VERILOG" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName" value="" />
+ <parameter name="projectName">sample_ledslider_top.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="timeStamp" value="0" />
@@ -81,13 +81,13 @@
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <interface
-   name="scif"
-   internal="physicaloid_bridge.conduit_end"
+   name="pwm_data"
+   internal="pwmdata.external_connection"
    type="conduit"
    dir="end" />
  <interface
-   name="pwm_data"
-   internal="pwmdata.external_connection"
+   name="scif"
+   internal="peridot_bridge.conduit_end"
    type="conduit"
    dir="end" />
  <module kind="clock_source" version="13.1" enabled="1" name="clk_0">
@@ -95,13 +95,6 @@
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
- </module>
- <module
-   kind="physicaloid_avalon_bridge"
-   version="0.9"
-   enabled="1"
-   name="physicaloid_bridge">
-  <parameter name="AUTO_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
  <module
    kind="altera_avalon_sysid_qsys"
@@ -127,25 +120,13 @@
   <parameter name="width" value="8" />
   <parameter name="clockRate" value="50000000" />
  </module>
- <connection
-   kind="clock"
-   version="13.1"
-   start="clk_0.clk"
-   end="physicaloid_bridge.clock" />
- <connection
-   kind="reset"
-   version="13.1"
-   start="clk_0.clk_reset"
-   end="physicaloid_bridge.reset" />
- <connection
-   kind="avalon"
-   version="13.1"
-   start="physicaloid_bridge.avalon_master"
-   end="sysid.control_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10000000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
+ <module
+   kind="peridot_avalon_bridge"
+   version="0.9"
+   enabled="1"
+   name="peridot_bridge">
+  <parameter name="AUTO_CLOCK_CLOCK_RATE" value="50000000" />
+ </module>
  <connection kind="clock" version="13.1" start="clk_0.clk" end="sysid.clk" />
  <connection kind="reset" version="13.1" start="clk_0.clk_reset" end="sysid.reset" />
  <connection kind="clock" version="13.1" start="clk_0.clk" end="pwmdata.clk" />
@@ -155,9 +136,28 @@
    start="clk_0.clk_reset"
    end="pwmdata.reset" />
  <connection
+   kind="clock"
+   version="13.1"
+   start="clk_0.clk"
+   end="peridot_bridge.clock" />
+ <connection
+   kind="reset"
+   version="13.1"
+   start="clk_0.clk_reset"
+   end="peridot_bridge.reset" />
+ <connection
    kind="avalon"
    version="13.1"
-   start="physicaloid_bridge.avalon_master"
+   start="peridot_bridge.avalon_master"
+   end="sysid.control_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x10000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="peridot_bridge.avalon_master"
    end="pwmdata.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x10000100" />

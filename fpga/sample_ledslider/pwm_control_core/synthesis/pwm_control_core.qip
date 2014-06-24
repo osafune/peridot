@@ -2,7 +2,7 @@ set_global_assignment -entity "pwm_control_core" -library "pwm_control_core" -na
 set_global_assignment -entity "pwm_control_core" -library "pwm_control_core" -name IP_TOOL_VERSION "13.1"
 set_global_assignment -entity "pwm_control_core" -library "pwm_control_core" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "pwm_control_core" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../pwm_control_core.sopcinfo"]
-set_global_assignment -entity "pwm_control_core" -library "pwm_control_core" -name SLD_INFO "QSYS_NAME pwm_control_core HAS_SOPCINFO 1 GENERATION_ID 1383785759"
+set_global_assignment -entity "pwm_control_core" -library "pwm_control_core" -name SLD_INFO "QSYS_NAME pwm_control_core HAS_SOPCINFO 1 GENERATION_ID 1403594279"
 set_global_assignment -library "pwm_control_core" -name MISC_FILE [file join $::quartus(qip_path) "../../pwm_control_core.cmp"]
 set_global_assignment -library "pwm_control_core" -name SLD_FILE [file join $::quartus(qip_path) "pwm_control_core.regmap"]
 set_global_assignment -library "pwm_control_core" -name SLD_FILE [file join $::quartus(qip_path) "pwm_control_core.debuginfo"]
@@ -30,14 +30,14 @@ set_global_assignment -library "pwm_control_core" -name SYSTEMVERILOG_FILE [file
 set_global_assignment -library "pwm_control_core" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_master_agent.sv"]
 set_global_assignment -library "pwm_control_core" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_slave_translator.sv"]
 set_global_assignment -library "pwm_control_core" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_master_translator.sv"]
-set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/pwm_control_core_pwmdata.v"]
-set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/pwm_control_core_sysid.v"]
 set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_avalon_packets_to_master.v"]
 set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_avalon_st_bytes_to_packets.v"]
 set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_avalon_st_packets_to_bytes.v"]
-set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/physicaloid_avalonmm_bridge.v"]
-set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/physicaloid_bytes_to_scif.v"]
-set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/physicaloid_scif_infifo.v"]
+set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/peridot_avalonmm_bridge.v"]
+set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/peridot_bytes_to_scif.v"]
+set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/peridot_scif_infifo.v"]
+set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/pwm_control_core_pwmdata.v"]
+set_global_assignment -library "pwm_control_core" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/pwm_control_core_sysid.v"]
 
 set_global_assignment -entity "altera_reset_controller" -library "pwm_control_core" -name IP_TOOL_NAME "altera_reset_controller"
 set_global_assignment -entity "altera_reset_controller" -library "pwm_control_core" -name IP_TOOL_VERSION "13.1"

@@ -21,8 +21,7 @@
   </columns>
  </clocktable>
  <window width="1404" height="998" x="263" y="14" />
- <library
-   expandedCategories="Library/Bridges/Memory-Mapped,Library/Bridges,Library,Project" />
+ <library expandedCategories="Library,Project/Bridges,Project" />
  <hdlexample language="VHDL" />
  <generation synthesis="VERILOG" />
 </preferences>

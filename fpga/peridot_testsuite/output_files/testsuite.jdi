@@ -1,9 +1,9 @@
 <sld_project_info>
   <project>
-    <hash md5_digest_80b="fc25c60ed85645b8fde2"/>
+    <hash md5_digest_80b="3f461f488a24d6a97280"/>
   </project>
   <file_info>
-    <file device="EP4CE6E22C8" path="testsuite.sof" usercode="0xA0131023"/>
+    <file device="EP4CE6E22C8" path="testsuite.sof" usercode="0xA0140624"/>
   </file_info>
   <hub_info hub_ir_width="5" ir_width="2" node_addr_width="2" node_count="2"/>
   <node_info>
@@ -144,7 +144,7 @@
   <sld_infos>
     <sld_info hpath="cq_viola:inst" name="inst">
       <assignment_values>
-        <assignment_value text="QSYS_NAME cq_viola HAS_SOPCINFO 1 GENERATION_ID 1382497617"/>
+        <assignment_value text="QSYS_NAME cq_viola HAS_SOPCINFO 1 GENERATION_ID 1403595143"/>
       </assignment_values>
       <parameters/>
     </sld_info>

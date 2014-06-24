@@ -1,4 +1,4 @@
-//Legal Notice: (C)2013 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2014 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -39,7 +39,7 @@ module cq_viola_nios2_e_test_bench (
                                       d_address,
                                       d_byteenable,
                                       d_read,
-                                      d_write_nxt,
+                                      d_write,
                                       i_address,
                                       i_read,
                                       i_readdata,
@@ -48,13 +48,11 @@ module cq_viola_nios2_e_test_bench (
 
                                      // outputs:
                                       av_ld_data_aligned_filtered,
-                                      d_write,
                                       test_has_ended
                                    )
 ;
 
   output  [ 31: 0] av_ld_data_aligned_filtered;
-  output           d_write;
   output           test_has_ended;
   input   [ 31: 0] D_iw;
   input   [  5: 0] D_iw_op;
@@ -75,7 +73,7 @@ module cq_viola_nios2_e_test_bench (
   input   [ 28: 0] d_address;
   input   [  3: 0] d_byteenable;
   input            d_read;
-  input            d_write_nxt;
+  input            d_write;
   input   [ 27: 0] i_address;
   input            i_read;
   input   [ 31: 0] i_readdata;
@@ -243,7 +241,6 @@ module cq_viola_nios2_e_test_bench (
   wire             av_ld_data_aligned_unfiltered_7_is_x;
   wire             av_ld_data_aligned_unfiltered_8_is_x;
   wire             av_ld_data_aligned_unfiltered_9_is_x;
-  reg              d_write;
   wire             test_has_ended;
   assign D_op_call = D_iw_op == 0;
   assign D_op_jmpi = D_iw_op == 1;
@@ -373,15 +370,6 @@ module cq_viola_nios2_e_test_bench (
   assign D_op_rsvx63 = D_op_opx & (D_iw_opx == 63);
   assign D_op_opx = D_iw_op == 58;
   assign D_op_custom = D_iw_op == 50;
-  always @(posedge clk or negedge reset_n)
-    begin
-      if (reset_n == 0)
-          d_write <= 0;
-      else 
-        d_write <= d_write_nxt;
-    end
-
-
   assign test_has_ended = 1'b0;
 
 //synthesis translate_off

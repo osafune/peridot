@@ -1,6 +1,6 @@
 chrome.app.runtime.onLaunched.addListener(function() {
 	var windowoption = {
-		'bounds':{'width':486, 'height':678},
+		'bounds':{'width':486, 'height':662},
 		'minWidth':486,
 		'minHeight':260
 	}

@@ -1,4 +1,4 @@
-//Legal Notice: (C)2013 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2014 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -128,8 +128,7 @@ module cq_viola_nios2_e_jtag_debug_module_tck (
               end // 2'b10 
           
               2'b11: begin
-                  sr[15 : 12] <= 1'b0;
-                  sr[11 : 2] <= trc_im_addr;
+                  sr[15 : 2] <= trc_im_addr;
                   sr[1] <= trc_wrap;
                   sr[0] <= trc_on;
               end // 2'b11 

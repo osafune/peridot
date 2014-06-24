@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.0sp1/ip/merlin/altera_merlin_master_translator/altera_merlin_master_translator.sv#1 $
+// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_master_translator/altera_merlin_master_translator.sv#1 $
 // $Revision: #1 $
-// $Date: 2013/03/07 $
+// $Date: 2013/08/11 $
 // $Author: swbranch $
 
 // --------------------------------------
@@ -203,7 +203,10 @@ module altera_merlin_master_translator #(
    //address + burstcount assignment
 
    reg [UAV_ADDRESS_W - 1 : 0] address_register;
-   reg [UAV_BURSTCOUNT_W - 1 : 0] burstcount_register;
+   wire [UAV_BURSTCOUNT_W - 1 : 0] burstcount_register;
+   reg [UAV_BURSTCOUNT_W : 0]     burstcount_register_lint;
+
+    assign burstcount_register = burstcount_register_lint [UAV_BURSTCOUNT_W - 1 : 0];
 
    always @* begin
       uav_address=uav_address_pre;
@@ -244,24 +247,24 @@ module altera_merlin_master_translator #(
       
       if(reset) begin
 	 address_register    <= '0;
-	 burstcount_register <= '0;
+	 burstcount_register_lint <= '0;
 	 first_burst_stalled <= 1'b0;
 	 burst_stalled       <= 1'b0;
       end
       else begin
 	 address_register    <= address_register;
-	 burstcount_register <= burstcount_register;
+	 burstcount_register_lint <= burstcount_register_lint;
 	 
 	 if(internal_beginbursttransfer||first_burst_stalled) begin
 
 	    if(av_waitrequest) begin
 	       first_burst_stalled <= 1'b1;
 	       address_register    <= uav_address_pre;
-	       burstcount_register <= uav_burstcount_pre;
+           burstcount_register_lint [UAV_BURSTCOUNT_W - 1 : 0] <= uav_burstcount_pre;
 	    end else begin
 	       first_burst_stalled <= 1'b0;
 	       address_register    <= combi_burst_addr_reg;
-	       burstcount_register <= uav_burstcount_pre - symbols_per_word;
+	       burstcount_register_lint <= uav_burstcount_pre - symbols_per_word;
 	    end
 	 end
 	 
@@ -269,7 +272,7 @@ module altera_merlin_master_translator #(
 	    if(~av_waitrequest) begin
 	       burst_stalled       <= 1'b0;
 	       address_register    <= combi_addr_reg;
-	       burstcount_register <= burstcount_register - symbols_per_word;
+	       burstcount_register_lint <= burstcount_register - symbols_per_word;
 	    end else
 	      burst_stalled<=1'b1;   
 	 end
@@ -279,12 +282,12 @@ module altera_merlin_master_translator #(
 	
    //Address
    always @* begin
-      uav_address_pre = '0;
+      uav_address_pre = {UAV_ADDRESS_W{1'b0}};
       
       if(AV_ADDRESS_SYMBOLS)
-	 uav_address_pre=av_address[ ( ADDRESS_HIGH ? ADDRESS_HIGH - 1 : 0 ) : 0 ];
+        uav_address_pre[ ( ADDRESS_HIGH ? ADDRESS_HIGH - 1 : 0 ) : 0 ] =av_address[ ( ADDRESS_HIGH ? ADDRESS_HIGH - 1 : 0 ) : 0 ];
       else begin  
-	    uav_address_pre[ UAV_ADDRESS_W - 1 : ADDRESS_LOW ] = av_address[( ADDRESS_HIGH ? ADDRESS_HIGH - 1 : 0) : 0 ];
+        uav_address_pre[ ADDRESS_LOW + ADDRESS_HIGH - 1 : ADDRESS_LOW ] = av_address[( ADDRESS_HIGH ? ADDRESS_HIGH - 1 : 0) : 0 ];
       end
    end
 
@@ -293,10 +296,10 @@ module altera_merlin_master_translator #(
       uav_burstcount_pre = symbols_per_word;  // default to a single transfer
       
       if(USE_BURSTCOUNT) begin
-	 uav_burstcount_pre = '0;
+        uav_burstcount_pre = {UAV_BURSTCOUNT_W{1'b0}};
 	 
 	 if(AV_BURSTCOUNT_SYMBOLS)
-	    uav_burstcount_pre = av_burstcount[( BURSTCOUNT_HIGH ? BURSTCOUNT_HIGH - 1 : 0 ) :0 ];
+        uav_burstcount_pre[( BURSTCOUNT_HIGH ? BURSTCOUNT_HIGH - 1 : 0 ) :0 ] = av_burstcount[( BURSTCOUNT_HIGH ? BURSTCOUNT_HIGH - 1 : 0 ) :0 ];
 	 else begin
 	    uav_burstcount_pre[ UAV_BURSTCOUNT_W - 1 : BURSTCOUNT_LOW] = av_burstcount[( BURSTCOUNT_HIGH ? BURSTCOUNT_HIGH - 1 : 0 ) : 0 ];
 	 end
@@ -314,12 +317,11 @@ module altera_merlin_master_translator #(
       else begin
 	 read_accepted <= read_accepted;
 	 
-	 if(read_accepted == 1 && uav_readdatavalid == 1)  // reset acceptance only when rdv arrives
-	   read_accepted <= 1'b0;
-	 
 	 if(read_accepted == 0)
 	   read_accepted<=av_waitrequest ? uav_read_pre & ~uav_waitrequest : 1'b0;
-      end
+     else if(read_accepted == 1 && uav_readdatavalid == 1)  // reset acceptance only when rdv arrives
+       read_accepted <= 1'b0; 
+     end
       
    end
    

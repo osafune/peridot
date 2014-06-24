@@ -1,6 +1,6 @@
 <sld_project_info>
   <project>
-    <hash md5_digest_80b="6d7f7b86a0ba9761bb48"/>
+    <hash md5_digest_80b="f278ee403dab6fff1174"/>
   </project>
   <file_info>
     <file device="EP4CE6E22C8" path="sample_ledslider_top.sof" usercode="0x20131107"/>
@@ -8,7 +8,7 @@
   <sld_infos>
     <sld_info hpath="pwm_control_core:u0" name="u0">
       <assignment_values>
-        <assignment_value text="QSYS_NAME pwm_control_core HAS_SOPCINFO 1 GENERATION_ID 1383785759"/>
+        <assignment_value text="QSYS_NAME pwm_control_core HAS_SOPCINFO 1 GENERATION_ID 1403594279"/>
       </assignment_values>
       <parameters/>
     </sld_info>

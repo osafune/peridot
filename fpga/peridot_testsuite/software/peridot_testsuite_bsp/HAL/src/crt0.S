@@ -221,14 +221,46 @@ _exit:
     .type _start, @function
 _start:
 
+#if (NIOS2_NUM_OF_SHADOW_REG_SETS > 0)    
+    /*
+     * Ensure that the current register set is 0 upon
+     * entry to this code.  Switch register set to 0 by
+     * writing zero to SSTATUS register and executing an ERET instruction
+     * to set STATUS.CRS to 0.
+     */
+    
+    /* Get the current register set number (STATUS.CRS). */
+    rdctl r2, status
+    andi r2, r2, NIOS2_STATUS_CRS_MSK
+    
+    /* Skip switching register set if STATUS.CRS is 0.  */
+    beq r2, zero, 0f
+
+    /* Set SSTATUS to 0 to get to set SSTATUS.PRS to 0. */
+    .set nobreak
+    movui sstatus, 0
+    .set break
+
+    /* Switch to register set 0 and jump to label. */
+    movhi ea, %hi(0f)
+    ori ea, ea, %lo(0f)
+    eret
+
+0:
+#endif /* NIOS2_NUM_OF_SHADOW_REG_SETS > 0 */
+
 /*
- * Initialize the data cache if present (i.e. size > 0) and not
- * optimizing for RTL simulation.
- * RTL simulations can ensure the data cache is already initialized
- * so skipping this loop speeds up RTL simulation.
+ * Initialize the data cache if present (i.e. size > 0).
+ * Skip initialization if optimizing for RTL simulation and ECC isn't present.
+ * RTL simulations can ensure the data cache tag RAM is already initialized
+ * (but not the data RAM for ECC) so skipping this speeds up RTL simulation.
+ *
+ * When ECC is present, need to execute initd for each word address
+ * to ensure ECC parity bits in data RAM get initialized.
+ * Otherwise, only need to execute initd for each line address.
  */
 
-#if NIOS2_DCACHE_SIZE > 0 && !defined(ALT_SIM_OPTIMIZE)
+#if NIOS2_DCACHE_SIZE > 0 && (!defined(ALT_SIM_OPTIMIZE) || defined(NIOS2_ECC_PRESENT))
 
     /* Assume the data cache size is always a power of two. */
 #if NIOS2_DCACHE_SIZE > 0x8000
@@ -239,7 +271,11 @@ _start:
 
 0:
     initd 0(r2)
+#ifdef NIOS2_ECC_PRESENT
+    addi r2, r2, -4
+#else
     addi r2, r2, -NIOS2_DCACHE_LINE_SIZE
+#endif
     bgt r2, zero, 0b
 1:
 
@@ -250,7 +286,6 @@ _start:
     .pushsection .debug_alt_sim_info
     .int 2, 1, 0b, 1b
     .popsection
-
 #endif /* Initialize Data Cache */
 
     /* Log that caches have been initialized. */
@@ -259,86 +294,69 @@ _start:
     /* Log that the stack pointer is about to be setup. */
     ALT_LOG_PUTS(alt_log_msg_stackpointer)
 
-#if (NIOS2_NUM_OF_SHADOW_REG_SETS == 0)    
     /*
-     * Now that the caches are initialized, set up the stack pointer.
-     * The value provided by the linker is assumed to be correctly aligned.
+     * Now that the caches are initialized, set up the stack pointer and global pointer.
+     * The values provided by the linker are assumed to be correctly aligned.
      */
     movhi sp, %hi(__alt_stack_pointer)
     ori sp, sp, %lo(__alt_stack_pointer)
-
-    /* Set up the global pointer. */
     movhi gp, %hi(_gp)
     ori gp, gp, %lo(_gp)
 
-#else /* NIOS2_NUM_OF_SHADOW_REG_SETS > 0 */
-
-    /*
-     * Set up the GP and SP in all shadow register sets.
-     */
-
+#ifdef NIOS2_ECC_PRESENT
     /* 
-     * Check current register set number, if CPU resets into a shadow register 
-     * set, switch register set to 0 by writing zero to SSTATUS register and 
-     * execute an ERET instruction that just jumps to the next PC address 
-     * (use the NEXTPC instruction to get this).
+     * Initialize all general-purpose registers so that ECC can be enabled
+     * later without accidentally triggering a spurious ECC error.
      */
-    
-    rdctl r2, status
-    
-    /* Get the current register set number (STATUS.CRS). */
-    andi r3, r2, NIOS2_STATUS_CRS_MSK
-    
-    /* Skip switch register set if STATUS.CRS is 0.  */
-    beq r3, zero, .Lskip_switch_reg_set
-    
+    movui r1, 0
+    movui r2, 0
+    movui r3, 0
+    movui r4, 0
+    movui r5, 0
+    movui r6, 0
+    movui r7, 0
+    movui r8, 0
+    movui r9, 0
+    movui r10, 0
+    movui r11, 0
+    movui r12, 0
+    movui r13, 0
+    movui r14, 0
+    movui r15, 0
+    movui r16, 0
+    movui r17, 0
+    movui r18, 0
+    movui r19, 0
+    movui r20, 0
+    movui r21, 0
+    movui r22, 0
+    movui r23, 0
+    /* Skip r24 (et) because only exception handler should write it. */
+    /* Skip r25 (bt) because only debugger should write it. */
+    /* Skip r26 (gp) because it is already been initialized. */
+    /* Skip r27 (sp) because it is already been initialized. */
+    movui r28, 0    /* fp */
+    movui r29, 0    /* ea */
     .set nobreak
-    
-    /* Current register set is non-zero, set SSTATUS to 0. */
-    mov sstatus, zero
-    
-    /* Get next pc and store in ea. */
-    nextpc ea
-    
-    /* Point to instruction after eret. */
-    addi ea, ea, 8
-    
-    /* 
-     * Execute ERET instruction that just jumps to the next PC address 
-     */
-    eret
-    
-.Lskip_switch_reg_set:    
-    mov r2, zero
-    
-    /* Reset STATUS register */
-    wrctl status, r2
+    movui r30, 0    /* sstatus */
+    .set break
+    movui r31, 0    /* ra */
 
-    movui r3, NIOS2_NUM_OF_SHADOW_REG_SETS
-    
-    /* Set up the stack pointer in register set 0. */
-    movhi sp, %hi(__alt_stack_pointer)
-    ori sp, sp, %lo(__alt_stack_pointer)
-    
-    /* Set up the global pointer in register set 0. */
-    movhi gp, %hi(_gp)
-    ori gp, gp, %lo(_gp)     
+#endif /* NIOS2_ECC_PRESENT */
 
-.Lsetup_sp_and_gp_loop:
+#if (NIOS2_NUM_OF_SHADOW_REG_SETS > 0)    
     /* 
-     * Setup GP and SP for shadow register set 
-     * from NIOS2_NUM_OF_SHADOW_REG_SETS to 0
+     * Setup registers in shadow register sets
+     * from 1 to NIOS2_NUM_OF_SHADOW_REG_SETS.
      */
 
-    /* Skip if number of register sets is 0. */
-    beq r3, zero, .Lno_shadow_register_set
-
-
-    /* Add previous register set STATUS.PRS by 1 */
-    movhi r4, 1
+    movui r2, 0     /* Contains value written into STATUS */
+    movui r3, NIOS2_NUM_OF_SHADOW_REG_SETS  /* counter */
+    movhi r4, 1     /* Constant to increment STATUS.PRS */
+    
+.Linitialize_shadow_registers:
+    /* Increment STATUS.PRS */
     add r2, r2, r4
-
-    /* Write STATUS */
     wrctl status, r2
 
     /* Clear r0 in the shadow register set (not done by hardware) */
@@ -347,25 +365,62 @@ _start:
     /* Write the GP in previous register set */
     wrprs gp, gp
 
-    /* Only write the SP in previous register set
-     * if using the seperate exception stack. For normal case (single stack),
-     * funnel code would read the SP from previous register set.
+    /* 
+     * Only write the SP in previous register set
+     * if using the separate exception stack. For normal case (single stack),
+     * funnel code would read the SP from previous register set with a RDPRS.
      */
 #ifdef ALT_INTERRUPT_STACK
-
     movhi et, %hiadj(__alt_interrupt_stack_pointer)
     addi  et, et, %lo(__alt_interrupt_stack_pointer)
     wrprs sp, et
-
 #endif /* ALT_INTERRUPT_STACK */
 
-    /* Decrease number of register set counter by 1 */
+#ifdef NIOS2_ECC_PRESENT
+    /* 
+     * Initialize all general-purpose registers so that ECC can be enabled
+     * later without accidentally triggering a spurious ECC error.
+     */
+    wrprs r1, r0
+    wrprs r2, r0
+    wrprs r3, r0
+    wrprs r4, r0
+    wrprs r5, r0
+    wrprs r6, r0
+    wrprs r7, r0
+    wrprs r8, r0
+    wrprs r9, r0
+    wrprs r10, r0
+    wrprs r11, r0
+    wrprs r12, r0
+    wrprs r13, r0
+    wrprs r14, r0
+    wrprs r15, r0
+    wrprs r16, r0
+    wrprs r17, r0
+    wrprs r18, r0
+    wrprs r19, r0
+    wrprs r20, r0
+    wrprs r21, r0
+    wrprs r22, r0
+    wrprs r23, r0
+    /* Skip r24 (et) because only exception handler should write it. */
+    /* Skip r25 (bt) because only debugger should write it. */
+    /* Skip r26 (gp) because it is already been initialized. */
+    /* Skip r27 (sp) because it was initialized above or will be by a rdprs if not above */
+    wrprs r28, r0    /* fp */
+    wrprs r29, r0    /* ea */
+    wrprs r30, r0    /* ba */
+    wrprs r31, r0    /* ra */
+#endif /* NIOS2_ECC_PRESENT */
+
+    /* Decrement shadow register set counter */
     addi r3, r3, -1
 
-    br .Lsetup_sp_and_gp_loop
-.Lno_shadow_register_set:
+    /* Done if index is 0. */
+    bne r3, zero, .Linitialize_shadow_registers
+#endif /* (NIOS2_NUM_OF_SHADOW_REG_SETS > 0) */
 
-#endif /* NIOS2_NUM_OF_SHADOW_REG_SETS */
 /*
  * Clear the BSS if not optimizing for RTL simulation.
  *

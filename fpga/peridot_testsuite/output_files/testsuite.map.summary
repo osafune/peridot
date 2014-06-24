@@ -1,12 +1,12 @@
-Analysis & Synthesis Status : Successful - Wed Oct 23 13:26:22 2013
-Quartus II 64-Bit Version : 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition
+Analysis & Synthesis Status : Successful - Tue Jun 24 16:37:37 2014
+Quartus II 64-Bit Version : 13.1.0 Build 162 10/23/2013 SJ Web Edition
 Revision Name : testsuite
 Top-level Entity Name : testsuite
 Family : Cyclone IV E
-Total logic elements : 4,514
-    Total combinational functions : 3,416
-    Dedicated logic registers : 2,740
-Total registers : 2740
+Total logic elements : 4,529
+    Total combinational functions : 3,428
+    Dedicated logic registers : 2,747
+Total registers : 2747
 Total pins : 78
 Total virtual pins : 0
 Total memory bits : 142,336

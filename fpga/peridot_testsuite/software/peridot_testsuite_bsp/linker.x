@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_e' in SOPC Builder design 'cq_viola'
  * SOPC Builder design path: C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_testsuite/cq_viola.sopcinfo
  *
- * Generated: Wed Oct 23 13:32:46 JST 2013
+ * Generated: Wed Nov 06 08:46:03 JST 2013
  */
 
 /*
@@ -100,6 +100,7 @@ SECTIONS
         KEEP (*(.irq));
         KEEP (*(.exceptions.entry.label));
         KEEP (*(.exceptions.entry.user));
+        KEEP (*(.exceptions.entry.ecc_fatal));
         KEEP (*(.exceptions.entry));
         KEEP (*(.exceptions.irqtest.user));
         KEEP (*(.exceptions.irqtest));
@@ -210,7 +211,7 @@ SECTIONS
         PROVIDE (__fini_array_end = ABSOLUTE(.));
         SORT(CONSTRUCTORS)
         KEEP (*(.eh_frame))
-        *(.gcc_except_table)
+        *(.gcc_except_table .gcc_except_table.*)
         *(.dynamic)
         PROVIDE (__CTOR_LIST__ = ABSOLUTE(.));
         KEEP (*(.ctors))
@@ -222,7 +223,7 @@ SECTIONS
         PROVIDE (__DTOR_END__ = ABSOLUTE(.));
         KEEP (*(.jcr))
         . = ALIGN(4);
-    } > ipl_memory = 0x3a880100 /* Nios II NOP instruction */
+    } > ipl_memory = 0x3a880100 /* NOP instruction (always in big-endian byte ordering) */
 
     /*
      *
@@ -332,7 +333,7 @@ SECTIONS
     .sdram : AT ( LOADADDR (.bss) + SIZEOF (.bss) )
     {
         PROVIDE (_alt_partition_sdram_start = ABSOLUTE(.));
-        *(.sdram. sdram.*)
+        *(.sdram .sdram. sdram.*)
         . = ALIGN(4);
         PROVIDE (_alt_partition_sdram_end = ABSOLUTE(.));
     } > sdram
@@ -349,7 +350,7 @@ SECTIONS
     .ipl_memory LOADADDR (.sdram) + SIZEOF (.sdram) : AT ( LOADADDR (.sdram) + SIZEOF (.sdram) )
     {
         PROVIDE (_alt_partition_ipl_memory_start = ABSOLUTE(.));
-        *(.ipl_memory. ipl_memory.*)
+        *(.ipl_memory .ipl_memory. ipl_memory.*)
         . = ALIGN(4);
         PROVIDE (_alt_partition_ipl_memory_end = ABSOLUTE(.));
         _end = ABSOLUTE(.);

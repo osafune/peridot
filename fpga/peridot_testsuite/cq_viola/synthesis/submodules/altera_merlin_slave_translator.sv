@@ -12,9 +12,9 @@
 
 
 
-// $Id: //acds/rel/13.0sp1/ip/merlin/altera_merlin_slave_translator/altera_merlin_slave_translator.sv#1 $
+// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_slave_translator/altera_merlin_slave_translator.sv#1 $
 // $Revision: #1 $
-// $Date: 2013/03/07 $
+// $Date: 2013/08/11 $
 // $Author: swbranch $
 
 // -------------------------------------
@@ -172,7 +172,7 @@ module altera_merlin_slave_translator
 
    // Calculate the symbols per word as the power of 2 extended symbols per word
    wire [31 : 0] symbols_per_word_int = 2**(clog2_plusone(AV_SYMBOLS_PER_WORD[UAV_BURSTCOUNT_W : 0] - 1));
-   wire [UAV_BURSTCOUNT_W : 0] symbols_per_word = symbols_per_word_int[UAV_BURSTCOUNT_W : 0];
+   wire [UAV_BURSTCOUNT_W-1 : 0] symbols_per_word = symbols_per_word_int[UAV_BURSTCOUNT_W-1 : 0];
    
    // +--------------------------------
    // |Backwards Compatibility Signals
@@ -308,11 +308,10 @@ end
 	 
 	 wait_latency_counter <= '0;
 	 	 	 
-	 if( uav_read | uav_write )
-	   wait_latency_counter <= wait_latency_counter + 1'h1;
-
 	 if( ~uav_waitrequest | waitrequest_reset_override )
 	   wait_latency_counter <= '0;
+     else if( uav_read | uav_write )
+       wait_latency_counter <= wait_latency_counter + 1'h1;     
 	 
       end
       
@@ -368,13 +367,13 @@ end
    end
 
    always@* begin
-      uav_readdata = '0;
+      uav_readdata = {UAV_DATA_W{1'b0}};
       
       if( AV_READLATENCY != 0  || USE_READDATAVALID ) begin
-	 uav_readdata = av_readdata;
+        uav_readdata[AV_DATA_W-1:0] = av_readdata;
       end 
       else begin
-	 uav_readdata = av_readdata_pre;
+	    uav_readdata[AV_DATA_W-1:0] = av_readdata_pre;
       end
    end
    // -------------------
@@ -417,7 +416,7 @@ end
       end
       else if (av_clken) begin
 	 
-	 read_latency_shift_reg <= uav_read && ~uav_waitrequest & ~waitrequest_reset_override;
+	 read_latency_shift_reg[0] <= uav_read && ~uav_waitrequest & ~waitrequest_reset_override;
 
 	 for (int i=0; i+1 < AV_READLATENCY ; i+=1 ) begin
 	    read_latency_shift_reg[i+1] <= read_latency_shift_reg[i];

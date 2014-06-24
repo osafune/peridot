@@ -11,10 +11,10 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.0sp1/ip/merlin/altera_merlin_width_adapter/altera_merlin_width_adapter.sv#2 $
-// $Revision: #2 $
-// $Date: 2013/05/15 $
-// $Author: llim $
+// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_width_adapter/altera_merlin_width_adapter.sv#1 $
+// $Revision: #1 $
+// $Date: 2013/08/11 $
+// $Author: swbranch $
 
 // -----------------------------------------------------
 // Merlin Width Adapter
@@ -42,6 +42,8 @@ module altera_merlin_width_adapter
     parameter IN_PKT_TRANS_EXCLUSIVE        = 88,
     parameter IN_PKT_BURST_TYPE_L           = 89,
     parameter IN_PKT_BURST_TYPE_H           = 90,
+	parameter IN_PKT_ORI_BURST_SIZE_L		= 91,
+	parameter IN_PKT_ORI_BURST_SIZE_H		= 93,
     parameter IN_ST_DATA_W                  = 110,
 
     parameter OUT_PKT_ADDR_L                = 0,
@@ -60,6 +62,8 @@ module altera_merlin_width_adapter
     parameter OUT_PKT_TRANS_EXCLUSIVE       = 65,
     parameter OUT_PKT_BURST_TYPE_L          = 66,
     parameter OUT_PKT_BURST_TYPE_H          = 67,
+	parameter OUT_PKT_ORI_BURST_SIZE_L		= 68,
+	parameter OUT_PKT_ORI_BURST_SIZE_H		= 70,
     parameter OUT_ST_DATA_W                 = 92,
 
     parameter ST_CHANNEL_W                  = 32,
@@ -124,18 +128,23 @@ module altera_merlin_width_adapter
     localparam ALIGNED_BITS_L       = clogb2(OUT_NUMSYMBOLS) - 1;
     localparam WN_ADDR_LSBS         = clogb2(RATIO);
     localparam WN_ADDR_SELECT       = clogb2(IN_NUMSYMBOLS);
+    localparam LOG_OUT_NUMSYMBOLS   = clogb2(OUT_NUMSYMBOLS);
     
     // ------------------------------------------------------------
     // Utility Functions
     // ------------------------------------------------------------
+
     function integer clogb2;
         input [63:0] value;
         begin
-            for (clogb2=0; value>0; clogb2=clogb2+1)
+            clogb2 = 0;
+            while (value>0) begin
                 value = value >> 1;
+                clogb2 = clogb2 + 1;
+            end
             clogb2 = clogb2 - 1;
         end
-    endfunction // clogb2
+    endfunction // clogb2    
 
     function integer min;
         input [31:0] a;
@@ -667,6 +676,7 @@ endgenerate
          reg                     p0_use_reg;
          reg [ST_CHANNEL_W-1:0]  p0_channel;
          reg [BURST_SIZE_W-1:0]  p0_burst_size;
+		 reg [BURST_SIZE_W-1:0]  p0_ori_burst_size;
          reg                     p0_out_lock_field;
          reg [BURST_TYPE_W-1:0]  p0_burst_type_field;
          
@@ -685,6 +695,7 @@ endgenerate
          reg [LAST_W-1:0]        p0_reg_last_field;
          reg [ST_CHANNEL_W-1:0]  p0_reg_channel;
          reg [BURST_SIZE_W-1:0]  p0_reg_burst_size;
+		 reg [BURST_SIZE_W-1:0]  p0_reg_ori_burst_size;
          reg [BURST_TYPE_W-1:0]  p0_reg_burst_type_field;
          reg [RESPONSE_STATUS_W-1:0] p0_reg_response_status_field;
          reg                     p0_reg_out_lock_field;
@@ -725,7 +736,7 @@ endgenerate
          wire [BYTE_CNT_W-1:0] byte_cnt_sized_in_num_symbols = 
             int_in_numsymbols[BYTE_CNT_W-1:0];
          reg [7:0]  cmd_burst_size;
-         reg [31:0] out_numsymbols_wire = clogb2(OUT_NUMSYMBOLS);
+         wire [31:0] out_numsymbols_wire = LOG_OUT_NUMSYMBOLS;
          wire [31:0]        int_encoded_burstsize = NW_BITFORSELECT_R; //NW_BITFORSELECT_R is the log2 of IN_NUMSYMBOLS
          wire [BURST_SIZE_W-1:0] encoded_burstsize = int_encoded_burstsize[BURST_SIZE_W-1:0];      
             
@@ -733,20 +744,23 @@ endgenerate
         if (RESPONSE_PATH == 0) begin
             assign in_burstwrap_field = in_data[IN_PKT_BURSTWRAP_H:IN_PKT_BURSTWRAP_L];
         end
+        else begin
+            assign in_burstwrap_field = {BWRAP_W{1'b1}};
+        end   
 
 		// To use "read response merging" the Width adapter need to know the size of the command
 		// to check if downside happen. For AXI system, the fifo will store this number (non-packing: we use "combined width adapter")
 		// but in case system without AXI, the system use stand alone width adapter and it cannot read this value
 		// Make a condition incase we see stand alone WA, set this in_command_burst_size to input size
-		wire [2:0] in_command_burst_size;
-		if ((PACKING == 1) & (CONSTANT_BURST_SIZE == 1)) // stand alone WA
-			begin
-				assign in_command_burst_size = out_numsymbols_wire[2:0];
-			end
-		else 
-			begin
-				assign in_command_burst_size = in_command_size_data;
-			end
+        //wire [2:0] in_command_burst_size = out_numsymbols_wire[2:0];
+		//if (!((PACKING == 1) & (CONSTANT_BURST_SIZE == 1))) // stand alone WA
+		//	begin
+		//		assign in_command_burst_size = in_command_size_data;
+		//	end
+		reg [BURST_SIZE_W-1:0]      	in_ori_size_field;
+		always @* begin
+			in_ori_size_field        = in_data[IN_PKT_ORI_BURST_SIZE_H :IN_PKT_ORI_BURST_SIZE_L ];
+		end
 		
         reg [7:0]   size_ratio;
          // --------------------------------------------
@@ -772,6 +786,7 @@ endgenerate
                p0_reg_last_field     <= '0;
                p0_reg_channel        <= '0;
                p0_reg_burst_size     <= '0;
+			   p0_reg_ori_burst_size     <= '0;
                p0_reg_out_lock_field <= '0;
                p0_reg_burst_type_field      <= '0;
                p0_reg_response_status_field <= '0;
@@ -795,6 +810,7 @@ endgenerate
                   p0_reg_last_field     <= p0_last_field;    
                   p0_reg_channel        <= p0_channel;
                   p0_reg_burst_size     <= p0_burst_size;
+				  p0_reg_ori_burst_size <= p0_ori_burst_size;
                   p0_reg_out_lock_field <= p0_out_lock_field;
                   p0_reg_burst_type_field       <= p0_burst_type_field;
                   p0_reg_response_status_field  <= p0_response_status_field;
@@ -829,6 +845,7 @@ endgenerate
             p0_last_field     = in_last_field;
             p0_channel        = in_channel;
             p0_burst_size     = in_size_field;
+			p0_ori_burst_size = in_ori_size_field;
             p0_out_lock_field = in_lock_field;
             p0_burst_type_field         = in_burst_type_field;
             p0_response_status_field    = in_response_status_field;
@@ -846,6 +863,7 @@ endgenerate
                p0_last_field     = p0_reg_last_field;
                p0_channel        = p0_reg_channel;
                p0_burst_size     = p0_reg_burst_size;
+			   p0_ori_burst_size = p0_reg_ori_burst_size;
                p0_out_lock_field = p0_reg_out_lock_field;
                p0_burst_type_field      = p0_reg_burst_type_field;
                p0_response_status_field = p0_reg_response_status_field;
@@ -985,7 +1003,9 @@ endgenerate
             p1_shift_correct_ouput_segments = p1_address_field[NW_BITFORSELECT_L:NW_BITFORSELECT_R];
             
             // size ratio betwen command size and response size
-            cmd_burst_size = bytes_in_transfer(in_command_burst_size);
+            //cmd_burst_size = bytes_in_transfer(in_command_burst_size);
+			cmd_burst_size = bytes_in_transfer(p0_ori_burst_size);
+			
             size_ratio = cmd_burst_size >> in_size_field; 
             
             if (RESPONSE_PATH == 0) begin 
@@ -1044,7 +1064,8 @@ endgenerate
                     out_size_field      = p1_burst_size;
                  end
             end else begin // the WA is on reponse path and default: PACKING = 1
-                if (in_size_field < in_command_burst_size) begin // downsize happen on command path, the response need packing
+                //if (in_size_field < in_command_burst_size) begin // downsize happen on command path, the response need packing
+				if (in_size_field < in_ori_size_field) begin // downsize happen on command path, the response need packing
                     out_data_field    = data_reg  
                         | (p1_data_field << (p1_shift_correct_ouput_segments *IN_NUMSYMBOLS*SYMBOL_W));
                     out_address_field = p1_address_field & out_address_field_mask;
@@ -1057,7 +1078,8 @@ endgenerate
                 end
             end
 			
-			if (in_size_field < in_command_burst_size) begin // downsize happen on command path, the response need packing
+			//if (in_size_field < in_command_burst_size) begin // downsize happen on command path, the response need packing
+			if (in_size_field < in_ori_size_field) begin // downsize happen on command path, the response need packing
                 // Response merging: rules: DECERR(11) > SLVERR (10) > OKAY (00)
                 // EXOKAY will not happen on merging
                 out_response_status_field = '0;

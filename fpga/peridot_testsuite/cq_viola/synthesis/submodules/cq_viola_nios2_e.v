@@ -1,4 +1,4 @@
-//Legal Notice: (C)2013 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2014 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -42,14 +42,16 @@ module cq_viola_nios2_e_register_bank_a_module (
   input            wren;
 
   wire    [ 31: 0] q;
+  wire    [ 31: 0] ram_data;
   wire    [ 31: 0] ram_q;
   assign q = ram_q;
+  assign ram_data = data;
   altsyncram the_altsyncram
     (
       .address_a (wraddress),
       .address_b (rdaddress),
       .clock0 (clock),
-      .data_a (data),
+      .data_a (ram_data),
       .q_b (ram_q),
       .wren_a (wren)
     );
@@ -105,14 +107,16 @@ module cq_viola_nios2_e_register_bank_b_module (
   input            wren;
 
   wire    [ 31: 0] q;
+  wire    [ 31: 0] ram_data;
   wire    [ 31: 0] ram_q;
   assign q = ram_q;
+  assign ram_data = data;
   altsyncram the_altsyncram
     (
       .address_a (wraddress),
       .address_b (rdaddress),
       .clock0 (clock),
-      .data_a (data),
+      .data_a (ram_data),
       .q_b (ram_q),
       .wren_a (wren)
     );
@@ -291,6 +295,7 @@ module cq_viola_nios2_e_ociram_sp_ram_module (
                                                 byteenable,
                                                 clock,
                                                 data,
+                                                reset_req,
                                                 wren,
 
                                                // outputs:
@@ -306,16 +311,20 @@ module cq_viola_nios2_e_ociram_sp_ram_module (
   input   [  3: 0] byteenable;
   input            clock;
   input   [ 31: 0] data;
+  input            reset_req;
   input            wren;
 
+  wire             clocken;
   wire    [ 31: 0] q;
   wire    [ 31: 0] ram_q;
   assign q = ram_q;
+  assign clocken = ~reset_req;
   altsyncram the_altsyncram
     (
       .address_a (address),
       .byteena_a (byteenable),
       .clock0 (clock),
+      .clocken0 (clocken),
       .data_a (data),
       .q_a (ram_q),
       .wren_a (wren)
@@ -352,6 +361,7 @@ module cq_viola_nios2_e_nios2_ocimem (
                                         jdo,
                                         jrst_n,
                                         read,
+                                        reset_req,
                                         take_action_ocimem_a,
                                         take_action_ocimem_b,
                                         take_no_action_ocimem_a,
@@ -375,6 +385,7 @@ module cq_viola_nios2_e_nios2_ocimem (
   input   [ 37: 0] jdo;
   input            jrst_n;
   input            read;
+  input            reset_req;
   input            take_action_ocimem_a;
   input            take_action_ocimem_b;
   input            take_no_action_ocimem_a;
@@ -478,7 +489,7 @@ module cq_viola_nios2_e_nios2_ocimem (
   assign ociram_addr = jtag_ram_access ? MonAReg[9 : 2] : address[7 : 0];
   assign ociram_wr_data = jtag_ram_access ? MonDReg[31 : 0] : writedata;
   assign ociram_byteenable = jtag_ram_access ? 4'b1111 : byteenable;
-  assign ociram_wr_en = jtag_ram_wr | avalon_ram_wr;
+  assign ociram_wr_en = jtag_ram_access ? jtag_ram_wr : avalon_ram_wr;
 //cq_viola_nios2_e_ociram_sp_ram, which is an nios_sp_ram
 cq_viola_nios2_e_ociram_sp_ram_module cq_viola_nios2_e_ociram_sp_ram
   (
@@ -487,6 +498,7 @@ cq_viola_nios2_e_ociram_sp_ram_module cq_viola_nios2_e_ociram_sp_ram
     .clock      (clk),
     .data       (ociram_wr_data),
     .q          (ociram_readdata),
+    .reset_req  (reset_req),
     .wren       (ociram_wr_en)
   );
 
@@ -503,7 +515,7 @@ defparam cq_viola_nios2_e_ociram_sp_ram.lpm_file = "cq_viola_nios2_e_ociram_defa
   assign cfgrom_readdata = (MonAReg[4 : 2] == 3'd0)? 32'h0f000020 :
     (MonAReg[4 : 2] == 3'd1)? 32'h00001d1c :
     (MonAReg[4 : 2] == 3'd2)? 32'h00040000 :
-    (MonAReg[4 : 2] == 3'd3)? 32'h00000000 :
+    (MonAReg[4 : 2] == 3'd3)? 32'h00000100 :
     (MonAReg[4 : 2] == 3'd4)? 32'h20000000 :
     (MonAReg[4 : 2] == 3'd5)? 32'h0f000000 :
     (MonAReg[4 : 2] == 3'd6)? 32'h00000000 :
@@ -1337,24 +1349,28 @@ module cq_viola_nios2_e_nios2_oci_itrace (
   input            xbrk_traceon;
   input            xbrk_wrap_traceoff;
 
+  wire             advanced_exc_occured;
   wire             curr_pid;
   reg     [ 29: 0] dct_buffer /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   wire    [  1: 0] dct_code;
   reg     [  3: 0] dct_count /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   wire             dct_is_taken;
-  wire    [ 31: 0] excaddr;
+  wire    [ 31: 0] eic_addr;
+  wire    [ 31: 0] exc_addr;
   wire             instr_retired;
-  wire             is_advanced_exception;
   wire             is_cond_dct;
   wire             is_dct;
   wire             is_exception_no_break;
+  wire             is_external_interrupt;
   wire             is_fast_tlb_miss_exception;
   wire             is_idct;
   reg     [ 35: 0] itm /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   wire             not_in_debug_mode;
   reg              pending_curr_pid /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
-  reg     [ 31: 0] pending_excaddr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
-  reg              pending_exctype /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
+  reg              pending_exc /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
+  reg     [ 31: 0] pending_exc_addr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
+  reg     [ 31: 0] pending_exc_handler /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
+  reg              pending_exc_record_handler /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   reg     [  3: 0] pending_frametype /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   reg              pending_prev_pid /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   reg              prev_pid /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
@@ -1367,9 +1383,9 @@ module cq_viola_nios2_e_nios2_oci_itrace (
   reg              snapped_prev_pid /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   wire    [  1: 0] sync_code;
   wire    [  6: 0] sync_interval;
-  wire             sync_pending;
   reg     [  6: 0] sync_timer /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   wire    [  6: 0] sync_timer_next;
+  wire             sync_timer_reached_zero;
   reg              trc_clear /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=D101"  */;
   wire    [ 15: 0] trc_ctrl;
   reg     [ 10: 0] trc_ctrl_reg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
@@ -1381,16 +1397,18 @@ module cq_viola_nios2_e_nios2_oci_itrace (
   assign retired_pcb = 32'b0;
   assign not_in_debug_mode = 1'b0;
   assign instr_retired = 1'b0;
-  assign is_advanced_exception = 1'b0;
+  assign advanced_exc_occured = 1'b0;
   assign is_exception_no_break = 1'b0;
+  assign is_external_interrupt = 1'b0;
   assign is_fast_tlb_miss_exception = 1'b0;
   assign curr_pid = 1'b0;
-  assign excaddr = 32'b0;
+  assign exc_addr = 32'b0;
+  assign eic_addr = 32'b0;
   assign sync_code = trc_ctrl[3 : 2];
   assign sync_interval = { sync_code[1] & sync_code[0], 1'b0, sync_code[1] & ~sync_code[0], 1'b0, ~sync_code[1] & sync_code[0], 2'b00 };
-  assign sync_pending = sync_timer == 0;
-  assign record_dct_outcome_in_sync = dct_is_taken & sync_pending;
-  assign sync_timer_next = sync_pending ? sync_timer : (sync_timer - 1);
+  assign sync_timer_reached_zero = sync_timer == 0;
+  assign record_dct_outcome_in_sync = dct_is_taken & sync_timer_reached_zero;
+  assign sync_timer_next = sync_timer_reached_zero ? sync_timer : (sync_timer - 1);
   assign record_itrace = trc_on & trc_ctrl[4];
   assign dct_code = {is_cond_dct, dct_is_taken};
   always @(posedge clk or negedge jrst_n)
@@ -1413,8 +1431,10 @@ module cq_viola_nios2_e_nios2_oci_itrace (
           dct_count <= 0;
           sync_timer <= 0;
           pending_frametype <= 4'b0000;
-          pending_exctype <= 1'b0;
-          pending_excaddr <= 0;
+          pending_exc <= 0;
+          pending_exc_addr <= 0;
+          pending_exc_handler <= 0;
+          pending_exc_record_handler <= 0;
           prev_pid <= 0;
           prev_pid_valid <= 0;
           snapped_pid <= 0;
@@ -1430,8 +1450,10 @@ module cq_viola_nios2_e_nios2_oci_itrace (
           dct_count <= 0;
           sync_timer <= 0;
           pending_frametype <= 4'b0000;
-          pending_exctype <= 1'b0;
-          pending_excaddr <= 0;
+          pending_exc <= 0;
+          pending_exc_addr <= 0;
+          pending_exc_handler <= 0;
+          pending_exc_record_handler <= 0;
           prev_pid <= 0;
           prev_pid_valid <= 0;
           snapped_pid <= 0;
@@ -1455,18 +1477,22 @@ module cq_viola_nios2_e_nios2_oci_itrace (
               prev_pid <= curr_pid;
               prev_pid_valid <= 1;
             end
-          if (instr_retired | is_advanced_exception)
+          if (instr_retired | advanced_exc_occured)
             begin
               if (~record_itrace)
                   pending_frametype <= 4'b1010;
               else if (is_exception_no_break)
                 begin
-                  pending_frametype <= 4'b0010;
-                  pending_excaddr <= excaddr;
-                  if (is_fast_tlb_miss_exception)
-                      pending_exctype <= 1'b1;
+                  pending_exc <= 1;
+                  pending_exc_addr <= exc_addr;
+                  pending_exc_record_handler <= 0;
+                  if (is_external_interrupt)
+                      pending_exc_handler <= eic_addr;
+                  else if (is_fast_tlb_miss_exception)
+                      pending_exc_handler <= 32'h0;
                   else 
-                    pending_exctype <= 1'b0;
+                    pending_exc_handler <= 32'hf000020;
+                  pending_frametype <= 4'b0000;
                 end
               else if (is_idct)
                   pending_frametype <= 4'b1001;
@@ -1482,11 +1508,11 @@ module cq_viola_nios2_e_nios2_oci_itrace (
               else 
                 pending_frametype <= 4'b0000;
               if ((dct_count != 0) & 
-           (~record_itrace | 
-            is_exception_no_break |
-            is_idct |
-            record_dct_outcome_in_sync |
-            (!is_dct & snapped_pid)))
+             (~record_itrace | 
+              is_exception_no_break |
+              is_idct |
+              record_dct_outcome_in_sync |
+              (!is_dct & snapped_pid)))
                 begin
                   itm <= {4'b0001, dct_buffer, 2'b00};
                   dct_buffer <= 0;
@@ -1495,23 +1521,21 @@ module cq_viola_nios2_e_nios2_oci_itrace (
                 end
               else 
                 begin
-                  if (record_itrace & (is_dct & (dct_count != 4'd15)) & ~record_dct_outcome_in_sync & ~is_advanced_exception)
+                  if (record_itrace & (is_dct & (dct_count != 4'd15)) & ~record_dct_outcome_in_sync & ~advanced_exc_occured)
                     begin
                       dct_buffer <= {dct_code, dct_buffer[29 : 2]};
                       dct_count <= dct_count + 1;
                     end
-                  if (record_itrace & (pending_frametype == 4'b0010))
-                      itm <= {4'b0010, pending_excaddr[31 : 1], pending_exctype};
-                  else if (record_itrace & (
-                (pending_frametype == 4'b1000) |
-                (pending_frametype == 4'b1010) |
-                (pending_frametype == 4'b1001)))
+                  if (record_itrace & (
+                  (pending_frametype == 4'b1000) |
+                  (pending_frametype == 4'b1010) |
+                  (pending_frametype == 4'b1001)))
                     begin
                       itm <= {pending_frametype, retired_pcb};
                       sync_timer <= sync_interval;
                       if (0 &
-                    ((pending_frametype == 4'b1000) | (pending_frametype == 4'b1010)) &
-                    !snapped_pid & prev_pid_valid)
+                      ((pending_frametype == 4'b1000) | (pending_frametype == 4'b1010)) &
+                      !snapped_pid & prev_pid_valid)
                         begin
                           snapped_pid <= 1;
                           snapped_curr_pid <= curr_pid;
@@ -1519,7 +1543,7 @@ module cq_viola_nios2_e_nios2_oci_itrace (
                         end
                     end
                   else if (record_itrace & 
-                0 & (pending_frametype == 4'b0011))
+                  0 & (pending_frametype == 4'b0011))
                       itm <= {4'b0011, 2'b00, pending_prev_pid, 2'b00, pending_curr_pid};
                   else if (record_itrace & is_dct)
                     begin
@@ -1535,6 +1559,20 @@ module cq_viola_nios2_e_nios2_oci_itrace (
                     end
                   else 
                     itm <= {4'b0000, 32'b0};
+                end
+            end
+          else if (record_itrace & pending_exc)
+            begin
+              if (pending_exc_record_handler)
+                begin
+                  itm <= {4'b0010, pending_exc_handler[31 : 1], 1'b1};
+                  pending_exc <= 1'b0;
+                  pending_exc_record_handler <= 1'b0;
+                end
+              else 
+                begin
+                  itm <= {4'b0010, pending_exc_addr[31 : 1], 1'b0};
+                  pending_exc_record_handler <= 1'b1;
                 end
             end
           else 
@@ -1757,23 +1795,23 @@ endmodule
 // altera message_level Level1 
 // altera message_off 10034 10035 10036 10037 10230 10240 10030 
 
-module cq_viola_nios2_e_nios2_oci_compute_tm_count (
-                                                     // inputs:
-                                                      atm_valid,
-                                                      dtm_valid,
-                                                      itm_valid,
+module cq_viola_nios2_e_nios2_oci_compute_input_tm_cnt (
+                                                         // inputs:
+                                                          atm_valid,
+                                                          dtm_valid,
+                                                          itm_valid,
 
-                                                     // outputs:
-                                                      compute_tm_count
-                                                   )
+                                                         // outputs:
+                                                          compute_input_tm_cnt
+                                                       )
 ;
 
-  output  [  1: 0] compute_tm_count;
+  output  [  1: 0] compute_input_tm_cnt;
   input            atm_valid;
   input            dtm_valid;
   input            itm_valid;
 
-  reg     [  1: 0] compute_tm_count;
+  reg     [  1: 0] compute_input_tm_cnt;
   wire    [  2: 0] switch_for_mux;
   assign switch_for_mux = {itm_valid, atm_valid, dtm_valid};
   always @(switch_for_mux)
@@ -1781,35 +1819,35 @@ module cq_viola_nios2_e_nios2_oci_compute_tm_count (
       case (switch_for_mux)
       
           3'b000: begin
-              compute_tm_count = 0;
+              compute_input_tm_cnt = 0;
           end // 3'b000 
       
           3'b001: begin
-              compute_tm_count = 1;
+              compute_input_tm_cnt = 1;
           end // 3'b001 
       
           3'b010: begin
-              compute_tm_count = 1;
+              compute_input_tm_cnt = 1;
           end // 3'b010 
       
           3'b011: begin
-              compute_tm_count = 2;
+              compute_input_tm_cnt = 2;
           end // 3'b011 
       
           3'b100: begin
-              compute_tm_count = 1;
+              compute_input_tm_cnt = 1;
           end // 3'b100 
       
           3'b101: begin
-              compute_tm_count = 2;
+              compute_input_tm_cnt = 2;
           end // 3'b101 
       
           3'b110: begin
-              compute_tm_count = 2;
+              compute_input_tm_cnt = 2;
           end // 3'b110 
       
           3'b111: begin
-              compute_tm_count = 3;
+              compute_input_tm_cnt = 3;
           end // 3'b111 
       
       endcase // switch_for_mux
@@ -1828,33 +1866,33 @@ endmodule
 // altera message_level Level1 
 // altera message_off 10034 10035 10036 10037 10230 10240 10030 
 
-module cq_viola_nios2_e_nios2_oci_fifowp_inc (
-                                               // inputs:
-                                                free2,
-                                                free3,
-                                                tm_count,
+module cq_viola_nios2_e_nios2_oci_fifo_wrptr_inc (
+                                                   // inputs:
+                                                    ge2_free,
+                                                    ge3_free,
+                                                    input_tm_cnt,
 
-                                               // outputs:
-                                                fifowp_inc
-                                             )
+                                                   // outputs:
+                                                    fifo_wrptr_inc
+                                                 )
 ;
 
-  output  [  3: 0] fifowp_inc;
-  input            free2;
-  input            free3;
-  input   [  1: 0] tm_count;
+  output  [  3: 0] fifo_wrptr_inc;
+  input            ge2_free;
+  input            ge3_free;
+  input   [  1: 0] input_tm_cnt;
 
-  reg     [  3: 0] fifowp_inc;
-  always @(free2 or free3 or tm_count)
+  reg     [  3: 0] fifo_wrptr_inc;
+  always @(ge2_free or ge3_free or input_tm_cnt)
     begin
-      if (free3 & (tm_count == 3))
-          fifowp_inc = 3;
-      else if (free2 & (tm_count >= 2))
-          fifowp_inc = 2;
-      else if (tm_count >= 1)
-          fifowp_inc = 1;
+      if (ge3_free & (input_tm_cnt == 3))
+          fifo_wrptr_inc = 3;
+      else if (ge2_free & (input_tm_cnt >= 2))
+          fifo_wrptr_inc = 2;
+      else if (input_tm_cnt >= 1)
+          fifo_wrptr_inc = 1;
       else 
-        fifowp_inc = 0;
+        fifo_wrptr_inc = 0;
     end
 
 
@@ -1870,37 +1908,37 @@ endmodule
 // altera message_level Level1 
 // altera message_off 10034 10035 10036 10037 10230 10240 10030 
 
-module cq_viola_nios2_e_nios2_oci_fifocount_inc (
-                                                  // inputs:
-                                                   empty,
-                                                   free2,
-                                                   free3,
-                                                   tm_count,
+module cq_viola_nios2_e_nios2_oci_fifo_cnt_inc (
+                                                 // inputs:
+                                                  empty,
+                                                  ge2_free,
+                                                  ge3_free,
+                                                  input_tm_cnt,
 
-                                                  // outputs:
-                                                   fifocount_inc
-                                                )
+                                                 // outputs:
+                                                  fifo_cnt_inc
+                                               )
 ;
 
-  output  [  4: 0] fifocount_inc;
+  output  [  4: 0] fifo_cnt_inc;
   input            empty;
-  input            free2;
-  input            free3;
-  input   [  1: 0] tm_count;
+  input            ge2_free;
+  input            ge3_free;
+  input   [  1: 0] input_tm_cnt;
 
-  reg     [  4: 0] fifocount_inc;
-  always @(empty or free2 or free3 or tm_count)
+  reg     [  4: 0] fifo_cnt_inc;
+  always @(empty or ge2_free or ge3_free or input_tm_cnt)
     begin
       if (empty)
-          fifocount_inc = tm_count[1 : 0];
-      else if (free3 & (tm_count == 3))
-          fifocount_inc = 2;
-      else if (free2 & (tm_count >= 2))
-          fifocount_inc = 1;
-      else if (tm_count >= 1)
-          fifocount_inc = 0;
+          fifo_cnt_inc = input_tm_cnt[1 : 0];
+      else if (ge3_free & (input_tm_cnt == 3))
+          fifo_cnt_inc = 2;
+      else if (ge2_free & (input_tm_cnt >= 2))
+          fifo_cnt_inc = 1;
+      else if (input_tm_cnt >= 1)
+          fifo_cnt_inc = 0;
       else 
-        fifocount_inc = {5{1'b1}};
+        fifo_cnt_inc = {5{1'b1}};
     end
 
 
@@ -1955,7 +1993,7 @@ module cq_viola_nios2_e_nios2_oci_fifo (
   input            trc_on;
 
   wire             atm_valid;
-  wire    [  1: 0] compute_tm_count_tm_count;
+  wire    [  1: 0] compute_input_tm_cnt;
   wire             dtm_valid;
   wire             empty;
   reg     [ 35: 0] fifo_0;
@@ -2006,66 +2044,62 @@ module cq_viola_nios2_e_nios2_oci_fifo (
   reg     [ 35: 0] fifo_9;
   wire             fifo_9_enable;
   wire    [ 35: 0] fifo_9_mux;
+  reg     [  4: 0] fifo_cnt /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
+  wire    [  4: 0] fifo_cnt_inc;
+  wire    [ 35: 0] fifo_head;
+  reg     [  3: 0] fifo_rdptr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
   wire    [ 35: 0] fifo_read_mux;
-  reg     [  4: 0] fifocount /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
-  wire    [  4: 0] fifocount_inc_fifocount;
-  wire    [ 35: 0] fifohead;
-  reg     [  3: 0] fiforp /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
-  reg     [  3: 0] fifowp /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
-  wire    [  3: 0] fifowp1;
-  wire    [  3: 0] fifowp2;
-  wire    [  3: 0] fifowp_inc_fifowp;
-  wire             free2;
-  wire             free3;
+  reg     [  3: 0] fifo_wrptr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
+  wire    [  3: 0] fifo_wrptr_inc;
+  wire    [  3: 0] fifo_wrptr_plus1;
+  wire    [  3: 0] fifo_wrptr_plus2;
+  wire             ge2_free;
+  wire             ge3_free;
+  wire             input_ge1;
+  wire             input_ge2;
+  wire             input_ge3;
+  wire    [  1: 0] input_tm_cnt;
   wire             itm_valid;
-  reg              ovf_pending /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
-  wire    [ 35: 0] ovr_pending_atm;
-  wire    [ 35: 0] ovr_pending_dtm;
-  wire    [  1: 0] tm_count;
-  wire             tm_count_ge1;
-  wire             tm_count_ge2;
-  wire             tm_count_ge3;
+  reg              overflow_pending /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=R101"  */;
+  wire    [ 35: 0] overflow_pending_atm;
+  wire    [ 35: 0] overflow_pending_dtm;
   wire             trc_this;
   wire    [ 35: 0] tw;
   assign trc_this = trc_on | (dbrk_traceon & ~dbrk_traceoff) | dbrk_traceme;
   assign itm_valid = |itm[35 : 32];
   assign atm_valid = |atm[35 : 32] & trc_this;
   assign dtm_valid = |dtm[35 : 32] & trc_this;
-  assign free2 = ~fifocount[4];
-  assign free3 = ~fifocount[4] & ~&fifocount[3 : 0];
-  assign empty = ~|fifocount;
-  assign fifowp1 = fifowp + 1;
-  assign fifowp2 = fifowp + 2;
-  //cq_viola_nios2_e_nios2_oci_compute_tm_count_tm_count, which is an e_instance
-  cq_viola_nios2_e_nios2_oci_compute_tm_count cq_viola_nios2_e_nios2_oci_compute_tm_count_tm_count
+  assign ge2_free = ~fifo_cnt[4];
+  assign ge3_free = ge2_free & ~&fifo_cnt[3 : 0];
+  assign empty = ~|fifo_cnt;
+  assign fifo_wrptr_plus1 = fifo_wrptr + 1;
+  assign fifo_wrptr_plus2 = fifo_wrptr + 2;
+  cq_viola_nios2_e_nios2_oci_compute_input_tm_cnt the_cq_viola_nios2_e_nios2_oci_compute_input_tm_cnt
     (
-      .atm_valid        (atm_valid),
-      .compute_tm_count (compute_tm_count_tm_count),
-      .dtm_valid        (dtm_valid),
-      .itm_valid        (itm_valid)
+      .atm_valid            (atm_valid),
+      .compute_input_tm_cnt (compute_input_tm_cnt),
+      .dtm_valid            (dtm_valid),
+      .itm_valid            (itm_valid)
     );
 
-  assign tm_count = compute_tm_count_tm_count;
-  //cq_viola_nios2_e_nios2_oci_fifowp_inc_fifowp, which is an e_instance
-  cq_viola_nios2_e_nios2_oci_fifowp_inc cq_viola_nios2_e_nios2_oci_fifowp_inc_fifowp
+  assign input_tm_cnt = compute_input_tm_cnt;
+  cq_viola_nios2_e_nios2_oci_fifo_wrptr_inc the_cq_viola_nios2_e_nios2_oci_fifo_wrptr_inc
     (
-      .fifowp_inc (fifowp_inc_fifowp),
-      .free2      (free2),
-      .free3      (free3),
-      .tm_count   (tm_count)
+      .fifo_wrptr_inc (fifo_wrptr_inc),
+      .ge2_free       (ge2_free),
+      .ge3_free       (ge3_free),
+      .input_tm_cnt   (input_tm_cnt)
     );
 
-  //cq_viola_nios2_e_nios2_oci_fifocount_inc_fifocount, which is an e_instance
-  cq_viola_nios2_e_nios2_oci_fifocount_inc cq_viola_nios2_e_nios2_oci_fifocount_inc_fifocount
+  cq_viola_nios2_e_nios2_oci_fifo_cnt_inc the_cq_viola_nios2_e_nios2_oci_fifo_cnt_inc
     (
-      .empty         (empty),
-      .fifocount_inc (fifocount_inc_fifocount),
-      .free2         (free2),
-      .free3         (free3),
-      .tm_count      (tm_count)
+      .empty        (empty),
+      .fifo_cnt_inc (fifo_cnt_inc),
+      .ge2_free     (ge2_free),
+      .ge3_free     (ge3_free),
+      .input_tm_cnt (input_tm_cnt)
     );
 
-  //the_cq_viola_nios2_e_oci_test_bench, which is an e_instance
   cq_viola_nios2_e_oci_test_bench the_cq_viola_nios2_e_oci_test_bench
     (
       .dct_buffer     (dct_buffer),
@@ -2078,28 +2112,28 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     begin
       if (jrst_n == 0)
         begin
-          fiforp <= 0;
-          fifowp <= 0;
-          fifocount <= 0;
-          ovf_pending <= 1;
+          fifo_rdptr <= 0;
+          fifo_wrptr <= 0;
+          fifo_cnt <= 0;
+          overflow_pending <= 1;
         end
       else 
         begin
-          fifowp <= fifowp + fifowp_inc_fifowp;
-          fifocount <= fifocount + fifocount_inc_fifocount;
+          fifo_wrptr <= fifo_wrptr + fifo_wrptr_inc;
+          fifo_cnt <= fifo_cnt + fifo_cnt_inc;
           if (~empty)
-              fiforp <= fiforp + 1;
-          if (~trc_this || (~free2 & tm_count[1])   || (~free3 & (&tm_count)))
-              ovf_pending <= 1;
+              fifo_rdptr <= fifo_rdptr + 1;
+          if (~trc_this || (~ge2_free & input_ge2) || (~ge3_free & input_ge3))
+              overflow_pending <= 1;
           else if (atm_valid | dtm_valid)
-              ovf_pending <= 0;
+              overflow_pending <= 0;
         end
     end
 
 
-  assign fifohead = fifo_read_mux;
-  assign tw = 0 ?  { (empty ?       4'h0       : fifohead[35 : 32]),   fifohead[31 : 0]}  : itm;
-  assign fifo_0_enable = ((fifowp == 4'd0) && tm_count_ge1)  || (free2 && (fifowp1== 4'd0) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd0) && tm_count_ge3);
+  assign fifo_head = fifo_read_mux;
+  assign tw = 0 ?  { (empty ? 4'h0 : fifo_head[35 : 32]),   fifo_head[31 : 0]}  : itm;
+  assign fifo_0_enable = ((fifo_wrptr == 4'd0) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd0) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd0) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2109,15 +2143,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_0_mux = (((fifowp == 4'd0) && itm_valid))? itm :
-    (((fifowp == 4'd0) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd0) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd0) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd0) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd0) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_0_mux = (((fifo_wrptr == 4'd0) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd0) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd0) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd0) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd0) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd0) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_1_enable = ((fifowp == 4'd1) && tm_count_ge1)  || (free2 && (fifowp1== 4'd1) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd1) && tm_count_ge3);
+  assign fifo_1_enable = ((fifo_wrptr == 4'd1) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd1) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd1) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2127,15 +2161,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_1_mux = (((fifowp == 4'd1) && itm_valid))? itm :
-    (((fifowp == 4'd1) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd1) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd1) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd1) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd1) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_1_mux = (((fifo_wrptr == 4'd1) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd1) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd1) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd1) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd1) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd1) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_2_enable = ((fifowp == 4'd2) && tm_count_ge1)  || (free2 && (fifowp1== 4'd2) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd2) && tm_count_ge3);
+  assign fifo_2_enable = ((fifo_wrptr == 4'd2) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd2) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd2) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2145,15 +2179,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_2_mux = (((fifowp == 4'd2) && itm_valid))? itm :
-    (((fifowp == 4'd2) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd2) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd2) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd2) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd2) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_2_mux = (((fifo_wrptr == 4'd2) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd2) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd2) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd2) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd2) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd2) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_3_enable = ((fifowp == 4'd3) && tm_count_ge1)  || (free2 && (fifowp1== 4'd3) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd3) && tm_count_ge3);
+  assign fifo_3_enable = ((fifo_wrptr == 4'd3) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd3) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd3) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2163,15 +2197,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_3_mux = (((fifowp == 4'd3) && itm_valid))? itm :
-    (((fifowp == 4'd3) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd3) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd3) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd3) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd3) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_3_mux = (((fifo_wrptr == 4'd3) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd3) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd3) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd3) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd3) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd3) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_4_enable = ((fifowp == 4'd4) && tm_count_ge1)  || (free2 && (fifowp1== 4'd4) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd4) && tm_count_ge3);
+  assign fifo_4_enable = ((fifo_wrptr == 4'd4) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd4) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd4) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2181,15 +2215,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_4_mux = (((fifowp == 4'd4) && itm_valid))? itm :
-    (((fifowp == 4'd4) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd4) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd4) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd4) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd4) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_4_mux = (((fifo_wrptr == 4'd4) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd4) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd4) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd4) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd4) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd4) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_5_enable = ((fifowp == 4'd5) && tm_count_ge1)  || (free2 && (fifowp1== 4'd5) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd5) && tm_count_ge3);
+  assign fifo_5_enable = ((fifo_wrptr == 4'd5) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd5) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd5) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2199,15 +2233,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_5_mux = (((fifowp == 4'd5) && itm_valid))? itm :
-    (((fifowp == 4'd5) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd5) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd5) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd5) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd5) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_5_mux = (((fifo_wrptr == 4'd5) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd5) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd5) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd5) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd5) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd5) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_6_enable = ((fifowp == 4'd6) && tm_count_ge1)  || (free2 && (fifowp1== 4'd6) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd6) && tm_count_ge3);
+  assign fifo_6_enable = ((fifo_wrptr == 4'd6) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd6) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd6) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2217,15 +2251,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_6_mux = (((fifowp == 4'd6) && itm_valid))? itm :
-    (((fifowp == 4'd6) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd6) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd6) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd6) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd6) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_6_mux = (((fifo_wrptr == 4'd6) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd6) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd6) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd6) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd6) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd6) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_7_enable = ((fifowp == 4'd7) && tm_count_ge1)  || (free2 && (fifowp1== 4'd7) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd7) && tm_count_ge3);
+  assign fifo_7_enable = ((fifo_wrptr == 4'd7) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd7) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd7) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2235,15 +2269,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_7_mux = (((fifowp == 4'd7) && itm_valid))? itm :
-    (((fifowp == 4'd7) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd7) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd7) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd7) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd7) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_7_mux = (((fifo_wrptr == 4'd7) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd7) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd7) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd7) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd7) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd7) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_8_enable = ((fifowp == 4'd8) && tm_count_ge1)  || (free2 && (fifowp1== 4'd8) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd8) && tm_count_ge3);
+  assign fifo_8_enable = ((fifo_wrptr == 4'd8) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd8) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd8) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2253,15 +2287,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_8_mux = (((fifowp == 4'd8) && itm_valid))? itm :
-    (((fifowp == 4'd8) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd8) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd8) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd8) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd8) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_8_mux = (((fifo_wrptr == 4'd8) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd8) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd8) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd8) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd8) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd8) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_9_enable = ((fifowp == 4'd9) && tm_count_ge1)  || (free2 && (fifowp1== 4'd9) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd9) && tm_count_ge3);
+  assign fifo_9_enable = ((fifo_wrptr == 4'd9) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd9) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd9) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2271,15 +2305,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_9_mux = (((fifowp == 4'd9) && itm_valid))? itm :
-    (((fifowp == 4'd9) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd9) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd9) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd9) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd9) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_9_mux = (((fifo_wrptr == 4'd9) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd9) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd9) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd9) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd9) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd9) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_10_enable = ((fifowp == 4'd10) && tm_count_ge1)  || (free2 && (fifowp1== 4'd10) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd10) && tm_count_ge3);
+  assign fifo_10_enable = ((fifo_wrptr == 4'd10) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd10) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd10) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2289,15 +2323,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_10_mux = (((fifowp == 4'd10) && itm_valid))? itm :
-    (((fifowp == 4'd10) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd10) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd10) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd10) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd10) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_10_mux = (((fifo_wrptr == 4'd10) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd10) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd10) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd10) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd10) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd10) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_11_enable = ((fifowp == 4'd11) && tm_count_ge1)  || (free2 && (fifowp1== 4'd11) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd11) && tm_count_ge3);
+  assign fifo_11_enable = ((fifo_wrptr == 4'd11) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd11) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd11) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2307,15 +2341,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_11_mux = (((fifowp == 4'd11) && itm_valid))? itm :
-    (((fifowp == 4'd11) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd11) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd11) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd11) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd11) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_11_mux = (((fifo_wrptr == 4'd11) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd11) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd11) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd11) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd11) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd11) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_12_enable = ((fifowp == 4'd12) && tm_count_ge1)  || (free2 && (fifowp1== 4'd12) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd12) && tm_count_ge3);
+  assign fifo_12_enable = ((fifo_wrptr == 4'd12) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd12) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd12) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2325,15 +2359,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_12_mux = (((fifowp == 4'd12) && itm_valid))? itm :
-    (((fifowp == 4'd12) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd12) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd12) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd12) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd12) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_12_mux = (((fifo_wrptr == 4'd12) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd12) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd12) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd12) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd12) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd12) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_13_enable = ((fifowp == 4'd13) && tm_count_ge1)  || (free2 && (fifowp1== 4'd13) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd13) && tm_count_ge3);
+  assign fifo_13_enable = ((fifo_wrptr == 4'd13) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd13) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd13) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2343,15 +2377,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_13_mux = (((fifowp == 4'd13) && itm_valid))? itm :
-    (((fifowp == 4'd13) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd13) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd13) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd13) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd13) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_13_mux = (((fifo_wrptr == 4'd13) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd13) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd13) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd13) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd13) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd13) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_14_enable = ((fifowp == 4'd14) && tm_count_ge1)  || (free2 && (fifowp1== 4'd14) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd14) && tm_count_ge3);
+  assign fifo_14_enable = ((fifo_wrptr == 4'd14) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd14) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd14) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2361,15 +2395,15 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_14_mux = (((fifowp == 4'd14) && itm_valid))? itm :
-    (((fifowp == 4'd14) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd14) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd14) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd14) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd14) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_14_mux = (((fifo_wrptr == 4'd14) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd14) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd14) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd14) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd14) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd14) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign fifo_15_enable = ((fifowp == 4'd15) && tm_count_ge1)  || (free2 && (fifowp1== 4'd15) && tm_count_ge2)  ||(free3 && (fifowp2== 4'd15) && tm_count_ge3);
+  assign fifo_15_enable = ((fifo_wrptr == 4'd15) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd15) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd15) && input_ge3);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -2379,34 +2413,34 @@ module cq_viola_nios2_e_nios2_oci_fifo (
     end
 
 
-  assign fifo_15_mux = (((fifowp == 4'd15) && itm_valid))? itm :
-    (((fifowp == 4'd15) && atm_valid))? ovr_pending_atm :
-    (((fifowp == 4'd15) && dtm_valid))? ovr_pending_dtm :
-    (((fifowp1 == 4'd15) && (free2 & itm_valid & atm_valid)))? ovr_pending_atm :
-    (((fifowp1 == 4'd15) && (free2 & itm_valid & dtm_valid)))? ovr_pending_dtm :
-    (((fifowp1 == 4'd15) && (free2 & atm_valid & dtm_valid)))? ovr_pending_dtm :
-    ovr_pending_dtm;
+  assign fifo_15_mux = (((fifo_wrptr == 4'd15) && itm_valid))? itm :
+    (((fifo_wrptr == 4'd15) && atm_valid))? overflow_pending_atm :
+    (((fifo_wrptr == 4'd15) && dtm_valid))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd15) && (ge2_free & itm_valid & atm_valid)))? overflow_pending_atm :
+    (((fifo_wrptr_plus1 == 4'd15) && (ge2_free & itm_valid & dtm_valid)))? overflow_pending_dtm :
+    (((fifo_wrptr_plus1 == 4'd15) && (ge2_free & atm_valid & dtm_valid)))? overflow_pending_dtm :
+    overflow_pending_dtm;
 
-  assign tm_count_ge1 = |tm_count;
-  assign tm_count_ge2 = tm_count[1];
-  assign tm_count_ge3 = &tm_count;
-  assign ovr_pending_atm = {ovf_pending, atm[34 : 0]};
-  assign ovr_pending_dtm = {ovf_pending, dtm[34 : 0]};
-  assign fifo_read_mux = (fiforp == 4'd0)? fifo_0 :
-    (fiforp == 4'd1)? fifo_1 :
-    (fiforp == 4'd2)? fifo_2 :
-    (fiforp == 4'd3)? fifo_3 :
-    (fiforp == 4'd4)? fifo_4 :
-    (fiforp == 4'd5)? fifo_5 :
-    (fiforp == 4'd6)? fifo_6 :
-    (fiforp == 4'd7)? fifo_7 :
-    (fiforp == 4'd8)? fifo_8 :
-    (fiforp == 4'd9)? fifo_9 :
-    (fiforp == 4'd10)? fifo_10 :
-    (fiforp == 4'd11)? fifo_11 :
-    (fiforp == 4'd12)? fifo_12 :
-    (fiforp == 4'd13)? fifo_13 :
-    (fiforp == 4'd14)? fifo_14 :
+  assign input_ge1 = |input_tm_cnt;
+  assign input_ge2 = input_tm_cnt[1];
+  assign input_ge3 = &input_tm_cnt;
+  assign overflow_pending_atm = {overflow_pending, atm[34 : 0]};
+  assign overflow_pending_dtm = {overflow_pending, dtm[34 : 0]};
+  assign fifo_read_mux = (fifo_rdptr == 4'd0)? fifo_0 :
+    (fifo_rdptr == 4'd1)? fifo_1 :
+    (fifo_rdptr == 4'd2)? fifo_2 :
+    (fifo_rdptr == 4'd3)? fifo_3 :
+    (fifo_rdptr == 4'd4)? fifo_4 :
+    (fifo_rdptr == 4'd5)? fifo_5 :
+    (fifo_rdptr == 4'd6)? fifo_6 :
+    (fifo_rdptr == 4'd7)? fifo_7 :
+    (fifo_rdptr == 4'd8)? fifo_8 :
+    (fifo_rdptr == 4'd9)? fifo_9 :
+    (fifo_rdptr == 4'd10)? fifo_10 :
+    (fifo_rdptr == 4'd11)? fifo_11 :
+    (fifo_rdptr == 4'd12)? fifo_12 :
+    (fifo_rdptr == 4'd13)? fifo_13 :
+    (fifo_rdptr == 4'd14)? fifo_14 :
     fifo_15;
 
 
@@ -2640,6 +2674,7 @@ module cq_viola_nios2_e_nios2_oci (
                                      read_nxt,
                                      reset,
                                      reset_n,
+                                     reset_req,
                                      test_ending,
                                      test_has_ended,
                                      write_nxt,
@@ -2680,6 +2715,7 @@ module cq_viola_nios2_e_nios2_oci (
   input            read_nxt;
   input            reset;
   input            reset_n;
+  input            reset_req;
   input            test_ending;
   input            test_has_ended;
   input            write_nxt;
@@ -2812,6 +2848,7 @@ module cq_viola_nios2_e_nios2_oci (
       .jrst_n                  (jrst_n),
       .ociram_readdata         (ociram_readdata),
       .read                    (read),
+      .reset_req               (reset_req),
       .take_action_ocimem_a    (take_action_ocimem_a),
       .take_action_ocimem_b    (take_action_ocimem_b),
       .take_no_action_ocimem_a (take_no_action_ocimem_a),
@@ -3141,6 +3178,7 @@ module cq_viola_nios2_e (
                            jtag_debug_module_write,
                            jtag_debug_module_writedata,
                            reset_n,
+                           reset_req,
 
                           // outputs:
                            d_address,
@@ -3183,6 +3221,7 @@ module cq_viola_nios2_e (
   input            jtag_debug_module_write;
   input   [ 31: 0] jtag_debug_module_writedata;
   input            reset_n;
+  input            reset_req;
 
   wire    [  1: 0] D_compare_op;
   wire             D_ctrl_alu_force_xor;
@@ -3688,6 +3727,7 @@ module cq_viola_nios2_e (
   wire             W_bstatus_reg_nxt;
   reg              W_cmp_result;
   reg     [ 31: 0] W_control_rd_data;
+  wire    [ 31: 0] W_cpuid_reg;
   reg              W_estatus_reg;
   wire             W_estatus_reg_inst_nxt;
   wire             W_estatus_reg_nxt;
@@ -3734,7 +3774,7 @@ module cq_viola_nios2_e (
   reg     [  3: 0] d_byteenable;
   reg              d_read;
   wire             d_read_nxt;
-  wire             d_write;
+  reg              d_write;
   wire             d_write_nxt;
   reg     [ 31: 0] d_writedata;
   reg              hbreak_enabled;
@@ -3784,7 +3824,6 @@ module cq_viola_nios2_e (
       .d_byteenable                  (d_byteenable),
       .d_read                        (d_read),
       .d_write                       (d_write),
-      .d_write_nxt                   (d_write_nxt),
       .i_address                     (i_address),
       .i_read                        (i_read),
       .i_readdata                    (i_readdata),
@@ -4436,7 +4475,7 @@ defparam cq_viola_nios2_e_register_bank_b.lpm_file = "cq_viola_nios2_e_rf_ram_b.
     (D_iw_control_regnum == 3'd2)? W_bstatus_reg :
     (D_iw_control_regnum == 3'd3)? W_ienable_reg :
     (D_iw_control_regnum == 3'd4)? W_ipending_reg :
-    0;
+    W_cpuid_reg;
 
   assign E_alu_result = ((R_ctrl_br_cmp | R_ctrl_rdctl_inst))? 0 :
     (R_ctrl_shift_rot)? E_shift_rot_result :
@@ -4674,6 +4713,7 @@ defparam cq_viola_nios2_e_register_bank_b.lpm_file = "cq_viola_nios2_e_rf_ram_b.
     end
 
 
+  assign W_cpuid_reg = 0;
   assign W_wr_data_non_zero = R_ctrl_br_cmp ? W_cmp_result :
     R_ctrl_rdctl_inst       ? W_control_rd_data :
     W_alu_result[31 : 0];
@@ -4725,6 +4765,15 @@ defparam cq_viola_nios2_e_register_bank_b.lpm_file = "cq_viola_nios2_e_rf_ram_b.
     end
 
 
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+          d_write <= 0;
+      else 
+        d_write <= d_write_nxt;
+    end
+
+
   cq_viola_nios2_e_nios2_oci the_cq_viola_nios2_e_nios2_oci
     (
       .D_valid                               (D_valid),
@@ -4749,6 +4798,7 @@ defparam cq_viola_nios2_e_register_bank_b.lpm_file = "cq_viola_nios2_e_rf_ram_b.
       .readdata                              (jtag_debug_module_readdata),
       .reset                                 (jtag_debug_module_reset),
       .reset_n                               (reset_n),
+      .reset_req                             (reset_req),
       .resetrequest                          (jtag_debug_module_resetrequest),
       .test_ending                           (test_ending),
       .test_has_ended                        (test_has_ended),

@@ -206,15 +206,15 @@ module altera_merlin_arbitrator
                         grant[NUM_REQUESTERS-1]} : top_priority_reg;
                 end
             end else begin
-                if (save_top_priority) begin
-                    top_priority_reg <= grant; 
-                end
                 if (increment_top_priority) begin
                     if (|request)
                         top_priority_reg <= { grant[NUM_REQUESTERS-2:0],
                             grant[NUM_REQUESTERS-1] };
                     else
                         top_priority_reg <= { top_priority_reg[NUM_REQUESTERS-2:0], top_priority_reg[NUM_REQUESTERS-1] };
+                end
+                else if (save_top_priority) begin
+                    top_priority_reg <= grant; 
                 end
             end
         end
@@ -236,6 +236,7 @@ module altera_merlin_arb_adder
     output [WIDTH-1:0] sum
 );
 
+    wire [WIDTH:0] sum_lint;
     // ----------------------------------------------
     // Benchmarks indicate that for small widths, the full
     // adder has higher fmax because synthesis can merge
@@ -262,7 +263,8 @@ module altera_merlin_arb_adder
 
     end else begin : carry_chain
 
-        assign sum = a + b;
+        assign sum_lint = a + b;
+        assign sum = sum_lint[WIDTH-1:0];
 
     end
     endgenerate

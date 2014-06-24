@@ -24,10 +24,10 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.0sp1/ip/merlin/altera_merlin_burst_adapter/altera_merlin_burst_adapter.sv#1 $
-// $Revision: #1 $
-// $Date: 2013/03/07 $
-// $Author: swbranch $
+// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_burst_adapter/altera_merlin_burst_adapter.sv#3 $
+// $Revision: #3 $
+// $Date: 2013/08/19 $
+// $Author: kevtan $
 
 // -------------------------------------------------------
 // Merlin Burst Adapter
@@ -655,6 +655,8 @@ module altera_merlin_burst_adapter_full
   reg 	d1_in_eop;
   reg	d1_in_uncompressed_read;
   reg  	d1_in_narrow;
+  reg   d1_in_passthru;
+  reg   in_ready_hold;
 
   reg [PKT_BYTE_CNT_W - 1 : 0] the_min_byte_cnt_or_num_sym;
 
@@ -733,7 +735,7 @@ module altera_merlin_burst_adapter_full
   wire in_uncompressed_read	=	in_read & ~sink0_data [PKT_TRANS_COMPRESSED_READ];
 
   wire [ST_DATA_W - 1 : 0] in_data = sink0_data;
-  wire in_valid	= sink0_valid;
+  wire in_valid	= sink0_valid & in_ready_hold;  // Fbz143820 hold ready and internal valid to zero during reset
   wire in_sop	= sink0_startofpacket;
   wire in_eop	= sink0_endofpacket; 
   wire [ST_CHANNEL_W - 1 : 0] in_channel = sink0_channel;
@@ -748,7 +750,7 @@ module altera_merlin_burst_adapter_full
   wire in_narrow 	= in_size < log2_numsymbols[PKT_BYTE_CNT_W -1 :0];
   wire in_passthru	= in_burstcount <= 16;
 
-  wire [PKT_BURST_TYPE_W - 1 : 0] in_bursttype = ~(in_passthru & in_sop | !in_sop & d0_in_passthru) && OUT_NARROW_SIZE ? INCR : sink0_data[PKT_BURST_TYPE_H : PKT_BURST_TYPE_L];
+  wire [PKT_BURST_TYPE_W - 1 : 0] in_bursttype = sink0_data[PKT_BURST_TYPE_H : PKT_BURST_TYPE_L];
   wire [PKT_BURSTWRAP_W - 1 : 0]  in_burstwrap;
 
   genvar i;
@@ -784,11 +786,11 @@ generate if (PIPE_INPUTS == 0)
 			in_bursttype_reg	<= '0;
 			in_byteen_reg		<= '0;
 			in_narrow_reg		<= '0;
-			in_size_reg		<= '0;
+			in_size_reg		    <= '0;
 			in_passthru_reg		<= '0;
-			in_eop_reg		<= '0;
-			in_bytecount_reg_zero	<= '0;
-			in_uncompressed_read_reg  <= '0;
+			in_eop_reg		    <= '0;
+			in_bytecount_reg_zero	    <= '0;
+			in_uncompressed_read_reg    <= '0;
 	end
 	else begin
 		if (load_next_cmd) begin
@@ -798,10 +800,10 @@ generate if (PIPE_INPUTS == 0)
 			in_bursttype_reg	<= in_bursttype;
 			in_byteen_reg		<= in_byteen;
 			in_narrow_reg		<= in_narrow;
-			in_size_reg		<= in_size;
-			in_bytecount_reg_zero	<= ~|in_bytecount;
+			in_size_reg		    <= in_size;
+			in_bytecount_reg_zero	  <= ~|in_bytecount;
 			in_uncompressed_read_reg  <= in_uncompressed_read;
-                        in_eop_reg              <= in_eop;
+            in_eop_reg                <= in_eop;
 		end
 
 		// Passthru is evaluated every transaction
@@ -831,6 +833,7 @@ generate if (PIPE_INPUTS == 0)
   assign d1_in_byteen            = in_byteen_reg;
   assign d1_in_uncompressed_read = in_uncompressed_read_reg;
   assign d1_in_narrow            = in_narrow_reg;
+  assign d1_in_passthru          = in_passthru_reg;
 
  end : NON_PIPELINED_INPUTS
 
@@ -871,6 +874,7 @@ else
             d1_in_byteen            <= '0;
             d1_in_uncompressed_read <= '0;
             d1_in_narrow            <= '0;
+            d1_in_passthru          <= '0;
 			d0_int_size           <= '0;
 			d0_int_burstwrap      <= '0;
 			d0_int_bursttype     <= '0;
@@ -913,6 +917,7 @@ else
                         d1_in_byteen            <= in_byteen_reg;
                         d1_in_uncompressed_read <= in_uncompressed_read_reg;
                         d1_in_narrow            <= in_narrow_reg;
+                        d1_in_passthru          <= in_passthru_reg;
 		end
 
                 if (    ( (state != ST_COMP_TRANS) & (~source0_valid | source0_ready)) |
@@ -1012,7 +1017,7 @@ endgenerate
   
   always_comb begin
 
-    // Default case : Unless it's a narrow transfer, take the max, else keep it at num_symbols_sig
+    // Default case : Always try to use the slaves max byte count. If a narrow transfer occurs, follow the masters num_symbols_sig
     the_min_byte_cnt_or_num_sym = d0_in_narrow ? num_symbols_sig : out_max_byte_cnt_sig;
 
 
@@ -1024,7 +1029,10 @@ endgenerate
 	// When burst type is "RESERVED" it means that a fix burst wide-to-narrow has occured
 	// kevtan : added highest bit of wrap mask
         disable_wrap_dist_calc 		= (d0_in_passthru && d0_in_bursttype != RESERVED) | nxt_out_burstwrap[PKT_BURSTWRAP_W - 1]; 
-        the_min_byte_cnt_or_num_sym 	= out_max_byte_cnt_sig;
+        the_min_byte_cnt_or_num_sym	= (d0_in_narrow   && ~d0_in_passthru && d0_in_bursttype==WRAP) ? num_symbols_sig : out_max_byte_cnt_sig; 
+                                              // kevtan : Fbz140322 : in case of narrow transfer, chop to smallest if it's not passthru
+                                              //                      Calculation is messed up if narrow   
+                                              //                    : added term to only chop to smallest in case of wrapping transactions
       end
       else if (OUT_BURSTWRAP_W == PKT_BURSTWRAP_W) begin // Sequential slave
         disable_wrap_dist_calc = d0_in_burstwrap[PKT_BURSTWRAP_W - 1];
@@ -1118,7 +1126,7 @@ endgenerate
 
   assign nxt_in_ready = (state == ST_COMP_TRANS) ? source0_endofpacket & source0_ready | ~source0_valid :  
 			            (state == ST_UNCOMP_TRANS | state == ST_UNCOMP_WR_SUBBURST) ? source0_ready | ~source0_valid :
-			            1'b1;
+			            in_ready_hold; // Fbz143820 hold ready and internal valid to zero during reset
   
   // out_valid is asserted:
   // 1. Following sink_valid unless in ST_COMP_TRANS, where it's always one, unless it's endofpacket.
@@ -1136,16 +1144,18 @@ endgenerate
 
   always_ff @(posedge clk or posedge reset) begin
 	if (reset) 	begin
-		state		<= ST_IDLE;
+		state		    <= ST_IDLE;
 		out_valid_reg 	<= '0;
 		out_sop_reg 	<= '0;
+        in_ready_hold   <= '0;
 	end
 	else begin
 	if (~source0_valid | source0_ready) begin
-		state 		<= next_state;
+		state 		    <= next_state;
 		out_valid_reg	<= nxt_out_valid;
 		out_sop_reg 	<= nxt_out_sop;
-		end
+    end
+        in_ready_hold <= 1'b1;
 	end
   end 
   
@@ -1287,7 +1297,7 @@ endgenerate
   reg [PKT_BURST_TYPE_W - 1 : 0 ] out_bursttype;
 
   // bursttype will switch to INCR if repeated wraps detected (NOTE: ??)
-  assign out_bursttype = (d1_in_bursttype == RESERVED) ? INCR : d1_in_bursttype;
+  assign out_bursttype = ((d1_in_bursttype == RESERVED)| (~d1_in_passthru & OUT_NARROW_SIZE)) ? INCR : d1_in_bursttype;
 
   // ---------------------------------------------------
   // Burst Wrap Generation

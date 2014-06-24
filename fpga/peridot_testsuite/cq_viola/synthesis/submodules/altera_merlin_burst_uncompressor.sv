@@ -24,9 +24,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.0sp1/ip/merlin/altera_merlin_slave_agent/altera_merlin_burst_uncompressor.sv#1 $
+// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_slave_agent/altera_merlin_burst_uncompressor.sv#1 $
 // $Revision: #1 $
-// $Date: 2013/03/07 $
+// $Date: 2013/08/11 $
 // $Author: swbranch $
 
 // ------------------------------------------
@@ -148,16 +148,18 @@ endfunction
    //   some value, multiple times in the packet.
   
    reg burst_uncompress_busy;
-   reg [BYTE_CNT_W-1:0] burst_uncompress_byte_counter;
+   reg [BYTE_CNT_W:0] burst_uncompress_byte_counter;
+   wire [BYTE_CNT_W-1:0] burst_uncompress_byte_counter_lint;
    wire first_packet_beat;
    wire last_packet_beat;
 
    assign first_packet_beat = sink_valid & ~burst_uncompress_busy;
+   assign burst_uncompress_byte_counter_lint = burst_uncompress_byte_counter[BYTE_CNT_W-1:0];
 
    // First cycle: burst_uncompress_byte_counter isn't ready yet, mux the input to
    // the output.
    assign source_byte_cnt =
-     first_packet_beat ? sink_byte_cnt : burst_uncompress_byte_counter;
+     first_packet_beat ? sink_byte_cnt : burst_uncompress_byte_counter_lint;
    assign source_valid = sink_valid;
   
    // Last packet beat is set throughout receipt of an uncompressed read burst
@@ -166,7 +168,7 @@ endfunction
    assign last_packet_beat = ~sink_is_compressed |
      (
      burst_uncompress_busy ?
-       (sink_valid & (burst_uncompress_byte_counter == num_symbols)) :
+       (sink_valid & (burst_uncompress_byte_counter_lint == num_symbols)) :
          sink_valid & (sink_byte_cnt == num_symbols)
      );
   
@@ -185,40 +187,45 @@ endfunction
          end
          else begin
            if (burst_uncompress_busy) begin
-             burst_uncompress_byte_counter <= burst_uncompress_byte_counter ? 
-               (burst_uncompress_byte_counter - num_symbols) :
+             burst_uncompress_byte_counter <= (burst_uncompress_byte_counter > 0) ? 
+               (burst_uncompress_byte_counter_lint - num_symbols) :
                (sink_byte_cnt - num_symbols);
            end
            else begin // not busy, at least one more beat to go
              burst_uncompress_byte_counter <= sink_byte_cnt - num_symbols;
              // To do: should busy go true for numsymbols-size compressed
              // bursts?
-             burst_uncompress_busy <= '1;
+             burst_uncompress_busy <= 1'b1;
            end
          end
        end
      end
    end
   
-   wire [ADDR_W - 1 : 0 ] addr_width_burstwrap;
    reg [ADDR_W - 1 : 0 ] burst_uncompress_address_base;
    reg [ADDR_W - 1 : 0] burst_uncompress_address_offset;
 
    wire [63:0] decoded_burstsize_wire;
    wire [ADDR_W-1:0] decoded_burstsize;
 
+
+   localparam ADD_BURSTWRAP_W = (ADDR_W > BURSTWRAP_W) ? ADDR_W : BURSTWRAP_W;
+   wire [ADD_BURSTWRAP_W-1:0] addr_width_burstwrap;
    // The input burstwrap value can be used as a mask against address values,
    // but with one caveat: the address width may be (probably is) wider than 
    // the burstwrap width.  The spec says: extend the msb of the burstwrap 
    // value out over the entire address width (but only if the address width
    // actually is wider than the burstwrap width; otherwise it's a 0-width or
    // negative range and concatenation multiplier). 
-   assign addr_width_burstwrap[BURSTWRAP_W - 1 : 0] = sink_burstwrap;
    generate
       if (ADDR_W > BURSTWRAP_W) begin : addr_sign_extend
          // Sign-extend, just wires:
-         assign addr_width_burstwrap[ADDR_W - 1 : BURSTWRAP_W] =
-            {(ADDR_W - BURSTWRAP_W) {sink_burstwrap[BURSTWRAP_W - 1]}};
+            assign addr_width_burstwrap[ADDR_W - 1 : BURSTWRAP_W] =
+                {(ADDR_W - BURSTWRAP_W) {sink_burstwrap[BURSTWRAP_W - 1]}};
+            assign addr_width_burstwrap[BURSTWRAP_W-1:0] = sink_burstwrap [BURSTWRAP_W-1:0];
+      end
+      else begin
+            assign addr_width_burstwrap[BURSTWRAP_W-1 : 0] = sink_burstwrap;
       end
    endgenerate
 
@@ -227,20 +234,21 @@ endfunction
        burst_uncompress_address_base <= '0;
      end
      else if (first_packet_beat & source_ready) begin
-       burst_uncompress_address_base <= sink_addr & ~addr_width_burstwrap;
+       burst_uncompress_address_base <= sink_addr & ~addr_width_burstwrap[ADDR_W-1:0];
      end
    end
 
    assign decoded_burstsize_wire = bytes_in_transfer(sink_burstsize);  //expand it to 64 bits
    assign decoded_burstsize = decoded_burstsize_wire[ADDR_W-1:0];      //then take the width that is needed
 
-   wire [ADDR_W - 1 : 0] p1_burst_uncompress_address_offset =
+   wire [ADDR_W : 0] p1_burst_uncompress_address_offset =
    (
      (first_packet_beat ?
        sink_addr :
        burst_uncompress_address_offset) + decoded_burstsize
     ) &
-    addr_width_burstwrap;
+    addr_width_burstwrap[ADDR_W-1:0];
+    wire [ADDR_W-1:0] p1_burst_uncompress_address_offset_lint = p1_burst_uncompress_address_offset [ADDR_W-1:0];
 
    always @(posedge clk or posedge reset) begin
      if (reset) begin
@@ -248,7 +256,7 @@ endfunction
      end
      else begin
        if (source_ready & source_valid) begin
-         burst_uncompress_address_offset <= p1_burst_uncompress_address_offset;
+         burst_uncompress_address_offset <= p1_burst_uncompress_address_offset_lint;
          // if (first_packet_beat) begin
          //   burst_uncompress_address_offset <=
          //     (sink_addr + num_symbols) & addr_width_burstwrap;

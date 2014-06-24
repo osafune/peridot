@@ -49,7 +49,7 @@
 /*
  * Routine called on exit.
  */
-static ALT_ALWAYS_INLINE void alt_sim_halt(int exit_code)
+static ALT_INLINE ALT_ALWAYS_INLINE void alt_sim_halt(int exit_code)
 {
   int r2 = exit_code;
 

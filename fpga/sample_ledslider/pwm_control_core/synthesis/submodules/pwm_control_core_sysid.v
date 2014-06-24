@@ -36,7 +36,7 @@ module pwm_control_core_sysid (
 
   wire    [ 31: 0] readdata;
   //control_slave, which is an e_avalon_slave
-  assign readdata = address ? 1383785759 : 538120455;
+  assign readdata = address ? 1403594279 : 538120455;
 
 endmodule
 

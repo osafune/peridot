@@ -24,9 +24,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.0sp1/ip/merlin/altera_merlin_slave_agent/altera_merlin_slave_agent.sv#1 $
+// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_slave_agent/altera_merlin_slave_agent.sv#1 $
 // $Revision: #1 $
-// $Date: 2013/03/07 $
+// $Date: 2013/08/11 $
 // $Author: swbranch $
 
 `timescale 1 ns / 1 ns
@@ -61,7 +61,9 @@ module altera_merlin_slave_agent
     parameter PKT_RESPONSE_STATUS_L = 88,
     parameter PKT_BURST_SIZE_H = 92,
     parameter PKT_BURST_SIZE_L = 90,
-    parameter ST_DATA_W        = 93,
+	parameter PKT_ORI_BURST_SIZE_L = 93,
+    parameter PKT_ORI_BURST_SIZE_H = 95,
+    parameter ST_DATA_W        = 96,
     parameter ST_CHANNEL_W     = 32,
 
     // Slave parameters
@@ -425,7 +427,7 @@ module altera_merlin_slave_agent
 	// at this time, the final response merged will send out, and rp_valid is only asserted
 	// for one response for whole burst
 	generate
-	if (USE_READRESPONSE & USE_WRITERESPONSE) begin
+	if (USE_WRITERESPONSE) begin
 		wire last_write_response = rf_sink_data[PKT_TRANS_WRITE] & !rf_sink_data[PKT_TRANS_POSTED] & rf_sink_endofpacket;
 		always @* begin
 			if (rf_sink_data[PKT_TRANS_WRITE] == 1) 
@@ -442,11 +444,12 @@ module altera_merlin_slave_agent
 	// ------------------------------------------------------------------
     // Response merging
     // ------------------------------------------------------------------
-	wire [1:0] current_response = rdata_fifo_sink_data[AVS_DATA_W+1:AVS_DATA_W];
+
+    reg [1:0] current_response;
 	reg [1:0] response_merged;
 	generate
 	begin: response_merging
-	if (USE_READRESPONSE & USE_WRITERESPONSE) begin
+	if (USE_WRITERESPONSE) begin
 		reg first_write_response;
 		reg reset_merged_output;
 		reg [1:0] previous_response_in;
@@ -466,6 +469,7 @@ module altera_merlin_slave_agent
 		end
 	
 		always_comb begin
+            current_response = rdata_fifo_sink_data[AVS_DATA_W+1:AVS_DATA_W];
 			reset_merged_output = first_write_response && rdata_fifo_sink_valid;
 			previous_response_in = reset_merged_output ? current_response : previous_response;
 			response_merged = current_response >= previous_response ? current_response: previous_response_in;
@@ -483,6 +487,7 @@ module altera_merlin_slave_agent
 		end
 	end else begin
         always @* begin
+            current_response = generate_response ? 2'b00: rdata_fifo_sink_data[AVS_DATA_W+1:AVS_DATA_W];
 		    response_merged = current_response;
         end
 	end
@@ -536,6 +541,8 @@ module altera_merlin_slave_agent
         //rp_data[PKT_RESPONSE_STATUS_H:PKT_RESPONSE_STATUS_L]  = {RESPONSE_W{ 1'b0 }};
 		rp_data[PKT_RESPONSE_STATUS_H:PKT_RESPONSE_STATUS_L]  = response_merged;
 		rp_data[PKT_BURST_SIZE_H:PKT_BURST_SIZE_L]            = uncompressor_burstsize;
+		// bounce the original size back to the master untouch
+		rp_data[PKT_ORI_BURST_SIZE_H:PKT_ORI_BURST_SIZE_L]    = rf_sink_data[PKT_ORI_BURST_SIZE_H:PKT_ORI_BURST_SIZE_L];
     end
 
     // ------------------------------------------------------------------
