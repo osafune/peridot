@@ -1,0 +1,131 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2013 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II 64-Bit
+# Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+# Date created = 09:02:37  August 28, 2013
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		psconfig_top_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "MAX V"
+set_global_assignment -name DEVICE 5M160ZE64C5
+set_global_assignment -name TOP_LEVEL_ENTITY psconfig_top
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "09:02:37  AUGUST 28, 2013"
+set_global_assignment -name LAST_QUARTUS_VERSION 14.0
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name DEVICE_FILTER_PACKAGE EQFP
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 64
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 5
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR "-1"
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
+set_global_assignment -name AUTO_RESTART_CONFIGURATION OFF
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name USE_CHECKSUM_AS_USERCODE OFF
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED WITH WEAK PULL-UP"
+set_global_assignment -name MAXII_OPTIMIZATION_TECHNIQUE AREA
+set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name STRATIX_JTAG_USER_CODE 20140803
+
+set_location_assignment PIN_7 -to clk24mhz
+set_location_assignment PIN_1 -to conn_tck_in
+set_location_assignment PIN_2 -to conn_tdi_in
+set_location_assignment PIN_63 -to conn_tdo_out
+set_location_assignment PIN_64 -to conn_tms_in
+set_location_assignment PIN_59 -to data0
+set_location_assignment PIN_58 -to dclk
+set_location_assignment PIN_13 -to ud[7]
+set_location_assignment PIN_11 -to ud[6]
+set_location_assignment PIN_12 -to ud[5]
+set_location_assignment PIN_20 -to ud[4]
+set_location_assignment PIN_10 -to ud[3]
+set_location_assignment PIN_19 -to ud[2]
+set_location_assignment PIN_18 -to ud[1]
+set_location_assignment PIN_24 -to ud[0]
+set_location_assignment PIN_21 -to txe_n
+set_location_assignment PIN_4 -to wr
+set_location_assignment PIN_5 -to rd_n
+set_location_assignment PIN_22 -to rxf_n
+set_location_assignment PIN_3 -to si_wu_n
+set_location_assignment PIN_9 -to cbus6
+set_location_assignment PIN_62 -to mreset_n_in
+set_location_assignment PIN_27 -to mreset_n_ext
+set_location_assignment PIN_55 -to tck
+set_location_assignment PIN_56 -to tdi
+set_location_assignment PIN_53 -to tdo
+set_location_assignment PIN_54 -to tms
+set_location_assignment PIN_30 -to nconfig
+set_location_assignment PIN_32 -to msel1
+set_location_assignment PIN_31 -to confdone
+set_location_assignment PIN_29 -to nstatus
+set_location_assignment PIN_49 -to sci_sclk
+set_location_assignment PIN_48 -to sci_rxd
+set_location_assignment PIN_52 -to sci_rxr_n
+set_location_assignment PIN_47 -to sci_txd
+set_location_assignment PIN_51 -to sci_txr_n
+set_location_assignment PIN_50 -to reset_n_out
+set_location_assignment PIN_61 -to led_n_out
+set_location_assignment PIN_26 -to i2c_scl
+set_location_assignment PIN_25 -to i2c_sda
+
+set_instance_assignment -name RESERVE_PIN AS_INPUT_TRI_STATED -to cbus6
+set_instance_assignment -name IO_STANDARD "3.3V SCHMITT TRIGGER INPUT" -to mreset_n_in
+set_instance_assignment -name IO_STANDARD "3.3V SCHMITT TRIGGER INPUT" -to mreset_n_ext
+set_instance_assignment -name IO_STANDARD "3.3V SCHMITT TRIGGER INPUT" -to conn_tck_in
+set_instance_assignment -name IO_STANDARD "3.3V SCHMITT TRIGGER INPUT" -to i2c_scl
+set_instance_assignment -name IO_STANDARD "3.3V SCHMITT TRIGGER INPUT" -to i2c_sda
+#set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to mreset_n_in
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to txe_n
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to rxf_n
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to sci_txr_n
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to sci_rxd
+set_instance_assignment -name SLOW_SLEW_RATE ON -to i2c_scl
+set_instance_assignment -name SLOW_SLEW_RATE ON -to i2c_sda
+
+set_global_assignment -name VHDL_FILE ../psconfig_v11_top.vhd
+set_global_assignment -name SDC_FILE psconfig.sdc
+set_global_assignment -name VHDL_FILE ../max2_internal_osc.vhd
+set_global_assignment -name VHDL_FILE ../avalonst_byte_to_usbfifo.vhd
+set_global_assignment -name VHDL_FILE ../avalonst_byte_to_scif.vhd
+set_global_assignment -name CDF_FILE output_files/psconfig_top.cdf
+
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "NO HEAT SINK WITH STILL AIR"
+set_global_assignment -name REMOVE_REDUNDANT_LOGIC_CELLS ON
+set_global_assignment -name ADV_NETLIST_OPT_SYNTH_WYSIWYG_REMAP ON
+set_global_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION ALWAYS
+set_global_assignment -name MUX_RESTRUCTURE ON
+set_global_assignment -name ALLOW_SHIFT_REGISTER_MERGING_ACROSS_HIERARCHIES ALWAYS
+set_global_assignment -name STATE_MACHINE_PROCESSING "MINIMAL BITS"

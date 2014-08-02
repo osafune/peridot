@@ -1,0 +1,828 @@
+TimeQuest Timing Analyzer report for psconfig_top
+Sun Aug 03 03:53:33 2014
+Quartus II 64-Bit Version 14.0.0 Build 200 06/17/2014 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. TimeQuest Timing Analyzer Summary
+  3. Parallel Compilation
+  4. SDC File List
+  5. Clocks
+  6. Fmax Summary
+  7. Setup Summary
+  8. Hold Summary
+  9. Recovery Summary
+ 10. Removal Summary
+ 11. Minimum Pulse Width Summary
+ 12. Setup: 'clk24mhz'
+ 13. Hold: 'clk24mhz'
+ 14. Minimum Pulse Width: 'conn_tck_in'
+ 15. Minimum Pulse Width: 'clk24mhz'
+ 16. Setup Times
+ 17. Hold Times
+ 18. Clock to Output Times
+ 19. Minimum Clock to Output Times
+ 20. Propagation Delay
+ 21. Minimum Propagation Delay
+ 22. Output Enable Times
+ 23. Minimum Output Enable Times
+ 24. Output Disable Times
+ 25. Minimum Output Disable Times
+ 26. Setup Transfers
+ 27. Hold Transfers
+ 28. Report TCCS
+ 29. Report RSKM
+ 30. Unconstrained Paths
+ 31. TimeQuest Timing Analyzer Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2014 Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus II License Agreement,
+the Altera MegaCore Function License Agreement, or other 
+applicable license agreement, including, without limitation, 
+that your use is for the sole purpose of programming logic 
+devices manufactured by Altera and sold by Altera or its 
+authorized distributors.  Please refer to the applicable 
+agreement for further details.
+
+
+
++-------------------------------------------------------------------------+
+; TimeQuest Timing Analyzer Summary                                       ;
++--------------------+----------------------------------------------------+
+; Quartus II Version ; Version 14.0.0 Build 200 06/17/2014 SJ Web Edition ;
+; Revision Name      ; psconfig_top                                       ;
+; Device Family      ; MAX V                                              ;
+; Device Name        ; 5M160ZE64C5                                        ;
+; Timing Models      ; Final                                              ;
+; Delay Model        ; Slow Model                                         ;
+; Rise/Fall Delays   ; Unavailable                                        ;
++--------------------+----------------------------------------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 8           ;
+; Maximum allowed            ; 4           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 1           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processors 2-8         ;   0.0%      ;
++----------------------------+-------------+
+
+
++---------------------------------------------------+
+; SDC File List                                     ;
++---------------+--------+--------------------------+
+; SDC File Path ; Status ; Read at                  ;
++---------------+--------+--------------------------+
+; psconfig.sdc  ; OK     ; Sun Aug 03 03:53:32 2014 ;
++---------------+--------+--------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Clocks                                                                                                                                                                                   ;
++-------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-----------------+
+; Clock Name  ; Type ; Period ; Frequency ; Rise  ; Fall   ; Duty Cycle ; Divide by ; Multiply by ; Phase ; Offset ; Edge List ; Edge Shift ; Inverted ; Master ; Source ; Targets         ;
++-------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-----------------+
+; clk24mhz    ; Base ; 41.666 ; 24.0 MHz  ; 0.000 ; 20.833 ;            ;           ;             ;       ;        ;           ;            ;          ;        ;        ; { clk24mhz }    ;
+; conn_tck_in ; Base ; 40.000 ; 25.0 MHz  ; 0.000 ; 20.000 ;            ;           ;             ;       ;        ;           ;            ;          ;        ;        ; { conn_tck_in } ;
++-------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-----------------+
+
+
++-------------------------------------------------+
+; Fmax Summary                                    ;
++-----------+-----------------+------------+------+
+; Fmax      ; Restricted Fmax ; Clock Name ; Note ;
++-----------+-----------------+------------+------+
+; 34.17 MHz ; 34.17 MHz       ; clk24mhz   ;      ;
++-----------+-----------------+------------+------+
+This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
+
+
++-----------------------------------+
+; Setup Summary                     ;
++----------+--------+---------------+
+; Clock    ; Slack  ; End Point TNS ;
++----------+--------+---------------+
+; clk24mhz ; 12.402 ; 0.000         ;
++----------+--------+---------------+
+
+
++----------------------------------+
+; Hold Summary                     ;
++----------+-------+---------------+
+; Clock    ; Slack ; End Point TNS ;
++----------+-------+---------------+
+; clk24mhz ; 3.117 ; 0.000         ;
++----------+-------+---------------+
+
+
+--------------------
+; Recovery Summary ;
+--------------------
+No paths to report.
+
+
+-------------------
+; Removal Summary ;
+-------------------
+No paths to report.
+
+
++--------------------------------------+
+; Minimum Pulse Width Summary          ;
++-------------+--------+---------------+
+; Clock       ; Slack  ; End Point TNS ;
++-------------+--------+---------------+
+; conn_tck_in ; 19.661 ; 0.000         ;
+; clk24mhz    ; 20.494 ; 0.000         ;
++-------------+--------+---------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Setup: 'clk24mhz'                                                                                                                                                                       ;
++--------+--------------------------------------------------------+-------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack  ; From Node                                              ; To Node                                         ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++--------+--------------------------------------------------------+-------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 12.402 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[6]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 28.943     ;
+; 12.402 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[7]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 28.943     ;
+; 13.208 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|txcounter[3]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 28.137     ;
+; 13.211 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|txcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 28.134     ;
+; 13.213 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|txcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 28.132     ;
+; 13.407 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|outdata_reg[6]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 27.938     ;
+; 13.407 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|outdata_reg[7]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 27.938     ;
+; 14.070 ; psstate.state_bit_0                                    ; psstate.state_bit_0                             ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 27.275     ;
+; 14.213 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|txcounter[3]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 27.132     ;
+; 14.216 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|txcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 27.129     ;
+; 14.218 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|txcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 27.127     ;
+; 14.301 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[0]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 27.044     ;
+; 14.413 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[1]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 26.932     ;
+; 14.413 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[2]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 26.932     ;
+; 14.413 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[3]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 26.932     ;
+; 14.413 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[4]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 26.932     ;
+; 14.413 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[5]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 26.932     ;
+; 15.075 ; timeout_reg                                            ; psstate.state_bit_0                             ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 26.270     ;
+; 15.181 ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[6]      ; escape_reg                                      ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 26.164     ;
+; 15.306 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|outdata_reg[0]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 26.039     ;
+; 15.418 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|outdata_reg[1]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.927     ;
+; 15.418 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|outdata_reg[2]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.927     ;
+; 15.418 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|outdata_reg[3]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.927     ;
+; 15.418 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|outdata_reg[4]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.927     ;
+; 15.418 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|outdata_reg[5]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.927     ;
+; 15.745 ; tocount_reg[16]                                        ; timeout_reg                                     ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.600     ;
+; 15.760 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|txcounter[0]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.585     ;
+; 15.876 ; psstate.state_bit_0                                    ; avalonst_byte_to_usbfifo:inst_ftif|outvalid_reg ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.469     ;
+; 16.039 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_usbfifo:inst_ftif|outvalid_reg ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.306     ;
+; 16.060 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|indata_reg[0]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.285     ;
+; 16.060 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|indata_reg[1]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.285     ;
+; 16.060 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|indata_reg[2]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.285     ;
+; 16.060 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|indata_reg[3]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.285     ;
+; 16.060 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|indata_reg[4]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.285     ;
+; 16.061 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|indata_reg[0]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.284     ;
+; 16.061 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|indata_reg[1]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.284     ;
+; 16.061 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|indata_reg[2]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.284     ;
+; 16.061 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|indata_reg[3]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.284     ;
+; 16.061 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|indata_reg[4]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.284     ;
+; 16.098 ; psstate.state_bit_2                                    ; psstate.state_bit_0                             ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.247     ;
+; 16.122 ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; avalonst_byte_to_usbfifo:inst_ftif|outvalid_reg ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.223     ;
+; 16.316 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_scif:inst_scif|indata_reg[0]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.029     ;
+; 16.316 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_scif:inst_scif|indata_reg[1]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.029     ;
+; 16.316 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_scif:inst_scif|indata_reg[2]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.029     ;
+; 16.316 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_scif:inst_scif|indata_reg[3]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.029     ;
+; 16.316 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_scif:inst_scif|indata_reg[4]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 25.029     ;
+; 16.474 ; tocount_reg[15]                                        ; timeout_reg                                     ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.871     ;
+; 16.694 ; tocount_reg[18]                                        ; timeout_reg                                     ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.651     ;
+; 16.765 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|txcounter[0]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.580     ;
+; 16.785 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; psstate.state_bit_0                             ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.560     ;
+; 16.868 ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; psstate.state_bit_0                             ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.477     ;
+; 16.881 ; timeout_reg                                            ; avalonst_byte_to_usbfifo:inst_ftif|outvalid_reg ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.464     ;
+; 16.966 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|rxcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.379     ;
+; 16.967 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|rxcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.378     ;
+; 16.967 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|rxcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.378     ;
+; 16.968 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|rxcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.377     ;
+; 17.039 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|rxcounter[0]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.306     ;
+; 17.040 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|rxcounter[0]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.305     ;
+; 17.103 ; avalonst_byte_to_scif:inst_scif|txcounter[1]           ; avalonst_byte_to_usbfifo:inst_ftif|outvalid_reg ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.242     ;
+; 17.125 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_usbfifo:inst_ftif|ft_doe_reg   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.220     ;
+; 17.126 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_usbfifo:inst_ftif|ft_doe_reg   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.219     ;
+; 17.129 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_usbfifo:inst_ftif|ft_wr_reg    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.216     ;
+; 17.130 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_usbfifo:inst_ftif|ft_wr_reg    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.215     ;
+; 17.223 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_scif:inst_scif|rxcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.122     ;
+; 17.224 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_scif:inst_scif|rxcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.121     ;
+; 17.288 ; tocount_reg[17]                                        ; timeout_reg                                     ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.057     ;
+; 17.292 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|confmode_reg    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.053     ;
+; 17.296 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_scif:inst_scif|rxcounter[0]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.049     ;
+; 17.314 ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[6]      ; bytedlop_reg                                    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.031     ;
+; 17.319 ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[6]      ; psstate.state_bit_1                             ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 24.026     ;
+; 17.382 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_usbfifo:inst_ftif|ft_doe_reg   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.963     ;
+; 17.386 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ; avalonst_byte_to_usbfifo:inst_ftif|ft_wr_reg    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.959     ;
+; 17.685 ; avalonst_byte_to_scif:inst_scif|txcounter[3]           ; avalonst_byte_to_usbfifo:inst_ftif|outvalid_reg ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.660     ;
+; 17.728 ; psstate.state_bit_0                                    ; avalonst_byte_to_scif:inst_scif|outdata_reg[8]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.617     ;
+; 17.794 ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ; avalonst_byte_to_scif:inst_scif|indata_reg[0]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.551     ;
+; 17.794 ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ; avalonst_byte_to_scif:inst_scif|indata_reg[1]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.551     ;
+; 17.794 ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ; avalonst_byte_to_scif:inst_scif|indata_reg[2]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.551     ;
+; 17.794 ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ; avalonst_byte_to_scif:inst_scif|indata_reg[3]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.551     ;
+; 17.794 ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ; avalonst_byte_to_scif:inst_scif|indata_reg[4]   ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.551     ;
+; 17.840 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_scif:inst_scif|outdata_reg[6]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.505     ;
+; 17.840 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_scif:inst_scif|outdata_reg[7]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.505     ;
+; 17.849 ; avalonst_byte_to_scif:inst_scif|txcounter[1]           ; psstate.state_bit_0                             ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.496     ;
+; 17.923 ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; avalonst_byte_to_scif:inst_scif|outdata_reg[6]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.422     ;
+; 17.923 ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; avalonst_byte_to_scif:inst_scif|outdata_reg[7]  ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.422     ;
+; 18.028 ; avalonst_byte_to_scif:inst_scif|sclk_reg               ; avalonst_byte_to_scif:inst_scif|rxcounter[0]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.317     ;
+; 18.297 ; timeout_reg                                            ; avalonst_byte_to_scif:inst_scif|confmode_reg    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 23.048     ;
+; 18.431 ; avalonst_byte_to_scif:inst_scif|txcounter[3]           ; psstate.state_bit_0                             ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.914     ;
+; 18.532 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ; avalonst_byte_to_scif:inst_scif|rxcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.813     ;
+; 18.533 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ; avalonst_byte_to_scif:inst_scif|rxcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.812     ;
+; 18.605 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.740     ;
+; 18.612 ; psstate.state_bit_2                                    ; avalonst_byte_to_scif:inst_scif|rxcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.733     ;
+; 18.613 ; psstate.state_bit_2                                    ; avalonst_byte_to_scif:inst_scif|rxcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.732     ;
+; 18.622 ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[7]      ; escape_reg                                      ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.723     ;
+; 18.646 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_scif:inst_scif|txcounter[3]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.699     ;
+; 18.649 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_scif:inst_scif|txcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.696     ;
+; 18.651 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_scif:inst_scif|txcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.694     ;
+; 18.685 ; psstate.state_bit_2                                    ; avalonst_byte_to_scif:inst_scif|rxcounter[0]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.660     ;
+; 18.701 ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ; avalonst_byte_to_scif:inst_scif|rxcounter[1]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.644     ;
+; 18.702 ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ; avalonst_byte_to_scif:inst_scif|rxcounter[2]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.643     ;
+; 18.729 ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; avalonst_byte_to_scif:inst_scif|txcounter[3]    ; clk24mhz     ; clk24mhz    ; 41.666       ; 0.000      ; 22.616     ;
++--------+--------------------------------------------------------+-------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Hold: 'clk24mhz'                                                                                                                                                                              ;
++-------+--------------------------------------------------------+--------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                              ; To Node                                                ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+--------------------------------------------------------+--------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 3.117 ; avalonst_byte_to_scif:inst_scif|indata_reg[2]          ; avalonst_byte_to_scif:inst_scif|indata_reg[1]          ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.156      ;
+; 3.120 ; avalonst_byte_to_scif:inst_scif|indata_reg[7]          ; avalonst_byte_to_scif:inst_scif|indata_reg[6]          ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.159      ;
+; 3.128 ; avalonst_byte_to_scif:inst_scif|indata_reg[4]          ; avalonst_byte_to_scif:inst_scif|indata_reg[3]          ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.167      ;
+; 3.129 ; avalonst_byte_to_scif:inst_scif|indata_reg[3]          ; avalonst_byte_to_scif:inst_scif|indata_reg[2]          ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.168      ;
+; 3.145 ; avalonst_byte_to_usbfifo:inst_ftif|ft_rxf_reg[0]       ; avalonst_byte_to_usbfifo:inst_ftif|ft_rxf_reg[1]       ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.184      ;
+; 3.173 ; avalonst_byte_to_usbfifo:inst_ftif|ft_txe_reg[0]       ; avalonst_byte_to_usbfifo:inst_ftif|ft_txe_reg[1]       ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.212      ;
+; 3.362 ; bytedlop_reg                                           ; bytedlop_reg                                           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.401      ;
+; 3.406 ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[0]      ; avalonst_byte_to_scif:inst_scif|outdata_reg[1]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.445      ;
+; 3.431 ; avalonst_byte_to_scif:inst_scif|confmode_reg           ; avalonst_byte_to_scif:inst_scif|dclk_reg               ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.470      ;
+; 3.432 ; avalonst_byte_to_scif:inst_scif|outdata_reg[3]         ; avalonst_byte_to_scif:inst_scif|outdata_reg[2]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.471      ;
+; 3.434 ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[2]      ; avalonst_byte_to_scif:inst_scif|outdata_reg[3]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.473      ;
+; 3.495 ; avalonst_byte_to_scif:inst_scif|sclk_reg               ; avalonst_byte_to_scif:inst_scif|sclk_reg               ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.534      ;
+; 3.496 ; avalonst_byte_to_scif:inst_scif|sclk_reg               ; avalonst_byte_to_scif:inst_scif|txready_reg            ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.535      ;
+; 3.518 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_2 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_2 ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.557      ;
+; 3.546 ; psstate.state_bit_2                                    ; psstate.state_bit_2                                    ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.585      ;
+; 3.754 ; avalonst_byte_to_scif:inst_scif|outdata_reg[2]         ; avalonst_byte_to_scif:inst_scif|outdata_reg[1]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.793      ;
+; 3.756 ; avalonst_byte_to_scif:inst_scif|outdata_reg[4]         ; avalonst_byte_to_scif:inst_scif|outdata_reg[3]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.795      ;
+; 3.766 ; avalonst_byte_to_scif:inst_scif|outdata_reg[8]         ; avalonst_byte_to_scif:inst_scif|outdata_reg[8]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.805      ;
+; 3.767 ; avalonst_byte_to_scif:inst_scif|outdata_reg[8]         ; avalonst_byte_to_scif:inst_scif|outdata_reg[7]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.806      ;
+; 3.777 ; avalonst_byte_to_scif:inst_scif|outdata_reg[5]         ; avalonst_byte_to_scif:inst_scif|outdata_reg[4]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.816      ;
+; 3.790 ; avalonst_byte_to_scif:inst_scif|rxready_reg            ; avalonst_byte_to_scif:inst_scif|rxready_reg            ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.829      ;
+; 3.802 ; avalonst_byte_to_usbfifo:inst_ftif|outvalid_reg        ; avalonst_byte_to_usbfifo:inst_ftif|outvalid_reg        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.841      ;
+; 3.810 ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[1]      ; avalonst_byte_to_scif:inst_scif|outdata_reg[2]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.849      ;
+; 3.885 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_0 ; avalonst_byte_to_usbfifo:inst_ftif|ft_wr_reg           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.924      ;
+; 3.892 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_0 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_2 ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.931      ;
+; 3.936 ; psstate.state_bit_1                                    ; psstate.state_bit_2                                    ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 3.975      ;
+; 3.971 ; avalonst_byte_to_usbfifo:inst_ftif|ft_rxf_reg[1]       ; avalonst_byte_to_usbfifo:inst_ftif|ft_rd_reg           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 4.010      ;
+; 4.493 ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[3]      ; avalonst_byte_to_scif:inst_scif|outdata_reg[4]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 4.532      ;
+; 4.888 ; avalonst_byte_to_scif:inst_scif|txcounter[3]           ; avalonst_byte_to_scif:inst_scif|outdata_reg[0]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 4.927      ;
+; 5.094 ; avalonst_byte_to_usbfifo:inst_ftif|ft_rxf_reg[1]       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.133      ;
+; 5.228 ; tocount_reg[0]                                         ; tocount_reg[0]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.267      ;
+; 5.228 ; tocount_reg[8]                                         ; tocount_reg[8]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.267      ;
+; 5.229 ; tocount_reg[7]                                         ; tocount_reg[7]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.268      ;
+; 5.229 ; tocount_reg[15]                                        ; tocount_reg[15]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.268      ;
+; 5.240 ; tocount_reg[18]                                        ; tocount_reg[18]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.279      ;
+; 5.241 ; tocount_reg[9]                                         ; tocount_reg[9]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.280      ;
+; 5.242 ; tocount_reg[10]                                        ; tocount_reg[10]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.281      ;
+; 5.242 ; tocount_reg[17]                                        ; tocount_reg[17]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.281      ;
+; 5.253 ; jtagtdi_reg                                            ; jtagtdi_reg                                            ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.292      ;
+; 5.253 ; avalonst_byte_to_scif:inst_scif|outdata_reg[7]         ; avalonst_byte_to_scif:inst_scif|outdata_reg[6]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.292      ;
+; 5.254 ; tocount_reg[5]                                         ; tocount_reg[5]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.293      ;
+; 5.255 ; tocount_reg[25]                                        ; tocount_reg[25]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.294      ;
+; 5.256 ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.295      ;
+; 5.267 ; tocount_reg[20]                                        ; tocount_reg[20]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.306      ;
+; 5.270 ; tocount_reg[19]                                        ; tocount_reg[19]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.309      ;
+; 5.290 ; avalonst_byte_to_scif:inst_scif|confmode_reg           ; avalonst_byte_to_scif:inst_scif|confmode_reg           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.329      ;
+; 5.305 ; avalonst_byte_to_usbfifo:inst_ftif|ft_doe_reg          ; avalonst_byte_to_usbfifo:inst_ftif|ft_doe_reg          ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.344      ;
+; 5.314 ; avalonst_byte_to_scif:inst_scif|txready_reg            ; avalonst_byte_to_scif:inst_scif|txready_reg            ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.353      ;
+; 5.379 ; avalonst_byte_to_scif:inst_scif|txcounter[3]           ; avalonst_byte_to_scif:inst_scif|txcounter[3]           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.418      ;
+; 5.401 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_2 ; avalonst_byte_to_usbfifo:inst_ftif|ft_wr_reg           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.440      ;
+; 5.428 ; tocount_reg[11]                                        ; tocount_reg[11]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.467      ;
+; 5.428 ; tocount_reg[16]                                        ; tocount_reg[16]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.467      ;
+; 5.429 ; avalonst_byte_to_usbfifo:inst_ftif|ft_rd_reg           ; avalonst_byte_to_usbfifo:inst_ftif|ft_rd_reg           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.468      ;
+; 5.440 ; tocount_reg[13]                                        ; tocount_reg[13]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.479      ;
+; 5.441 ; tocount_reg[12]                                        ; tocount_reg[12]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.480      ;
+; 5.441 ; tocount_reg[14]                                        ; tocount_reg[14]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.480      ;
+; 5.443 ; avalonst_byte_to_scif:inst_scif|rxd_reg                ; avalonst_byte_to_scif:inst_scif|rxd_reg                ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.482      ;
+; 5.446 ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.485      ;
+; 5.454 ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; avalonst_byte_to_scif:inst_scif|outdata_reg[0]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.493      ;
+; 5.455 ; tocount_reg[21]                                        ; tocount_reg[21]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.494      ;
+; 5.465 ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ; avalonst_byte_to_scif:inst_scif|txcounter[1]           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.504      ;
+; 5.468 ; tocount_reg[1]                                         ; tocount_reg[1]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.507      ;
+; 5.471 ; tocount_reg[6]                                         ; tocount_reg[6]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.510      ;
+; 5.473 ; timeout_reg                                            ; timeout_reg                                            ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.512      ;
+; 5.484 ; tocount_reg[3]                                         ; tocount_reg[3]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.523      ;
+; 5.486 ; tocount_reg[23]                                        ; tocount_reg[23]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.525      ;
+; 5.486 ; tocount_reg[4]                                         ; tocount_reg[4]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.525      ;
+; 5.487 ; tocount_reg[24]                                        ; tocount_reg[24]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.526      ;
+; 5.488 ; tocount_reg[22]                                        ; tocount_reg[22]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.527      ;
+; 5.488 ; tocount_reg[2]                                         ; tocount_reg[2]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.527      ;
+; 5.522 ; avalonst_byte_to_scif:inst_scif|txcounter[1]           ; avalonst_byte_to_scif:inst_scif|txcounter[1]           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.561      ;
+; 5.534 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.573      ;
+; 5.556 ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.595      ;
+; 5.580 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.619      ;
+; 5.583 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_2 ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.622      ;
+; 5.815 ; avalonst_byte_to_scif:inst_scif|indata_reg[6]          ; avalonst_byte_to_scif:inst_scif|indata_reg[5]          ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.854      ;
+; 5.906 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_scif:inst_scif|outdata_reg[0]         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.945      ;
+; 5.923 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_2 ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_0 ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 5.962      ;
+; 5.963 ; tocount_reg[8]                                         ; tocount_reg[9]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.002      ;
+; 5.963 ; tocount_reg[0]                                         ; tocount_reg[1]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.002      ;
+; 5.964 ; tocount_reg[15]                                        ; tocount_reg[16]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.003      ;
+; 5.975 ; tocount_reg[18]                                        ; tocount_reg[19]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.014      ;
+; 5.976 ; tocount_reg[9]                                         ; tocount_reg[10]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.015      ;
+; 5.977 ; tocount_reg[10]                                        ; tocount_reg[11]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.016      ;
+; 5.989 ; tocount_reg[5]                                         ; tocount_reg[6]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.028      ;
+; 6.002 ; tocount_reg[20]                                        ; tocount_reg[21]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.041      ;
+; 6.005 ; tocount_reg[19]                                        ; tocount_reg[20]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.044      ;
+; 6.107 ; tocount_reg[0]                                         ; tocount_reg[2]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.146      ;
+; 6.107 ; tocount_reg[8]                                         ; tocount_reg[10]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.146      ;
+; 6.108 ; tocount_reg[15]                                        ; tocount_reg[17]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.147      ;
+; 6.119 ; tocount_reg[18]                                        ; tocount_reg[20]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.158      ;
+; 6.120 ; tocount_reg[9]                                         ; tocount_reg[11]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.159      ;
+; 6.121 ; tocount_reg[10]                                        ; tocount_reg[12]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.160      ;
+; 6.133 ; tocount_reg[5]                                         ; tocount_reg[7]                                         ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.172      ;
+; 6.146 ; tocount_reg[20]                                        ; tocount_reg[22]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.185      ;
+; 6.149 ; tocount_reg[19]                                        ; tocount_reg[21]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.188      ;
+; 6.226 ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ; avalonst_byte_to_scif:inst_scif|txcounter[3]           ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.265      ;
+; 6.251 ; tocount_reg[8]                                         ; tocount_reg[11]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.290      ;
+; 6.263 ; tocount_reg[18]                                        ; tocount_reg[21]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.302      ;
+; 6.264 ; tocount_reg[9]                                         ; tocount_reg[12]                                        ; clk24mhz     ; clk24mhz    ; 0.000        ; 0.000      ; 6.303      ;
++-------+--------------------------------------------------------+--------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++------------------------------------------------------------------------------------------------------------+
+; Minimum Pulse Width: 'conn_tck_in'                                                                         ;
++--------+--------------+----------------+------------------+-------------+------------+---------------------+
+; Slack  ; Actual Width ; Required Width ; Type             ; Clock       ; Clock Edge ; Target              ;
++--------+--------------+----------------+------------------+-------------+------------+---------------------+
+; 19.661 ; 20.000       ; 0.339          ; High Pulse Width ; conn_tck_in ; Fall       ; tdoout_reg          ;
+; 19.661 ; 20.000       ; 0.339          ; Low Pulse Width  ; conn_tck_in ; Fall       ; tdoout_reg          ;
+; 20.000 ; 20.000       ; 0.000          ; High Pulse Width ; conn_tck_in ; Rise       ; conn_tck_in|combout ;
+; 20.000 ; 20.000       ; 0.000          ; Low Pulse Width  ; conn_tck_in ; Rise       ; conn_tck_in|combout ;
+; 20.000 ; 20.000       ; 0.000          ; High Pulse Width ; conn_tck_in ; Rise       ; tdoout_reg|clk      ;
+; 20.000 ; 20.000       ; 0.000          ; Low Pulse Width  ; conn_tck_in ; Rise       ; tdoout_reg|clk      ;
+; 36.711 ; 40.000       ; 3.289          ; Port Rate        ; conn_tck_in ; Rise       ; conn_tck_in         ;
++--------+--------------+----------------+------------------+-------------+------------+---------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------+
+; Minimum Pulse Width: 'clk24mhz'                                                                                                            ;
++--------+--------------+----------------+------------------+----------+------------+--------------------------------------------------------+
+; Slack  ; Actual Width ; Required Width ; Type             ; Clock    ; Clock Edge ; Target                                                 ;
++--------+--------------+----------------+------------------+----------+------------+--------------------------------------------------------+
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|confmode_reg           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|confmode_reg           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|dclk_reg               ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|dclk_reg               ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[0]          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[0]          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[1]          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[1]          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[2]          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[2]          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[3]          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[3]          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[4]          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[4]          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[5]          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[5]          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[6]          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[6]          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[7]          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|indata_reg[7]          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[0]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[0]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[1]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[1]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[2]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[2]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[3]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[3]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[4]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[4]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[5]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[5]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[6]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[6]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[7]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[7]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[8]         ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|outdata_reg[8]         ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxcounter[0]           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxcounter[1]           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxcounter[2]           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxcounter[3]           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxd_reg                ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxd_reg                ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxready_reg            ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|rxready_reg            ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|sclk_reg               ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|sclk_reg               ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txcounter[0]           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txcounter[1]           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txcounter[1]           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txcounter[2]           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txcounter[3]           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txcounter[3]           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txready_reg            ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_scif:inst_scif|txready_reg            ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_doe_reg          ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_doe_reg          ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_rd_reg           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_rd_reg           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_rxf_reg[0]       ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_rxf_reg[0]       ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_rxf_reg[1]       ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_rxf_reg[1]       ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_txe_reg[0]       ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_txe_reg[0]       ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_txe_reg[1]       ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_txe_reg[1]       ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_wr_reg           ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ft_wr_reg           ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_0 ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_0 ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_1 ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_2 ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_2 ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_3 ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|ifstate.state_bit_3 ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[0]      ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[0]      ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[1]      ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[1]      ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[2]      ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[2]      ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[3]      ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[3]      ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[4]      ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[4]      ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[5]      ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[5]      ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[6]      ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[6]      ;
+; 20.494 ; 20.833       ; 0.339          ; High Pulse Width ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[7]      ;
+; 20.494 ; 20.833       ; 0.339          ; Low Pulse Width  ; clk24mhz ; Rise       ; avalonst_byte_to_usbfifo:inst_ftif|outdata_reg[7]      ;
++--------+--------------+----------------+------------------+----------+------------+--------------------------------------------------------+
+
+
++------------------------------------------------------------------------+
+; Setup Times                                                            ;
++-----------+-------------+-------+-------+------------+-----------------+
+; Data Port ; Clock Port  ; Rise  ; Fall  ; Clock Edge ; Clock Reference ;
++-----------+-------------+-------+-------+------------+-----------------+
+; rxf_n     ; clk24mhz    ; 5.151 ; 5.151 ; Rise       ; clk24mhz        ;
+; sci_rxd   ; clk24mhz    ; 2.578 ; 2.578 ; Rise       ; clk24mhz        ;
+; sci_txr_n ; clk24mhz    ; 5.534 ; 5.534 ; Rise       ; clk24mhz        ;
+; txe_n     ; clk24mhz    ; 8.968 ; 8.968 ; Rise       ; clk24mhz        ;
+; ud[*]     ; clk24mhz    ; 6.897 ; 6.897 ; Rise       ; clk24mhz        ;
+;  ud[0]    ; clk24mhz    ; 4.886 ; 4.886 ; Rise       ; clk24mhz        ;
+;  ud[1]    ; clk24mhz    ; 6.778 ; 6.778 ; Rise       ; clk24mhz        ;
+;  ud[2]    ; clk24mhz    ; 6.798 ; 6.798 ; Rise       ; clk24mhz        ;
+;  ud[3]    ; clk24mhz    ; 6.472 ; 6.472 ; Rise       ; clk24mhz        ;
+;  ud[4]    ; clk24mhz    ; 6.624 ; 6.624 ; Rise       ; clk24mhz        ;
+;  ud[5]    ; clk24mhz    ; 4.973 ; 4.973 ; Rise       ; clk24mhz        ;
+;  ud[6]    ; clk24mhz    ; 6.897 ; 6.897 ; Rise       ; clk24mhz        ;
+;  ud[7]    ; clk24mhz    ; 6.657 ; 6.657 ; Rise       ; clk24mhz        ;
+; tdo       ; conn_tck_in ; 5.291 ; 5.291 ; Fall       ; conn_tck_in     ;
++-----------+-------------+-------+-------+------------+-----------------+
+
+
++--------------------------------------------------------------------------+
+; Hold Times                                                               ;
++-----------+-------------+--------+--------+------------+-----------------+
+; Data Port ; Clock Port  ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++-----------+-------------+--------+--------+------------+-----------------+
+; rxf_n     ; clk24mhz    ; -4.791 ; -4.791 ; Rise       ; clk24mhz        ;
+; sci_rxd   ; clk24mhz    ; -2.218 ; -2.218 ; Rise       ; clk24mhz        ;
+; sci_txr_n ; clk24mhz    ; -5.174 ; -5.174 ; Rise       ; clk24mhz        ;
+; txe_n     ; clk24mhz    ; -8.608 ; -8.608 ; Rise       ; clk24mhz        ;
+; ud[*]     ; clk24mhz    ; -4.526 ; -4.526 ; Rise       ; clk24mhz        ;
+;  ud[0]    ; clk24mhz    ; -4.526 ; -4.526 ; Rise       ; clk24mhz        ;
+;  ud[1]    ; clk24mhz    ; -6.418 ; -6.418 ; Rise       ; clk24mhz        ;
+;  ud[2]    ; clk24mhz    ; -6.438 ; -6.438 ; Rise       ; clk24mhz        ;
+;  ud[3]    ; clk24mhz    ; -6.112 ; -6.112 ; Rise       ; clk24mhz        ;
+;  ud[4]    ; clk24mhz    ; -6.264 ; -6.264 ; Rise       ; clk24mhz        ;
+;  ud[5]    ; clk24mhz    ; -4.613 ; -4.613 ; Rise       ; clk24mhz        ;
+;  ud[6]    ; clk24mhz    ; -6.537 ; -6.537 ; Rise       ; clk24mhz        ;
+;  ud[7]    ; clk24mhz    ; -6.297 ; -6.297 ; Rise       ; clk24mhz        ;
+; tdo       ; conn_tck_in ; -4.931 ; -4.931 ; Fall       ; conn_tck_in     ;
++-----------+-------------+--------+--------+------------+-----------------+
+
+
++-----------------------------------------------------------------------------+
+; Clock to Output Times                                                       ;
++--------------+-------------+--------+--------+------------+-----------------+
+; Data Port    ; Clock Port  ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++--------------+-------------+--------+--------+------------+-----------------+
+; data0        ; clk24mhz    ; 11.869 ; 11.869 ; Rise       ; clk24mhz        ;
+; dclk         ; clk24mhz    ; 14.040 ; 14.040 ; Rise       ; clk24mhz        ;
+; i2c_scl      ; clk24mhz    ; 26.049 ; 26.049 ; Rise       ; clk24mhz        ;
+; i2c_sda      ; clk24mhz    ; 28.488 ; 28.488 ; Rise       ; clk24mhz        ;
+; led_n_out    ; clk24mhz    ; 20.779 ; 20.779 ; Rise       ; clk24mhz        ;
+; mreset_n_ext ; clk24mhz    ; 15.845 ; 15.845 ; Rise       ; clk24mhz        ;
+; nconfig      ; clk24mhz    ; 18.981 ; 18.981 ; Rise       ; clk24mhz        ;
+; rd_n         ; clk24mhz    ; 13.987 ; 13.987 ; Rise       ; clk24mhz        ;
+; reset_n_out  ; clk24mhz    ; 19.534 ; 19.534 ; Rise       ; clk24mhz        ;
+; sci_rxr_n    ; clk24mhz    ; 19.543 ; 19.543 ; Rise       ; clk24mhz        ;
+; sci_sclk     ; clk24mhz    ; 12.087 ; 12.087 ; Rise       ; clk24mhz        ;
+; sci_txd      ; clk24mhz    ; 21.861 ; 21.861 ; Rise       ; clk24mhz        ;
+; si_wu_n      ; clk24mhz    ; 13.834 ; 13.834 ; Rise       ; clk24mhz        ;
+; tck          ; clk24mhz    ; 18.613 ; 18.613 ; Rise       ; clk24mhz        ;
+; tdi          ; clk24mhz    ; 17.994 ; 17.994 ; Rise       ; clk24mhz        ;
+; tms          ; clk24mhz    ; 22.460 ; 22.460 ; Rise       ; clk24mhz        ;
+; ud[*]        ; clk24mhz    ; 26.439 ; 26.439 ; Rise       ; clk24mhz        ;
+;  ud[0]       ; clk24mhz    ; 21.469 ; 21.469 ; Rise       ; clk24mhz        ;
+;  ud[1]       ; clk24mhz    ; 18.136 ; 18.136 ; Rise       ; clk24mhz        ;
+;  ud[2]       ; clk24mhz    ; 18.137 ; 18.137 ; Rise       ; clk24mhz        ;
+;  ud[3]       ; clk24mhz    ; 24.019 ; 24.019 ; Rise       ; clk24mhz        ;
+;  ud[4]       ; clk24mhz    ; 18.145 ; 18.145 ; Rise       ; clk24mhz        ;
+;  ud[5]       ; clk24mhz    ; 25.762 ; 25.762 ; Rise       ; clk24mhz        ;
+;  ud[6]       ; clk24mhz    ; 25.807 ; 25.807 ; Rise       ; clk24mhz        ;
+;  ud[7]       ; clk24mhz    ; 26.439 ; 26.439 ; Rise       ; clk24mhz        ;
+; wr           ; clk24mhz    ; 14.174 ; 14.174 ; Rise       ; clk24mhz        ;
+; tck          ; conn_tck_in ; 21.263 ; 21.263 ; Rise       ; conn_tck_in     ;
+; conn_tdo_out ; conn_tck_in ; 10.184 ; 10.184 ; Fall       ; conn_tck_in     ;
+; tck          ; conn_tck_in ; 21.263 ; 21.263 ; Fall       ; conn_tck_in     ;
++--------------+-------------+--------+--------+------------+-----------------+
+
+
++-----------------------------------------------------------------------------+
+; Minimum Clock to Output Times                                               ;
++--------------+-------------+--------+--------+------------+-----------------+
+; Data Port    ; Clock Port  ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++--------------+-------------+--------+--------+------------+-----------------+
+; data0        ; clk24mhz    ; 11.869 ; 11.869 ; Rise       ; clk24mhz        ;
+; dclk         ; clk24mhz    ; 14.040 ; 14.040 ; Rise       ; clk24mhz        ;
+; i2c_scl      ; clk24mhz    ; 25.000 ; 25.000 ; Rise       ; clk24mhz        ;
+; i2c_sda      ; clk24mhz    ; 28.073 ; 28.073 ; Rise       ; clk24mhz        ;
+; led_n_out    ; clk24mhz    ; 16.422 ; 16.422 ; Rise       ; clk24mhz        ;
+; mreset_n_ext ; clk24mhz    ; 15.845 ; 15.845 ; Rise       ; clk24mhz        ;
+; nconfig      ; clk24mhz    ; 18.981 ; 18.981 ; Rise       ; clk24mhz        ;
+; rd_n         ; clk24mhz    ; 13.987 ; 13.987 ; Rise       ; clk24mhz        ;
+; reset_n_out  ; clk24mhz    ; 19.534 ; 19.534 ; Rise       ; clk24mhz        ;
+; sci_rxr_n    ; clk24mhz    ; 15.218 ; 15.218 ; Rise       ; clk24mhz        ;
+; sci_sclk     ; clk24mhz    ; 12.087 ; 12.087 ; Rise       ; clk24mhz        ;
+; sci_txd      ; clk24mhz    ; 16.332 ; 16.332 ; Rise       ; clk24mhz        ;
+; si_wu_n      ; clk24mhz    ; 13.834 ; 13.834 ; Rise       ; clk24mhz        ;
+; tck          ; clk24mhz    ; 15.122 ; 15.122 ; Rise       ; clk24mhz        ;
+; tdi          ; clk24mhz    ; 17.775 ; 17.775 ; Rise       ; clk24mhz        ;
+; tms          ; clk24mhz    ; 22.045 ; 22.045 ; Rise       ; clk24mhz        ;
+; ud[*]        ; clk24mhz    ; 9.224  ; 9.224  ; Rise       ; clk24mhz        ;
+;  ud[0]       ; clk24mhz    ; 12.550 ; 12.550 ; Rise       ; clk24mhz        ;
+;  ud[1]       ; clk24mhz    ; 9.224  ; 9.224  ; Rise       ; clk24mhz        ;
+;  ud[2]       ; clk24mhz    ; 9.224  ; 9.224  ; Rise       ; clk24mhz        ;
+;  ud[3]       ; clk24mhz    ; 13.623 ; 13.623 ; Rise       ; clk24mhz        ;
+;  ud[4]       ; clk24mhz    ; 9.231  ; 9.231  ; Rise       ; clk24mhz        ;
+;  ud[5]       ; clk24mhz    ; 16.624 ; 16.624 ; Rise       ; clk24mhz        ;
+;  ud[6]       ; clk24mhz    ; 16.671 ; 16.671 ; Rise       ; clk24mhz        ;
+;  ud[7]       ; clk24mhz    ; 17.296 ; 17.296 ; Rise       ; clk24mhz        ;
+; wr           ; clk24mhz    ; 14.174 ; 14.174 ; Rise       ; clk24mhz        ;
+; tck          ; conn_tck_in ; 21.263 ; 21.263 ; Rise       ; conn_tck_in     ;
+; conn_tdo_out ; conn_tck_in ; 10.184 ; 10.184 ; Fall       ; conn_tck_in     ;
+; tck          ; conn_tck_in ; 21.263 ; 21.263 ; Fall       ; conn_tck_in     ;
++--------------+-------------+--------+--------+------------+-----------------+
+
+
++---------------------------------------------------------+
+; Propagation Delay                                       ;
++--------------+--------------+--------+----+----+--------+
+; Input Port   ; Output Port  ; RR     ; RF ; FR ; FF     ;
++--------------+--------------+--------+----+----+--------+
+; confdone     ; led_n_out    ; 19.232 ;    ;    ; 19.232 ;
+; confdone     ; ud[2]        ; 15.533 ;    ;    ; 15.533 ;
+; conn_tdi_in  ; tdi          ; 21.158 ;    ;    ; 21.158 ;
+; conn_tms_in  ; tms          ; 16.686 ;    ;    ; 16.686 ;
+; i2c_scl      ; ud[4]        ; 16.129 ;    ;    ; 16.129 ;
+; i2c_sda      ; ud[5]        ; 22.134 ;    ;    ; 22.134 ;
+; mreset_n_ext ; reset_n_out  ; 16.989 ;    ;    ; 16.989 ;
+; mreset_n_in  ; mreset_n_ext ; 15.390 ;    ;    ; 15.390 ;
+; mreset_n_in  ; nconfig      ; 18.714 ;    ;    ; 18.714 ;
+; msel1        ; nconfig      ; 18.980 ;    ;    ; 18.980 ;
+; msel1        ; ud[0]        ; 19.197 ;    ;    ; 19.197 ;
+; nstatus      ; ud[1]        ; 15.686 ;    ;    ; 15.686 ;
+; tdo          ; ud[6]        ; 23.167 ;    ;    ; 23.167 ;
++--------------+--------------+--------+----+----+--------+
+
+
++---------------------------------------------------------+
+; Minimum Propagation Delay                               ;
++--------------+--------------+--------+----+----+--------+
+; Input Port   ; Output Port  ; RR     ; RF ; FR ; FF     ;
++--------------+--------------+--------+----+----+--------+
+; confdone     ; led_n_out    ; 19.232 ;    ;    ; 19.232 ;
+; confdone     ; ud[2]        ; 15.533 ;    ;    ; 15.533 ;
+; conn_tdi_in  ; tdi          ; 21.158 ;    ;    ; 21.158 ;
+; conn_tms_in  ; tms          ; 16.686 ;    ;    ; 16.686 ;
+; i2c_scl      ; ud[4]        ; 16.129 ;    ;    ; 16.129 ;
+; i2c_sda      ; ud[5]        ; 22.134 ;    ;    ; 22.134 ;
+; mreset_n_ext ; reset_n_out  ; 16.989 ;    ;    ; 16.989 ;
+; mreset_n_in  ; mreset_n_ext ; 15.390 ;    ;    ; 15.390 ;
+; mreset_n_in  ; nconfig      ; 18.714 ;    ;    ; 18.714 ;
+; msel1        ; nconfig      ; 18.980 ;    ;    ; 18.980 ;
+; msel1        ; ud[0]        ; 19.197 ;    ;    ; 19.197 ;
+; nstatus      ; ud[1]        ; 15.686 ;    ;    ; 15.686 ;
+; tdo          ; ud[6]        ; 23.167 ;    ;    ; 23.167 ;
++--------------+--------------+--------+----+----+--------+
+
+
++-----------------------------------------------------------------------+
+; Output Enable Times                                                   ;
++-----------+------------+--------+------+------------+-----------------+
+; Data Port ; Clock Port ; Rise   ; Fall ; Clock Edge ; Clock Reference ;
++-----------+------------+--------+------+------------+-----------------+
+; data0     ; clk24mhz   ; 15.696 ;      ; Rise       ; clk24mhz        ;
+; dclk      ; clk24mhz   ; 15.696 ;      ; Rise       ; clk24mhz        ;
+; ud[*]     ; clk24mhz   ; 11.522 ;      ; Rise       ; clk24mhz        ;
+;  ud[0]    ; clk24mhz   ; 11.522 ;      ; Rise       ; clk24mhz        ;
+;  ud[1]    ; clk24mhz   ; 13.435 ;      ; Rise       ; clk24mhz        ;
+;  ud[2]    ; clk24mhz   ; 13.435 ;      ; Rise       ; clk24mhz        ;
+;  ud[3]    ; clk24mhz   ; 11.620 ;      ; Rise       ; clk24mhz        ;
+;  ud[4]    ; clk24mhz   ; 13.435 ;      ; Rise       ; clk24mhz        ;
+;  ud[5]    ; clk24mhz   ; 13.483 ;      ; Rise       ; clk24mhz        ;
+;  ud[6]    ; clk24mhz   ; 13.483 ;      ; Rise       ; clk24mhz        ;
+;  ud[7]    ; clk24mhz   ; 13.483 ;      ; Rise       ; clk24mhz        ;
++-----------+------------+--------+------+------------+-----------------+
+
+
++-----------------------------------------------------------------------+
+; Minimum Output Enable Times                                           ;
++-----------+------------+--------+------+------------+-----------------+
+; Data Port ; Clock Port ; Rise   ; Fall ; Clock Edge ; Clock Reference ;
++-----------+------------+--------+------+------------+-----------------+
+; data0     ; clk24mhz   ; 15.696 ;      ; Rise       ; clk24mhz        ;
+; dclk      ; clk24mhz   ; 15.696 ;      ; Rise       ; clk24mhz        ;
+; ud[*]     ; clk24mhz   ; 11.522 ;      ; Rise       ; clk24mhz        ;
+;  ud[0]    ; clk24mhz   ; 11.522 ;      ; Rise       ; clk24mhz        ;
+;  ud[1]    ; clk24mhz   ; 13.435 ;      ; Rise       ; clk24mhz        ;
+;  ud[2]    ; clk24mhz   ; 13.435 ;      ; Rise       ; clk24mhz        ;
+;  ud[3]    ; clk24mhz   ; 11.620 ;      ; Rise       ; clk24mhz        ;
+;  ud[4]    ; clk24mhz   ; 13.435 ;      ; Rise       ; clk24mhz        ;
+;  ud[5]    ; clk24mhz   ; 13.483 ;      ; Rise       ; clk24mhz        ;
+;  ud[6]    ; clk24mhz   ; 13.483 ;      ; Rise       ; clk24mhz        ;
+;  ud[7]    ; clk24mhz   ; 13.483 ;      ; Rise       ; clk24mhz        ;
++-----------+------------+--------+------+------------+-----------------+
+
+
++-------------------------------------------------------------------------------+
+; Output Disable Times                                                          ;
++-----------+------------+-----------+-----------+------------+-----------------+
+; Data Port ; Clock Port ; 0 to Hi-Z ; 1 to Hi-Z ; Clock Edge ; Clock Reference ;
++-----------+------------+-----------+-----------+------------+-----------------+
+; data0     ; clk24mhz   ; 15.696    ;           ; Rise       ; clk24mhz        ;
+; dclk      ; clk24mhz   ; 15.696    ;           ; Rise       ; clk24mhz        ;
+; ud[*]     ; clk24mhz   ; 11.522    ;           ; Rise       ; clk24mhz        ;
+;  ud[0]    ; clk24mhz   ; 11.522    ;           ; Rise       ; clk24mhz        ;
+;  ud[1]    ; clk24mhz   ; 13.435    ;           ; Rise       ; clk24mhz        ;
+;  ud[2]    ; clk24mhz   ; 13.435    ;           ; Rise       ; clk24mhz        ;
+;  ud[3]    ; clk24mhz   ; 11.620    ;           ; Rise       ; clk24mhz        ;
+;  ud[4]    ; clk24mhz   ; 13.435    ;           ; Rise       ; clk24mhz        ;
+;  ud[5]    ; clk24mhz   ; 13.483    ;           ; Rise       ; clk24mhz        ;
+;  ud[6]    ; clk24mhz   ; 13.483    ;           ; Rise       ; clk24mhz        ;
+;  ud[7]    ; clk24mhz   ; 13.483    ;           ; Rise       ; clk24mhz        ;
++-----------+------------+-----------+-----------+------------+-----------------+
+
+
++-------------------------------------------------------------------------------+
+; Minimum Output Disable Times                                                  ;
++-----------+------------+-----------+-----------+------------+-----------------+
+; Data Port ; Clock Port ; 0 to Hi-Z ; 1 to Hi-Z ; Clock Edge ; Clock Reference ;
++-----------+------------+-----------+-----------+------------+-----------------+
+; data0     ; clk24mhz   ; 15.696    ;           ; Rise       ; clk24mhz        ;
+; dclk      ; clk24mhz   ; 15.696    ;           ; Rise       ; clk24mhz        ;
+; ud[*]     ; clk24mhz   ; 11.522    ;           ; Rise       ; clk24mhz        ;
+;  ud[0]    ; clk24mhz   ; 11.522    ;           ; Rise       ; clk24mhz        ;
+;  ud[1]    ; clk24mhz   ; 13.435    ;           ; Rise       ; clk24mhz        ;
+;  ud[2]    ; clk24mhz   ; 13.435    ;           ; Rise       ; clk24mhz        ;
+;  ud[3]    ; clk24mhz   ; 11.620    ;           ; Rise       ; clk24mhz        ;
+;  ud[4]    ; clk24mhz   ; 13.435    ;           ; Rise       ; clk24mhz        ;
+;  ud[5]    ; clk24mhz   ; 13.483    ;           ; Rise       ; clk24mhz        ;
+;  ud[6]    ; clk24mhz   ; 13.483    ;           ; Rise       ; clk24mhz        ;
+;  ud[7]    ; clk24mhz   ; 13.483    ;           ; Rise       ; clk24mhz        ;
++-----------+------------+-----------+-----------+------------+-----------------+
+
+
++-------------------------------------------------------------------+
+; Setup Transfers                                                   ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; clk24mhz   ; clk24mhz ; 1424     ; 0        ; 0        ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++-------------------------------------------------------------------+
+; Hold Transfers                                                    ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; clk24mhz   ; clk24mhz ; 1424     ; 0        ; 0        ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
+---------------
+; Report TCCS ;
+---------------
+No dedicated SERDES Transmitter circuitry present in device or used in design
+
+
+---------------
+; Report RSKM ;
+---------------
+No non-DPA dedicated SERDES Receiver circuitry present in device or used in design
+
+
++------------------------------------------------+
+; Unconstrained Paths                            ;
++---------------------------------+-------+------+
+; Property                        ; Setup ; Hold ;
++---------------------------------+-------+------+
+; Illegal Clocks                  ; 0     ; 0    ;
+; Unconstrained Clocks            ; 0     ; 0    ;
+; Unconstrained Input Ports       ; 23    ; 23   ;
+; Unconstrained Input Port Paths  ; 27    ; 27   ;
+; Unconstrained Output Ports      ; 26    ; 26   ;
+; Unconstrained Output Port Paths ; 77    ; 77   ;
++---------------------------------+-------+------+
+
+
++------------------------------------+
+; TimeQuest Timing Analyzer Messages ;
++------------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit TimeQuest Timing Analyzer
+    Info: Version 14.0.0 Build 200 06/17/2014 SJ Web Edition
+    Info: Processing started: Sun Aug 03 03:53:32 2014
+Info: Command: quartus_sta psconfig_top -c psconfig_top
+Info: qsta_default_script.tcl version: #1
+Info (11104): Parallel Compilation has detected 8 hyper-threaded processors. However, the extra hyper-threaded processors will not be used by default. Parallel Compilation will use 4 of the 4 physical processors detected instead.
+Info (21077): Low junction temperature is 0 degrees C
+Info (21077): High junction temperature is 85 degrees C
+Info (306004): Started post-fitting delay annotation
+Info (306005): Delay annotation completed successfully
+Info (332104): Reading SDC File: 'psconfig.sdc'
+Warning (114001): Time value "41.6667 ns" truncated to "41.666 ns"
+Warning (114001): Time value "41.6667 ns" truncated to "41.666 ns"
+Warning (332056): PLL cross checking found inconsistent PLL clock settings:
+    Warning (332056): Node: osc_inst|max2_internal_osc_altufm_osc_lv5_component|maxii_ufm_block1|osc was found missing 1 generated clock that corresponds to a base clock with a period of: 181.818
+Info: Found TIMEQUEST_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
+Info: Can't run Report Timing Closure Recommendations. The current device family is not supported.
+Info (332146): Worst-case setup slack is 12.402
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    12.402               0.000 clk24mhz 
+Info (332146): Worst-case hold slack is 3.117
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     3.117               0.000 clk24mhz 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is 19.661
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    19.661               0.000 conn_tck_in 
+    Info (332119):    20.494               0.000 clk24mhz 
+Info (332001): The selected device family is not supported by the report_metastability command.
+Info (332102): Design is not fully constrained for setup requirements
+Info (332102): Design is not fully constrained for hold requirements
+Info: Quartus II 64-Bit TimeQuest Timing Analyzer was successful. 0 errors, 4 warnings
+    Info: Peak virtual memory: 470 megabytes
+    Info: Processing ended: Sun Aug 03 03:53:33 2014
+    Info: Elapsed time: 00:00:01
+    Info: Total CPU time (on all processors): 00:00:01
+
+
