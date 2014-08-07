@@ -1,0 +1,125 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1200mV 85C Model Setup 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 4.450
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Setup 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 26.507
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Setup 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 27.965
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.452
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.500
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 11.198
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 3.681
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.858
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 19.542
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 19.543
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 4.614
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 28.192
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 28.666
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.401
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.469
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 9.598
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 3.681
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.855
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 19.539
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 19.541
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 6.391
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 33.220
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 34.485
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.187
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 0.192
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 5.402
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 3.761
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.423
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'videopll_inst|altpll_component|auto_generated|pll1|clk[1]'
+Slack : 19.620
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'U_TMDS|SER|\VGAPLL:TXPLL|altpll_component|auto_generated|pll1|clk[0]'
+Slack : 19.622
+TNS   : 0.000
+
+------------------------------------------------------------

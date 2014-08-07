@@ -1,0 +1,10 @@
+PLL_Name	dvi_tx_pdiff:U_TMDS|pdiff_transmitter:SER|pll_tx_cyclone3_vga:\VGAPLL:TXPLL|altpll:altpll_component|pll_tx_cyclone3_vga_altpll:auto_generated|pll1
+PLLJITTER	31
+PLLSPEmax	84
+PLLSPEmin	-53
+
+PLL_Name	videopll:videopll_inst|altpll:altpll_component|videopll_altpll:auto_generated|pll1
+PLLJITTER	NA
+PLLSPEmax	84
+PLLSPEmin	-53
+

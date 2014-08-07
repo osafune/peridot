@@ -3,7 +3,6 @@
   "description": "PERIDOT CRAFT",
   "version": "0.9",
   "icons": {
-    "16": "img/peridotcraft_favicon.png",
 	"128": "img/peridotcraft_icon.png"
   },
   "app": {

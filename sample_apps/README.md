@@ -56,7 +56,7 @@ PERIDOTデバイスのコンフィグレーション
 -----------------------------------------
 `myps.config(obj boardInfo, arraybuffer rbfdata[], function callback(bool result));`
 
-    boardInfo : コンフィグレーション対象のボード情報オブジェクト（現状では0を指定する）
+    boardInfo : コンフィグレーション対象のボード情報オブジェクト（普通はnullを指定する）
     rbfdata[] : コンフィグデータが格納された ArrayBufferオブジェクト
     result : 成功＝true / 失敗＝false
 

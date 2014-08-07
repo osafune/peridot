@@ -5,6 +5,8 @@
 //  ver 0.9.1
 //		2014/06/04	s.osafune@gmail.com
 //
+//  ver 0.9.2
+//		2014/08/04	s.osafune@gmail.com
 //
 // ******************************************************************* //
 //     Copyright (C) 2014, J-7SYSTEM Works.  All rights Reserved.      //
@@ -25,6 +27,7 @@
 //	.close(function callback(bool result));
 //	.config(obj boardInfo, arraybuffer rbfdata[], function callback(bool result));
 //	.reset(function callback(bool result));
+//	.getinfo(function callback(bool result));
 //	.avm.read(uint address, int bytenum, function callback(bool result, arraybuffer readdata[]));
 //	.avm.write(uint address, arraybuffer writedata[], function callback(bool result));
 //	.avm.iord(uint address, int offset, function callback(bool result, uint readdata));
@@ -42,10 +45,8 @@ var Canarium = function() {
 	// Information of the board that this object is connected
 	self.boardInfo = null;
 //	{
-//		version : 1,
-//		manufacturerId : uint16,
-//		productId : uint16,
-//		serialnumber : uint32
+//		id : strings,			// 'J72A' (J-7SYSTEM Works / PERIDOT board)
+//		serialcode : strings	// 'xxxxxx-yyyyyy-zzzzzz'
 //	};
 
 	// デフォルトのビットレート 
@@ -58,6 +59,7 @@ var Canarium = function() {
 	self.close	= function(callback){ devclose(callback); };
 	self.config	= function(boardInfo, rbfarraybuf, callback){ devconfig(boardInfo, rbfarraybuf, callback); };
 	self.reset	= function(callback){ devreset(callback); };
+	self.getinfo= function(callback){ devgetinfo(callback); };
 
 	self.avm = {
 		read	: function(address, readbytenum, callback){ avmread(address, readbytenum, callback); },
@@ -364,7 +366,7 @@ var Canarium = function() {
 			commandtrans(0x39, function(result, respbyte) {
 				if (result) {
 					console.log("board : Confirm acknowledge.");
-					getboardinfo();					// コマンドに応答があった 
+					getboardheader();				// コマンドに応答があった 
 				} else {
 					console.log("board : [!] No response.");
 					open_exit(false);				// コマンドに応答がなかった 
@@ -372,54 +374,32 @@ var Canarium = function() {
 			});
 		};
 
-		// ボード情報の取得 
-		var getboardinfo = function() {
-			eepromread(function(result, readdata) {
+		// EEPROMヘッダの読み取り 
+		var getboardheader = function() {
+			eepromread(0x00, 4, function(result, readdata) {
 				if (result) {
 					var readdata_arr = new Uint8Array(readdata);
 					var header = (readdata_arr[0] << 16) | (readdata_arr[1] << 8) | (readdata_arr[2] << 0);
 
 					if (header == 0x4a3757) {		// J7Wのヘッダがある 
-						self.boardInfo = {
-							version : (readdata_arr[3]),
-							manufacturerId : (((readdata_arr[4] << 8) | (readdata_arr[5] << 0))>>> 0),
-							productId : (((readdata_arr[6] << 8) | (readdata_arr[7] << 0))>>> 0),
-							serialnumber : (((readdata_arr[8] << 24) | (readdata_arr[9] << 16) |
-											(readdata_arr[10] << 8)|(readdata_arr[11] << 0))>>> 0)
-						};
-					} else {
-						self.boardInfo = {			// J7Wのヘッダが見つからない 
-							version : 1,
-							manufacturerId : (0xffff >>> 0),
-							productId : (0xffff >>> 0),
-							serialnumber : (0xffffffff >>> 0)
-						};
+						self.boardInfo = {version : readdata_arr[3]};
+						console.log("board : EEPROM header version = " + self.boardInfo.version);
+					} else {						// J7Wのヘッダがない 
+						self.boardInfo = {version : 0};
+						console.log("board : [!] Unknown EEPROM header.");
 					}
-
-					open_exit(true);
-				} else {
-					self.boardInfo = {				// EEPROMが見つからない 
-						version : 1,
-						manufacturerId : 0x0000,
-						productId : 0x0000,
-						serialnumber : 0x00000000
-					};
-
-					open_exit(true);
+				} else {							// EEPROMがない 
+					self.boardInfo = {version : 0};
+					console.log("board : [!] EEPROM not found.");
 				}
+
+				open_exit(true);
 			});
 		};
 
-		connect();
-
+		// 終了処理 
 		var open_exit = function(result) {
 			if (result) {
-				console.log("board : version = " + self.boardInfo.version + "\n" + 
-							"        manufacturer ID = 0x" + ("0000"+self.boardInfo.manufacturerId.toString(16)).slice(-4) + "\n" +
-							"        product ID = 0x" + ("0000"+self.boardInfo.productId.toString(16)).slice(-4) + "\n" +
-							"        serial number = 0x" + ("00000000"+self.boardInfo.serialnumber.toString(16)).slice(-8)
-				);
-
 				callback(true);
 			} else {
 				if (onConnect) {
@@ -431,6 +411,8 @@ var Canarium = function() {
 				}
 			}
 		};
+
+		connect();
 	};
 
 
@@ -471,34 +453,6 @@ var Canarium = function() {
 		configBarrier = true;
 
 
-		///// バイトエスケープ処理 /////
-
-		var rbfescape = new Array();
-		var rbfarraybuf_arr = new Uint8Array(rbfarraybuf);
-		var escape_num = 0;
-
-		for(var i=0 ; i<rbfarraybuf.byteLength ; i++) {
-			if (rbfarraybuf_arr[i] == 0x3a || rbfarraybuf_arr[i] == 0x3d) {
-				rbfescape.push(0x3d);
-				rbfescape.push(rbfarraybuf_arr[i] ^ 0x20);
-				escape_num++;
-			} else {
-				rbfescape.push(rbfarraybuf_arr[i]);
-			}
-		}
-
-		var rbfescapebuf = new ArrayBuffer(rbfescape.length);
-		var rbfescapebuf_arr = new Uint8Array(rbfescapebuf);
-		var checksum = 0;
-
-		for(var i=0 ; i<rbfescape.length ; i++) {
-			rbfescapebuf_arr[i] = rbfescape[i];
-			checksum = (checksum + rbfescapebuf_arr[i]) & 0xff;
-		}
-
-		console.log("config : " + escape_num + " places were escaped. config data size = " + rbfescapebuf.byteLength + "bytes");
-
-
 		///// FPGAコンフィグレーションシーケンサ /////
 
 		var sendretry = 0;		// タイムアウトカウンタ 
@@ -509,6 +463,7 @@ var Canarium = function() {
 				if (result) {
 					if ((respbyte & 0x01)== 0x00) {		// PSモード 
 						console.log("config : configuration is started.");
+						confrun = false;
 						sendretry = 0;
 						sendinit();
 					} else {
@@ -609,16 +564,68 @@ var Canarium = function() {
 			config_exit(false);
 		};
 
-
-		///// コンフィグレーションの実行 /////
-
-		confrun = false;
-		setup();
-
+		// 終了処理 
 		var config_exit = function(result) {
 			configBarrier = false;
 			callback(result);
 		};
+
+
+		///// バイトエスケープ処理 /////
+
+		var rbfescape = new Array();
+		var rbfarraybuf_arr = new Uint8Array(rbfarraybuf);
+		var escape_num = 0;
+
+		for(var i=0 ; i<rbfarraybuf.byteLength ; i++) {
+			if (rbfarraybuf_arr[i] == 0x3a || rbfarraybuf_arr[i] == 0x3d) {
+				rbfescape.push(0x3d);
+				rbfescape.push(rbfarraybuf_arr[i] ^ 0x20);
+				escape_num++;
+			} else {
+				rbfescape.push(rbfarraybuf_arr[i]);
+			}
+		}
+
+		var rbfescapebuf = new ArrayBuffer(rbfescape.length);
+		var rbfescapebuf_arr = new Uint8Array(rbfescapebuf);
+		var checksum = 0;
+
+		for(var i=0 ; i<rbfescape.length ; i++) {
+			rbfescapebuf_arr[i] = rbfescape[i];
+			checksum = (checksum + rbfescapebuf_arr[i]) & 0xff;
+		}
+
+		console.log("config : " + escape_num + " places were escaped. config data size = " + rbfescapebuf.byteLength + "bytes");
+
+
+		///// コンフィグレーションの実行 /////
+
+		if (boardInfo) {
+			devgetinfo( function(result) {		// boardInfoでターゲットを制限する場合 
+				if (result) {
+					var conf = true;
+					if ('id' in boardInfo && boardInfo.id != self.boardInfo.id) {
+						conf = false;
+						console.log("config : [!] Board ID is not in agreement.");
+					}
+					if ('serialcode' in boardInfo && boardInfo.serialcode != self.boardInfo.serialcode) {
+						conf = false;
+						console.log("config : [!] Board serial-code is not in agreement.");
+					}
+
+					if (conf) {
+						setup();
+					} else {
+						config_exit(false);
+					}
+				} else {
+					config_exit(false);
+				}
+			});
+		} else {
+			setup();
+		}
 	};
 
 
@@ -627,7 +634,7 @@ var Canarium = function() {
 
 	var mresetBarrier = false;
 	var devreset = function(callback) {
-		if (!onConnect || !confrun || mresetBarrier) {
+		if (!onConnect || mresetBarrier) {
 			callback(false);
 			return;
 		}
@@ -656,12 +663,105 @@ var Canarium = function() {
 			});
 		};
 
-		resetassert();
-
 		var reset_exit = function(result) {
 			mresetBarrier = false;
 			callback(result);
 		};
+
+		resetassert();
+	};
+
+
+	// ボード情報の取得 
+	//	devgetinfo(function callback(bool result));
+
+	var getinfoBarrier = false;
+	var devgetinfo = function(callback) {
+		if (!onConnect || getinfoBarrier) {
+			callback(false);
+			return;
+		}
+
+		getinfoBarrier = true;
+
+		// ver.1ヘッダ 
+		var getboadinfo_v1 = function() {
+			eepromread(0x04, 8, function(result, readdata) {
+				if (result) {
+					var readdata_arr = new Uint8Array(readdata);
+					var mid = (((readdata_arr[0] << 8) | (readdata_arr[1] << 0))>>> 0);
+					var pid = (((readdata_arr[2] << 8) | (readdata_arr[3] << 0))>>> 0);
+					var sid = (((readdata_arr[4] << 24) | (readdata_arr[5] << 16) | (readdata_arr[6] << 8)|(readdata_arr[7] << 0))>>> 0);
+
+					if (mid == 0x0072) {
+						var s = ("0000" + pid.toString(16)).slice(-4) + ("00000000" + sid.toString(16)).slice(-8);
+						self.boardInfo.id = "J72A";
+						self.boardInfo.serialcode = s.substr(0,6) + "-" + s.substr(6,6) + "-000000";
+					}
+				}
+
+				getinfo_exit(result);
+			});
+		};
+
+		// ver.2ヘッダ 
+		var getboadinfo_v2 = function() {
+			eepromread(0x04, 22, function(result, readdata) {
+				if (result) {
+					var readdata_arr = new Uint8Array(readdata);
+					var bid = "";
+					var sid = "";
+
+					for(var i=0 ; i<4 ; i++) bid += String.fromCharCode(readdata_arr[i]);
+
+					for(var i=0 ; i<18 ; i++) {
+						sid += String.fromCharCode(readdata_arr[4+i]);
+						if (i == 5 || i == 11) sid += "-";
+					}
+
+					self.boardInfo.id = bid;
+					self.boardInfo.serialcode = sid;
+				}
+
+				getinfo_exit(result);
+			});
+		};
+
+		//  EEPROMが無い、または内容が不正 
+		var getboadinfo_def = function() {
+			self.boardInfo.id = "";
+			self.boardInfo.serialcode = "";
+
+			getinfo_exit(true);
+		};
+
+		// 終了処理 
+		var getinfo_exit = function(result) {
+			if (result) {
+				console.log("board : version = " + self.boardInfo.version + "\n" +
+							"        ID = " + self.boardInfo.id + "\n" +
+							"        serial code = " + self.boardInfo.serialcode
+				);
+			}
+
+			getinfoBarrier = false;
+			callback(result);
+		};
+
+
+		switch(self.boardInfo.version) {
+		case 1 :					// ヘッダver.1
+			getboadinfo_v1();
+			break;
+
+		case 2 : 					// ヘッダver.2
+			getboadinfo_v2();
+			break;
+
+		default :				// EEPROMが無い、または内容が不正 
+			getboadinfo_def();
+			break;
+		}
 	};
 
 
@@ -1273,12 +1373,12 @@ var Canarium = function() {
 			});
 		};
 
-		setup();
-
 		var i2cstart_exit = function(result) {
 			i2cBarrier = false;
 			callback(result);
 		};
+
+		setup();
 	};
 
 	// ストップコンディションの送信 (必ずSCL='L'が先行しているものとする) 
@@ -1347,12 +1447,12 @@ var Canarium = function() {
 			});
 		};
 
-		setup();
-
 		var i2cstop_exit = function(result) {
 			i2cBarrier = false;
 			callback(result);
 		};
+
+		setup();
 	};
 
 	// バイトリード (必ずSCL='L'が先行しているものとする) 
@@ -1392,6 +1492,7 @@ var Canarium = function() {
 
 			i2cbitwrite(ackbit, function(result) {
 				if (result) {
+
 //					var str = " ACK";
 //					if (!ack) str = " NACK";
 //					console.log("i2c : read 0x" + ("0"+readbyte.toString(16)).slice(-2) + str);
@@ -1404,12 +1505,12 @@ var Canarium = function() {
 
 		};
 
-		byteread();
-
 		var i2cread_exit = function(result, respbyte) {
 			i2cBarrier = false;
 			callback(result, respbyte);
 		};
+
+		byteread();
 	};
 
 	// バイトライト (必ずSCL='L'が先行しているものとする) 
@@ -1460,19 +1561,19 @@ var Canarium = function() {
 			});
 		};
 
-		bytewrite();
-
 		var i2cwrite_exit = function(result, ack) {
 			i2cBarrier = false;
 			callback(result, ack);
 		};
+
+		bytewrite();
 	};
 
 
 	// ボードのEEPROMを読み出す 
-	// eepromread(function callback(bool result, arraybuffer readdata[]));
+	// eepromread(int startaddr, int readbytes, function callback(bool result, arraybuffer readdata[]));
 	var eepromBarrier = false;
-	var eepromread = function(callback) {
+	var eepromread = function(startaddr, readbytes, callback) {
 		if (eepromBarrier) {
 			callback(false, null);
 			return;
@@ -1483,7 +1584,7 @@ var Canarium = function() {
 		avmSendImmediate = true;
 
 		var deviceaddr = 0xa0;
-		var readdata = new ArrayBuffer(12);
+		var readdata = new ArrayBuffer(readbytes);
 		var readdata_arr = new Uint8Array(readdata);
 
 		var byteread = function(byteaddr, callback) {
@@ -1511,7 +1612,7 @@ var Canarium = function() {
 			};
 
 			var setaddr = function() {
-				i2cwrite((byteaddr | 0), function(result, ack) {
+				i2cwrite(byteaddr, function(result, ack) {
 					if (result && ack) {
 						repstart();
 					} else {
@@ -1568,11 +1669,12 @@ var Canarium = function() {
 
 		var bytenum = 0;
 		var idread = function() {
-			byteread(bytenum, function(result, data) {
+			byteread(startaddr, function(result, data) {
 				if (result) {
 					readdata_arr[bytenum++] = data;
 
 					if (bytenum < readdata.byteLength) {
+						startaddr++;
 						idread();
 					} else {
 						eepromread_exit(true, readdata);
@@ -1583,13 +1685,13 @@ var Canarium = function() {
 			});
 		};
 
-		idread();
-
 		var eepromread_exit = function(result, databuf) {
 			eepromBarrier = false;
 			avmSendImmediate = si_backup;
 			callback(result, databuf);
 		};
+
+		idread();
 	}
 }
 

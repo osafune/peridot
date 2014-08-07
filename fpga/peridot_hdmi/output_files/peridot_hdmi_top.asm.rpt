@@ -1,0 +1,104 @@
+Assembler report for peridot_hdmi_top
+Mon Aug 04 01:48:05 2014
+Quartus II 64-Bit Version 14.0.0 Build 200 06/17/2014 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Assembler Summary
+  3. Assembler Settings
+  4. Assembler Generated Files
+  5. Assembler Device Options: C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_hdmi/output_files/peridot_hdmi_top.sof
+  6. Assembler Device Options: C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_hdmi/output_files/peridot_hdmi_top.rbf
+  7. Assembler Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2014 Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus II License Agreement,
+the Altera MegaCore Function License Agreement, or other 
+applicable license agreement, including, without limitation, 
+that your use is for the sole purpose of programming logic 
+devices manufactured by Altera and sold by Altera or its 
+authorized distributors.  Please refer to the applicable 
+agreement for further details.
+
+
+
++---------------------------------------------------------------+
+; Assembler Summary                                             ;
++-----------------------+---------------------------------------+
+; Assembler Status      ; Successful - Mon Aug 04 01:48:05 2014 ;
+; Revision Name         ; peridot_hdmi_top                      ;
+; Top-level Entity Name ; peridot_hdmi_top                      ;
+; Family                ; Cyclone IV E                          ;
+; Device                ; EP4CE6E22C8                           ;
++-----------------------+---------------------------------------+
+
+
++----------------------------------+
+; Assembler Settings               ;
++--------+---------+---------------+
+; Option ; Setting ; Default Value ;
++--------+---------+---------------+
+
+
++----------------------------------------------------------------------------------------+
+; Assembler Generated Files                                                              ;
++----------------------------------------------------------------------------------------+
+; File Name                                                                              ;
++----------------------------------------------------------------------------------------+
+; C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_hdmi/output_files/peridot_hdmi_top.sof ;
+; C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_hdmi/output_files/peridot_hdmi_top.rbf ;
++----------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------+
+; Assembler Device Options: C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_hdmi/output_files/peridot_hdmi_top.sof ;
++----------------+-------------------------------------------------------------------------------------------------+
+; Option         ; Setting                                                                                         ;
++----------------+-------------------------------------------------------------------------------------------------+
+; Device         ; EP4CE6E22C8                                                                                     ;
+; JTAG usercode  ; 0x20140803                                                                                      ;
+; Checksum       ; 0x000F7927                                                                                      ;
++----------------+-------------------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------+
+; Assembler Device Options: C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_hdmi/output_files/peridot_hdmi_top.rbf ;
++---------------------+--------------------------------------------------------------------------------------------+
+; Option              ; Setting                                                                                    ;
++---------------------+--------------------------------------------------------------------------------------------+
+; Raw Binary File     ;                                                                                            ;
+;  Compression Ratio  ; 3                                                                                          ;
++---------------------+--------------------------------------------------------------------------------------------+
+
+
++--------------------+
+; Assembler Messages ;
++--------------------+
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit Assembler
+    Info: Version 14.0.0 Build 200 06/17/2014 SJ Web Edition
+    Info: Processing started: Mon Aug 04 01:48:04 2014
+Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off peridot_hdmi -c peridot_hdmi_top
+Info (115031): Writing out detailed assembly data for power analysis
+Info (115030): Assembler is generating device programming files
+Info: Quartus II 64-Bit Assembler was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 505 megabytes
+    Info: Processing ended: Mon Aug 04 01:48:05 2014
+    Info: Elapsed time: 00:00:01
+    Info: Total CPU time (on all processors): 00:00:01
+
+

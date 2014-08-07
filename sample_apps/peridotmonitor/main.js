@@ -119,6 +119,12 @@ function handleFileSelect(evt) {
 // FPGAのコンフィグレーション 
 function configSetup() {
 
+	var boardinfo = null;
+//		{
+//			id : "J72A",
+//			serialcode : "xxxxxx-yyyyyy-zzzzzz"
+//		};
+
 	// SysIDを表示 
 	var getsysid = function(result) {
 		var sysid_addr = 0x10000000 >>> 0;
@@ -143,7 +149,7 @@ function configSetup() {
 
 	document.getElementById('configicon').src="img/loading02_r2_c4.gif";
 
-	testps.config(0, confdata, function (result) {
+	testps.config(boardinfo, confdata, function (result) {
 		if (result) {
 			document.getElementById('configicon').src="img/icon_ok_24x24.png";
 			getsysid(true);
