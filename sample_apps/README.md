@@ -1,4 +1,4 @@
-﻿Canarium.js
+Canarium.js
 ==============
 Google Chrome Package Apps用のJavaScriptライブラリです。  
 
