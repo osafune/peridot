@@ -1,4 +1,4 @@
-// (C) 2001-2013 Altera Corporation. All rights reserved.
+// (C) 2001-2014 Altera Corporation. All rights reserved.
 // Your use of Altera Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files any of the foregoing (including device programming or simulation 
@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.1/ip/merlin/altera_avalon_mm_bridge/altera_avalon_mm_bridge.v#1 $
+// $Id: //acds/rel/14.0/ip/merlin/altera_avalon_mm_bridge/altera_avalon_mm_bridge.v#1 $
 // $Revision: #1 $
-// $Date: 2013/08/11 $
+// $Date: 2014/02/16 $
 // $Author: swbranch $
 // --------------------------------------
 // Avalon-MM pipeline bridge
@@ -26,7 +26,7 @@ module altera_avalon_mm_bridge
 #(
     parameter DATA_WIDTH           = 32,
     parameter SYMBOL_WIDTH         = 8,
-    parameter ADDRESS_WIDTH        = 10,
+    parameter HDL_ADDR_WIDTH       = 10,
     parameter BURSTCOUNT_WIDTH     = 1,
 
     parameter PIPELINE_COMMAND     = 1,
@@ -46,7 +46,7 @@ module altera_avalon_mm_bridge
     output                          s0_readdatavalid,
     input  [BURSTCOUNT_WIDTH-1:0]   s0_burstcount,
     input  [DATA_WIDTH-1:0]         s0_writedata,
-    input  [ADDRESS_WIDTH-1:0]      s0_address, 
+    input  [HDL_ADDR_WIDTH-1:0]     s0_address, 
     input                           s0_write,  
     input                           s0_read,  
     input  [BYTEEN_WIDTH-1:0]       s0_byteenable,  
@@ -57,7 +57,7 @@ module altera_avalon_mm_bridge
     input                           m0_readdatavalid,
     output [BURSTCOUNT_WIDTH-1:0]   m0_burstcount,
     output [DATA_WIDTH-1:0]         m0_writedata,
-    output [ADDRESS_WIDTH-1:0]      m0_address, 
+    output [HDL_ADDR_WIDTH-1:0]     m0_address, 
     output                          m0_write,  
     output                          m0_read,  
     output [BYTEEN_WIDTH-1:0]       m0_byteenable,
@@ -68,7 +68,7 @@ module altera_avalon_mm_bridge
     // --------------------------------------
     reg [BURSTCOUNT_WIDTH-1:0]   cmd_burstcount;
     reg [DATA_WIDTH-1:0]         cmd_writedata;
-    reg [ADDRESS_WIDTH-1:0]      cmd_address; 
+    reg [HDL_ADDR_WIDTH-1:0]     cmd_address; 
     reg                          cmd_write;  
     reg                          cmd_read;  
     reg [BYTEEN_WIDTH-1:0]       cmd_byteenable;
@@ -77,7 +77,7 @@ module altera_avalon_mm_bridge
 
     reg [BURSTCOUNT_WIDTH-1:0]   wr_burstcount;
     reg [DATA_WIDTH-1:0]         wr_writedata;
-    reg [ADDRESS_WIDTH-1:0]      wr_address; 
+    reg [HDL_ADDR_WIDTH-1:0]     wr_address; 
     reg                          wr_write;  
     reg                          wr_read;  
     reg [BYTEEN_WIDTH-1:0]       wr_byteenable;
@@ -85,7 +85,7 @@ module altera_avalon_mm_bridge
 
     reg [BURSTCOUNT_WIDTH-1:0]   wr_reg_burstcount;
     reg [DATA_WIDTH-1:0]         wr_reg_writedata;
-    reg [ADDRESS_WIDTH-1:0]      wr_reg_address; 
+    reg [HDL_ADDR_WIDTH-1:0]     wr_reg_address; 
     reg                          wr_reg_write;  
     reg                          wr_reg_read;  
     reg [BYTEEN_WIDTH-1:0]       wr_reg_byteenable;

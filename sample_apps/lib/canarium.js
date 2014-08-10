@@ -2,11 +2,8 @@
 //  PERIDOT Chrome Package Apps Driver - 'Canarium.js'                 //
 // ------------------------------------------------------------------- //
 //
-//  ver 0.9.1
-//		2014/06/04	s.osafune@gmail.com
-//
-//  ver 0.9.2
-//		2014/08/04	s.osafune@gmail.com
+//  ver 0.9.3
+//		2014/08/10	s.osafune@gmail.com
 //
 // ******************************************************************* //
 //     Copyright (C) 2014, J-7SYSTEM Works.  All rights Reserved.      //
@@ -38,10 +35,10 @@ var Canarium = function() {
 	var self = this;
 
 	//////////////////////////////////////////////////
-	//  ŒöŠJƒIƒuƒWƒFƒNƒg 
+	//  å…¬é–‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ 
 	//////////////////////////////////////////////////
 
-	// Ú‘±‚µ‚Ä‚¢‚éƒ{[ƒh‚Ìî•ñ 
+	// æ¥ç¶šã—ã¦ã„ã‚‹ãƒœãƒ¼ãƒ‰ã®æƒ…å ± 
 	// Information of the board that this object is connected
 	self.boardInfo = null;
 //	{
@@ -49,7 +46,7 @@ var Canarium = function() {
 //		serialcode : strings	// 'xxxxxx-yyyyyy-zzzzzz'
 //	};
 
-	// ƒfƒtƒHƒ‹ƒg‚ÌƒrƒbƒgƒŒ[ƒg 
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆ 
 	// The default bitrate
 	self.serialBitrate = 115200;
 
@@ -79,53 +76,70 @@ var Canarium = function() {
 
 
 	//////////////////////////////////////////////////
-	//  “à•”•Ï”‚¨‚æ‚Ñƒpƒ‰ƒ[ƒ^ 
+	//  å†…éƒ¨å¤‰æ•°ãŠã‚ˆã³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ 
 	//////////////////////////////////////////////////
 
-	// ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ªg—p‚·‚é’ÊMƒIƒuƒWƒFƒNƒg 
+	// ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒä½¿ç”¨ã™ã‚‹é€šä¿¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ 
 	// The communication object which this object uses
 	var comm = null;
 
-	// ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ªƒ{[ƒh‚ÉÚ‘±‚µ‚Ä‚¢‚ê‚Îtrue 
+	// ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒœãƒ¼ãƒ‰ã«æ¥ç¶šã—ã¦ã„ã‚Œã°true 
 	// True this object if connected to the board
 	var onConnect = false;
 
-	// ‚±‚ÌƒIƒuƒWƒFƒNƒg‚ªÚ‘±‚µ‚Ä‚¢‚éƒ{[ƒh‚ªÀs‰Â”\ó‘Ô‚Å‚ ‚ê‚Îtrue 
+	// ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæ¥ç¶šã—ã¦ã„ã‚‹ãƒœãƒ¼ãƒ‰ãŒå®Ÿè¡Œå¯èƒ½çŠ¶æ…‹ã§ã‚ã‚Œã°true 
 	// True board of this object if it is ready to run
 	var confrun = false;
 
-	// AvalonMMƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚Ì‘¦‰“šƒIƒvƒVƒ‡ƒ“ 
+	// AvalonMMãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ã®å³æ™‚å¿œç­”ã‚ªãƒ—ã‚·ãƒ§ãƒ³ 
 	// Send Immediate option of the Avalon-MM Transaction
 	var avmSendImmediate = false;
 
 
-	// I2CƒoƒX‚ªƒ^ƒCƒ€ƒAƒEƒg‚µ‚½‚Æ”»’è‚·‚é‚Ü‚Å‚Ìs‰ñ” 
+	// I2Cãƒã‚¹ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ãŸã¨åˆ¤å®šã™ã‚‹ã¾ã§ã®è©¦è¡Œå›æ•° 
 	// Number of attempts to determine I2C has timed out
 	var i2cTimeoutCycle = 100;
 
-	// FPGAƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“‚ªƒ^ƒCƒ€ƒAƒEƒg‚µ‚½‚Æ”»’è‚·‚é‚Ü‚Å‚Ìs‰ñ” 
+	// FPGAã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ãŸã¨åˆ¤å®šã™ã‚‹ã¾ã§ã®è©¦è¡Œå›æ•° 
 	// Number of attempts to determine FPGA-Configuration has timed out
 	var configTimeoutCycle = 100;
 
-	// AvalonMMƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“ƒpƒPƒbƒg‚ÌÅ‘å’· 
+	// AvalonMMãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãƒ‘ã‚±ãƒƒãƒˆã®æœ€å¤§é•· 
 	// The maximum length of the Avalon-MM Transaction packets
 	var avmTransactionMaxLength = 32768;
 
 
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ‡ãƒãƒƒã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æŠ‘æ­¢ 
+	var debug_message_cmd = false;
+
+	// AVMãƒ‡ãƒãƒƒã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æŠ‘æ­¢ 
+	var debug_message_avm = false;
+	var debug_message_avmpacket = false;
+
+	// I2Cãƒ‡ãƒãƒƒã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æŠ‘æ­¢ 
+	var debug_message_i2c = false;
+
+
 
 	//////////////////////////////////////////////////
-	//  “à•”ƒƒ\ƒbƒh (ƒVƒŠƒAƒ‹“üo—ÍŒQ)
+	//  å†…éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰ (ã‚·ãƒªã‚¢ãƒ«å…¥å‡ºåŠ›ç¾¤)
 	//////////////////////////////////////////////////
+
+	// serialio.open(portname, options, callback(result))
+	// serialio.close(callback(result))
+	// serialio.write(wirtearraybuf, callback(result, bytesSend))
+	// serialio.read(bytenum, callback(result, bytesRecv, readarraybuf))
+	// serialio.flush(callback(result))
 
 	var serialReadbufferMaxLength = 4096;
-	var serialReadbufferTimeoutms = 100;
+	var serialReadbufferTimeoutms = 200;
 
 	var serialio = function() {
 		var self = this;
 		var connectionId = null;
 
 
-		// ƒVƒŠƒAƒ‹óMƒŠƒXƒi 
+		// ã‚·ãƒªã‚¢ãƒ«å—ä¿¡ãƒªã‚¹ãƒŠ 
 
 		var readbuff = new ringbuffer(serialReadbufferMaxLength);
 
@@ -140,7 +154,7 @@ var Canarium = function() {
 		};
 
 
-		// ƒVƒŠƒAƒ‹ƒ|[ƒgÚ‘± 
+		// ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆæ¥ç¶š 
 
 		self.open = function(portname, options, callback) {
 			if (connectionId != null) {
@@ -155,7 +169,7 @@ var Canarium = function() {
 					console.log("serial : Open connectionId = " + connectionId + " (" + portname + ", " + options.bitrate + "bps)");
 
 					chrome.serial.onReceive.addListener(onReceiveCallback);
-					console.log("serial : Receive listener is started.");
+					console.log("serial : Receive listener is start.");
 
 					callback(true);
 
@@ -168,7 +182,7 @@ var Canarium = function() {
 		};
 
 
-		// ƒVƒŠƒAƒ‹ƒ|[ƒgØ’f 
+		// ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆåˆ‡æ–­ 
 
 		self.close = function(callback) {
 			if (connectionId == null) {
@@ -186,7 +200,7 @@ var Canarium = function() {
 		};
 
 
-		// ƒVƒŠƒAƒ‹ƒf[ƒ^‘—M 
+		// ã‚·ãƒªã‚¢ãƒ«ãƒ‡ãƒ¼ã‚¿é€ä¿¡ 
 
 		self.write = function(wirtearraybuf, callback) {
 			if (connectionId == null) {
@@ -199,21 +213,17 @@ var Canarium = function() {
 				var leftbytes = wirtearraybuf.byteLength - writeInfo.bytesSent;
 				var bool_witten = true;
 
-				if (leftbytes == 0) {
-//					console.log("serial : write " + writeInfo.bytesSent + "bytes success.");
-				} else {
+				if (leftbytes != 0) {
 					bool_witten = false;
 					console.log("serial : [!] write " + writeInfo.bytesSent + "bytes written, " + leftbytes + "bytes left.");
 				}
 
-				chrome.serial.flush(connectionId, function(){
-					callback(bool_witten, writeInfo.bytesSent);
-				});
+				callback(bool_witten, writeInfo.bytesSent);
 			});
 		};
 
 
-		// ƒVƒŠƒAƒ‹ƒf[ƒ^óM 
+		// ã‚·ãƒªã‚¢ãƒ«ãƒ‡ãƒ¼ã‚¿å—ä¿¡ 
 
 		self.read = function(bytenum, callback) {
 			if (connectionId == null) {
@@ -229,13 +239,13 @@ var Canarium = function() {
 			var blobread = function(leftbytes, callback) {
 				var datacount = readbuff.getcount();
 
-				if (datacount == 0) {			// ƒoƒbƒtƒ@‚ª‹ó‚Ìê‡‚ÍŸ‚ğ‘Ò‚Â 
-					setTimeout(function(){
+				if (datacount == 0) {			// ãƒãƒƒãƒ•ã‚¡ãŒç©ºã®å ´åˆã¯æ¬¡ã‚’å¾…ã¤ 
+					setTimeout( function() {
 						if (readbuff.getcount() == 0) {
 							console.log("serial : [!] read is timeout.");
-							callback(false, readarraybuf_num, readarraybuf);	// ƒ^ƒCƒ€ƒAƒEƒg 
+							callback(false, readarraybuf_num, readarraybuf);	// ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ 
 						} else {
-							blobread(leftbytes, callback);						// ƒŠƒgƒ‰ƒC 
+							blobread(leftbytes, callback);						// ãƒªãƒˆãƒ©ã‚¤ 
 						}
 					}, serialReadbufferTimeoutms);
 
@@ -248,7 +258,6 @@ var Canarium = function() {
 					if (leftbytes > 0) {
 						blobread(leftbytes, callback);
 					} else {
-//						console.log("serial : read " + readarraybuf_num + "bytes");
 						callback(true, readarraybuf_num, readarraybuf);
 					}
 
@@ -257,30 +266,45 @@ var Canarium = function() {
 
 			blobread(bytenum, callback);
 		};
+
+
+		// ã‚·ãƒªã‚¢ãƒ«ãƒ‡ãƒ¼ã‚¿å³æ™‚é€ä¿¡ 
+
+		self.flush = function(callback) {
+			if (connectionId == null) {
+				console.log("serial : [!] Serial write port is not open.");
+				callback(false);
+				return;
+			}
+
+			chrome.serial.flush(connectionId, function() {
+				callback(true);
+			});
+		};
 	};
 
 
-	// ƒŠƒ“ƒOƒoƒbƒtƒ@ 
-	// bool rb.add(byte indata)
-	// int rb.get()
-	// int rb.getcount()
+	// ãƒªãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡ 
+	// bool ringbuffer.add(byte indata)
+	// int ringbuffer.get()
+	// int ringbuffer.getcount()
 
 	var ringbuffer = function(bufferlength) {
 		var self = this;
 
-		self.overrun = false;		// ƒoƒbƒtƒ@ƒI[ƒo[ƒ‰ƒ“ƒGƒ‰[ 
+		self.overrun = false;		// ãƒãƒƒãƒ•ã‚¡ã‚ªãƒ¼ãƒãƒ¼ãƒ©ãƒ³ã‚¨ãƒ©ãƒ¼ 
 
 		var buffer = new ArrayBuffer(bufferlength);
 		var writeindex = 0;
 		var readindex = 0;
 
 
-		// ƒf[ƒ^‘‚«‚İ 
+		// ãƒ‡ãƒ¼ã‚¿æ›¸ãè¾¼ã¿ 
 
 		self.add = function(indata) {
 			var buff_arr = new Uint8Array(buffer);
 
-			// ƒoƒbƒtƒ@ƒI[ƒo[ƒ‰ƒ“‚Ìƒ`ƒFƒbƒN 
+			// ãƒãƒƒãƒ•ã‚¡ã‚ªãƒ¼ãƒãƒ¼ãƒ©ãƒ³ã®ãƒã‚§ãƒƒã‚¯ 
 			var nextindex = writeindex + 1;
 			if (nextindex >= buff_arr.byteLength) nextindex = 0;
 
@@ -290,7 +314,7 @@ var Canarium = function() {
 				return false;
 			}
 
-			// ƒoƒbƒtƒ@‚Ö‘‚«‚İ 
+			// ãƒãƒƒãƒ•ã‚¡ã¸æ›¸ãè¾¼ã¿ 
 			buff_arr[writeindex] = indata;
 			writeindex = nextindex;
 //			console.log("serial : inqueue 0x" + ("0"+indata.toString(16)).slice(-2));
@@ -299,7 +323,7 @@ var Canarium = function() {
 		};
 
 
-		// ƒf[ƒ^“Ç‚İo‚µ 
+		// ãƒ‡ãƒ¼ã‚¿èª­ã¿å‡ºã— 
 
 		self.get = function() {
 			if (readindex == writeindex) return null;
@@ -314,7 +338,7 @@ var Canarium = function() {
 		};
 
 
-		// ƒLƒ…[‚³‚ê‚Ä‚¢‚éƒf[ƒ^”‚Ìæ“¾ 
+		// ã‚­ãƒ¥ãƒ¼ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿æ•°ã®å–å¾— 
 
 		self.getcount = function() {
 			var buff_arr = new Uint8Array(buffer);
@@ -329,31 +353,31 @@ var Canarium = function() {
 
 
 	//////////////////////////////////////////////////
-	//  Šî–{ƒƒ\ƒbƒh 
+	//  åŸºæœ¬ãƒ¡ã‚½ãƒƒãƒ‰ 
 	//////////////////////////////////////////////////
 
-	// PERIDOTƒfƒoƒCƒXƒ|[ƒg‚ÌƒI[ƒvƒ“ 
+	// PERIDOTãƒ‡ãƒã‚¤ã‚¹ãƒãƒ¼ãƒˆã®ã‚ªãƒ¼ãƒ—ãƒ³ 
 	//	devopen(port portname, function callback(bool result));
 
 	var devopen = function(portname, callback) {
 		if (onConnect) {
-			callback(false);		// Šù‚ÉÚ‘±‚ªŠm—§‚µ‚Ä‚¢‚éê‡ 
+			callback(false);		// æ—¢ã«æ¥ç¶šãŒç¢ºç«‹ã—ã¦ã„ã‚‹å ´åˆ 
 			return;
 		}
 
 		self.boardInfo = null;
 		avmSendImmediate = false;
+		confrun = false;
 
-		comm = new serialio();		// ’ÊMƒIƒuƒWƒFƒNƒg‚ğƒCƒ“ƒXƒ^ƒ“ƒX 
+		comm = new serialio();		// é€šä¿¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ 
 
-		// ƒVƒŠƒAƒ‹ƒ|[ƒgÚ‘± 
+		// ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆæ¥ç¶š 
 		var connect = function() {
 			var options = {bitrate:self.serialBitrate};
 
 			comm.open(portname, options, function(result) {
 				if (result) {
 					onConnect = true;
-					confrun = false;
 					psconfcheck();
 				} else {
 					open_exit(false);
@@ -361,34 +385,34 @@ var Canarium = function() {
 			});
 		};
 
-		// PERIDOTƒRƒ“ƒtƒBƒOƒŒ[ƒ^‰“š‚ÌƒeƒXƒg 
+		// PERIDOTã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚¿å¿œç­”ã®ãƒ†ã‚¹ãƒˆ 
 		var psconfcheck = function() {
 			commandtrans(0x39, function(result, respbyte) {
 				if (result) {
 					console.log("board : Confirm acknowledge.");
-					getboardheader();				// ƒRƒ}ƒ“ƒh‚É‰“š‚ª‚ ‚Á‚½ 
+					getboardheader();				// ã‚³ãƒãƒ³ãƒ‰ã«å¿œç­”ãŒã‚ã£ãŸ 
 				} else {
 					console.log("board : [!] No response.");
-					open_exit(false);				// ƒRƒ}ƒ“ƒh‚É‰“š‚ª‚È‚©‚Á‚½ 
+					open_exit(false);				// ã‚³ãƒãƒ³ãƒ‰ã«å¿œç­”ãŒãªã‹ã£ãŸ 
 				}
 			});
 		};
 
-		// EEPROMƒwƒbƒ_‚Ì“Ç‚İæ‚è 
+		// EEPROMãƒ˜ãƒƒãƒ€ã®èª­ã¿å–ã‚Š 
 		var getboardheader = function() {
 			eepromread(0x00, 4, function(result, readdata) {
 				if (result) {
 					var readdata_arr = new Uint8Array(readdata);
 					var header = (readdata_arr[0] << 16) | (readdata_arr[1] << 8) | (readdata_arr[2] << 0);
 
-					if (header == 0x4a3757) {		// J7W‚Ìƒwƒbƒ_‚ª‚ ‚é 
+					if (header == 0x4a3757) {		// J7Wã®ãƒ˜ãƒƒãƒ€ãŒã‚ã‚‹ 
 						self.boardInfo = {version : readdata_arr[3]};
 						console.log("board : EEPROM header version = " + self.boardInfo.version);
-					} else {						// J7W‚Ìƒwƒbƒ_‚ª‚È‚¢ 
+					} else {						// J7Wã®ãƒ˜ãƒƒãƒ€ãŒãªã„ 
 						self.boardInfo = {version : 0};
 						console.log("board : [!] Unknown EEPROM header.");
 					}
-				} else {							// EEPROM‚ª‚È‚¢ 
+				} else {							// EEPROMãŒãªã„ 
 					self.boardInfo = {version : 0};
 					console.log("board : [!] EEPROM not found.");
 				}
@@ -397,7 +421,7 @@ var Canarium = function() {
 			});
 		};
 
-		// I—¹ˆ— 
+		// çµ‚äº†å‡¦ç† 
 		var open_exit = function(result) {
 			if (result) {
 				callback(true);
@@ -416,12 +440,12 @@ var Canarium = function() {
 	};
 
 
-	// PERIDOTƒfƒoƒCƒXƒ|[ƒg‚ÌƒNƒ[ƒY 
+	// PERIDOTãƒ‡ãƒã‚¤ã‚¹ãƒãƒ¼ãƒˆã®ã‚¯ãƒ­ãƒ¼ã‚º 
 	//	devclose(function callback(bool result));
 
 	var devclose = function(callback) {
 		if (!onConnect) {
-			callback(false);		// Ú‘±‚ªŠm—§‚µ‚Ä‚¢‚È‚¢ê‡ 
+			callback(false);		// æ¥ç¶šãŒç¢ºç«‹ã—ã¦ã„ãªã„å ´åˆ 
 			return;
 		}
 
@@ -436,14 +460,14 @@ var Canarium = function() {
 	};
 
 
-	// ƒ{[ƒh‚ÌFPGAƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ 
+	// ãƒœãƒ¼ãƒ‰ã®FPGAã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ 
 	//	devconfig(obj boardInfo, arraybuffer rbfdata[],
 	//						function callback(bool result));
 
 	var configBarrier = false;
 	var devconfig = function(boardInfo, rbfarraybuf, callback) {
 
-		///// ƒRƒ“ƒtƒBƒOƒV[ƒPƒ“ƒXŠ®—¹‚Ü‚ÅÄÀs‚ğ‘j~‚·‚é /////
+		///// ã‚³ãƒ³ãƒ•ã‚£ã‚°ã‚·ãƒ¼ã‚±ãƒ³ã‚¹å®Œäº†ã¾ã§å†å®Ÿè¡Œã‚’é˜»æ­¢ã™ã‚‹ /////
 
 		if (!onConnect || !rbfarraybuf || configBarrier || mresetBarrier) {
 			callback(false);
@@ -453,22 +477,22 @@ var Canarium = function() {
 		configBarrier = true;
 
 
-		///// FPGAƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒV[ƒPƒ“ƒT /////
+		///// FPGAã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚·ãƒ¼ã‚±ãƒ³ã‚µ /////
 
-		var sendretry = 0;		// ƒ^ƒCƒ€ƒAƒEƒgƒJƒEƒ“ƒ^ 
+		var sendretry = 0;		// ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã‚«ã‚¦ãƒ³ã‚¿ 
 
-		// FPGA‚ÌƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ŠJnˆ— 
+		// FPGAã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹å‡¦ç† 
 		var setup = function() {
-			commandtrans(0x39, function (result, respbyte) {
+			commandtrans(0x3b, function (result, respbyte) {	// ãƒ¢ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯ã€å³æ™‚å¿œç­” 
 				if (result) {
-					if ((respbyte & 0x01)== 0x00) {		// PSƒ‚[ƒh 
+					if ((respbyte & 0x01)== 0x00) {		// PSãƒ¢ãƒ¼ãƒ‰ 
 						console.log("config : configuration is started.");
 						confrun = false;
 						sendretry = 0;
 						sendinit();
 					} else {
 						console.log("config : [!] Setting is not in the PS mode.");
-						errorabort();
+						config_exit(false);
 					}
 				} else {
 					errorabort();
@@ -476,43 +500,53 @@ var Canarium = function() {
 			});
 		};
 
-		// ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ŠJnƒŠƒNƒGƒXƒg”­s 
+		// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹ãƒªã‚¯ã‚¨ã‚¹ãƒˆç™ºè¡Œ 
 		var sendinit = function() {
-			commandtrans(0x30, function (result, respbyte) {	// ƒRƒ“ƒtƒBƒOƒ‚[ƒhAnCONFIGƒAƒT[ƒg 
-				if (result || sendretry < configTimeoutCycle) {
-					if ((respbyte & 0x06)== 0x00) {		// nSTATUS = L, CONF_DONE = L
-						sendretry = 0;
-						sendready();
+			commandtrans(0x32, function (result, respbyte) {	// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¢ãƒ¼ãƒ‰ã€nCONFIGã‚¢ã‚µãƒ¼ãƒˆã€å³æ™‚å¿œç­” 
+				if (result) {
+					if (sendretry < configTimeoutCycle) {
+						if ((respbyte & 0x06)== 0x00) {		// nSTATUS = L, CONF_DONE = L
+							sendretry = 0;
+							sendready();
+						} else {
+							sendretry++;
+//							console.log("config : nSTATUS assart wait " + sendretry);
+							sendinit();
+						}
 					} else {
-						sendretry++;
-						sendinit();
+						console.log("config : [!] nCONFIG request is timeout.");
+						config_exit(false);
 					}
 				} else {
-					console.log("config : [!] nCONFIG request is timeout.");
 					errorabort();
 				}
 			});
 		};
 
-		// FPGA‚©‚ç‚Ì‰“š‚ğ‘Ò‚Â 
+		// FPGAã‹ã‚‰ã®å¿œç­”ã‚’å¾…ã¤ 
 		var sendready = function() {
-			commandtrans(0x31, function (result, respbyte) {	// ƒRƒ“ƒtƒBƒOƒ‚[ƒhAnCONFIGƒlƒQ[ƒg 
-				if (result || sendretry < configTimeoutCycle) {
-					if ((respbyte & 0x06)== 0x02) {		// nSTATUS = H, CONF_DONE = L
-						sendretry = 0;
-						sendrbf();
+			commandtrans(0x33, function (result, respbyte) {	// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¢ãƒ¼ãƒ‰ã€nCONFIGãƒã‚²ãƒ¼ãƒˆã€å³æ™‚å¿œç­” 
+				if (result) {
+					if (sendretry < configTimeoutCycle) {
+						if ((respbyte & 0x06)== 0x02) {		// nSTATUS = H, CONF_DONE = L
+							sendretry = 0;
+							sendrbf();
+						} else {
+							sendretry++;
+//							console.log("config : nSTATUS negate wait " + sendretry);
+							sendready();
+						}
 					} else {
-						sendretry++;
-						sendready();
+						console.log("config : [!] nSTATUS response is timeout.");
+						config_exit(false);
 					}
 				} else {
-					console.log("config : [!] nSTATUS response is timeout.");
 					errorabort();
 				}
 			});
 		};
 
-		// ƒRƒ“ƒtƒBƒOƒtƒ@ƒCƒ‹‘—M 
+		// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ•ã‚¡ã‚¤ãƒ«é€ä¿¡ 
 		var sendrbf = function() {
 			comm.write(rbfescapebuf, function (result, bytewritten) {
 				if (result) {
@@ -524,14 +558,15 @@ var Canarium = function() {
 			});
 		};
 
-		// ƒRƒ“ƒtƒBƒOŠ®—¹ƒ`ƒFƒbƒN 
+		// ã‚³ãƒ³ãƒ•ã‚£ã‚°å®Œäº†ãƒã‚§ãƒƒã‚¯ 
 		var checkstatus = function() {
-			commandtrans(0x31, function (result, respbyte) {	// ƒRƒ“ƒtƒBƒOƒ‚[ƒhAƒXƒe[ƒ^ƒXƒ`ƒFƒbƒN 
+			commandtrans(0x33, function (result, respbyte) {	// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¢ãƒ¼ãƒ‰ã€ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒã‚§ãƒƒã‚¯ã€å³æ™‚å¿œç­” 
 				if (result) {
 					if ((respbyte & 0x06)== 0x06) {		// nSTATUS = H, CONF_DONE = H
 						switchuser();
 					} else {
-						errordone();
+						console.log("config : [!] configuration error.");
+						config_exit(false);
 					}
 				} else {
 					errorabort();
@@ -539,9 +574,9 @@ var Canarium = function() {
 			});
 		};
 
-		// ƒRƒ“ƒtƒBƒOŠ®—¹ 
+		// ã‚³ãƒ³ãƒ•ã‚£ã‚°å®Œäº† 
 		var switchuser = function() {
-			commandtrans(0x39, function (result, respbyte) {	// ƒ†[ƒU[ƒ‚[ƒh 
+			commandtrans(0x39, function (result, respbyte) {	// ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ¢ãƒ¼ãƒ‰ 
 				if (result) {
 					console.log("config : configuration completion.");
 					confrun = true;
@@ -552,26 +587,20 @@ var Canarium = function() {
 			});
 		};
 
-		// ’ÊMƒGƒ‰[ 
+		// é€šä¿¡ã‚¨ãƒ©ãƒ¼ 
 		var errorabort = function() {
 			console.log("config : [!] communication error abort.");
 			config_exit(false);
 		};
 
-		// ƒRƒ“ƒtƒBƒOƒGƒ‰[ 
-		var errordone = function() {
-			console.log("config : [!] configuration error.");
-			config_exit(false);
-		};
-
-		// I—¹ˆ— 
+		// çµ‚äº†å‡¦ç† 
 		var config_exit = function(result) {
 			configBarrier = false;
 			callback(result);
 		};
 
 
-		///// ƒoƒCƒgƒGƒXƒP[ƒvˆ— /////
+		///// ãƒã‚¤ãƒˆã‚¨ã‚¹ã‚±ãƒ¼ãƒ—å‡¦ç† /////
 
 		var rbfescape = new Array();
 		var rbfarraybuf_arr = new Uint8Array(rbfarraybuf);
@@ -599,10 +628,10 @@ var Canarium = function() {
 		console.log("config : " + escape_num + " places were escaped. config data size = " + rbfescapebuf.byteLength + "bytes");
 
 
-		///// ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“‚ÌÀs /////
+		///// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã®å®Ÿè¡Œ /////
 
 		if (boardInfo) {
-			devgetinfo( function(result) {		// boardInfo‚Åƒ^[ƒQƒbƒg‚ğ§ŒÀ‚·‚éê‡ 
+			devgetinfo( function(result) {		// boardInfoã§ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’åˆ¶é™ã™ã‚‹å ´åˆ 
 				if (result) {
 					var conf = true;
 					if ('id' in boardInfo && boardInfo.id != self.boardInfo.id) {
@@ -629,7 +658,7 @@ var Canarium = function() {
 	};
 
 
-	// ƒ{[ƒh‚Ìƒ}ƒjƒ…ƒAƒ‹ƒŠƒZƒbƒg 
+	// ãƒœãƒ¼ãƒ‰ã®ãƒãƒ‹ãƒ¥ã‚¢ãƒ«ãƒªã‚»ãƒƒãƒˆ 
 	//	devreset(function callback(bool result));
 
 	var mresetBarrier = false;
@@ -644,7 +673,7 @@ var Canarium = function() {
 		var resetassert = function() {
 			commandtrans(0x31, function (result, respbyte) {
 				if (result) {
-					setTimeout(function(){ resetnegate(); }, 100);	// 100msŒã‚ÉƒŠƒZƒbƒg‚ğ‰ğœ‚·‚é 
+					setTimeout(function(){ resetnegate(); }, 100);	// 100mså¾Œã«ãƒªã‚»ãƒƒãƒˆã‚’è§£é™¤ã™ã‚‹ 
 				} else {
 					mreset_exit(false);
 				}
@@ -672,7 +701,7 @@ var Canarium = function() {
 	};
 
 
-	// ƒ{[ƒhî•ñ‚Ìæ“¾ 
+	// ãƒœãƒ¼ãƒ‰æƒ…å ±ã®å–å¾— 
 	//	devgetinfo(function callback(bool result));
 
 	var getinfoBarrier = false;
@@ -684,7 +713,7 @@ var Canarium = function() {
 
 		getinfoBarrier = true;
 
-		// ver.1ƒwƒbƒ_ 
+		// ver.1ãƒ˜ãƒƒãƒ€ 
 		var getboadinfo_v1 = function() {
 			eepromread(0x04, 8, function(result, readdata) {
 				if (result) {
@@ -704,7 +733,7 @@ var Canarium = function() {
 			});
 		};
 
-		// ver.2ƒwƒbƒ_ 
+		// ver.2ãƒ˜ãƒƒãƒ€ 
 		var getboadinfo_v2 = function() {
 			eepromread(0x04, 22, function(result, readdata) {
 				if (result) {
@@ -727,7 +756,7 @@ var Canarium = function() {
 			});
 		};
 
-		//  EEPROM‚ª–³‚¢A‚Ü‚½‚Í“à—e‚ª•s³ 
+		//  EEPROMãŒç„¡ã„ã€ã¾ãŸã¯å†…å®¹ãŒä¸æ­£ 
 		var getboadinfo_def = function() {
 			self.boardInfo.id = "";
 			self.boardInfo.serialcode = "";
@@ -735,12 +764,12 @@ var Canarium = function() {
 			getinfo_exit(true);
 		};
 
-		// I—¹ˆ— 
+		// çµ‚äº†å‡¦ç† 
 		var getinfo_exit = function(result) {
 			if (result) {
 				console.log("board : version = " + self.boardInfo.version + "\n" +
-							"        ID = " + self.boardInfo.id + "\n" +
-							"        serial code = " + self.boardInfo.serialcode
+							"        id = " + self.boardInfo.id + "\n" +
+							"        serialcode = " + self.boardInfo.serialcode
 				);
 			}
 
@@ -750,15 +779,15 @@ var Canarium = function() {
 
 
 		switch(self.boardInfo.version) {
-		case 1 :					// ƒwƒbƒ_ver.1
+		case 1 :					// ãƒ˜ãƒƒãƒ€ver.1
 			getboadinfo_v1();
 			break;
 
-		case 2 : 					// ƒwƒbƒ_ver.2
+		case 2 : 					// ãƒ˜ãƒƒãƒ€ver.2
 			getboadinfo_v2();
 			break;
 
-		default :				// EEPROM‚ª–³‚¢A‚Ü‚½‚Í“à—e‚ª•s³ 
+		default :				// EEPROMãŒç„¡ã„ã€ã¾ãŸã¯å†…å®¹ãŒä¸æ­£ 
 			getboadinfo_def();
 			break;
 		}
@@ -767,10 +796,10 @@ var Canarium = function() {
 
 
 	//////////////////////////////////////////////////
-	//  Avalon-MMƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“ƒƒ\ƒbƒh 
+	//  Avalon-MMãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãƒ¡ã‚½ãƒƒãƒ‰ 
 	//////////////////////////////////////////////////
 
-	// AvalonMMƒIƒvƒVƒ‡ƒ“İ’è 
+	// AvalonMMã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š 
 	//	avmoption(object option,
 	//					function callback(bool result);
 
@@ -781,6 +810,10 @@ var Canarium = function() {
 			return;
 		}
 
+		var avmoption_exit = function(result) {
+			callback(result);
+		};
+
 		if (option.fastAcknowledge != null) {
 			if (option.fastAcknowledge) {
 				avmSendImmediate = true;
@@ -789,21 +822,21 @@ var Canarium = function() {
 			}
 
 			var com = 0x39;
-			if (avmSendImmediate) com |= 0x02;	// ‘¦‰“šƒ‚[ƒhƒrƒbƒg 
+			if (avmSendImmediate) com |= 0x02;	// å³æ™‚å¿œç­”ãƒ¢ãƒ¼ãƒ‰ãƒ“ãƒƒãƒˆã®ã‚»ãƒƒãƒˆ 
 
 			commandtrans(com, function (result, respbyte) {
-				if (result) {
-					console.log("avm : Set option send immediate is " + avmSendImmediate);
-					callback(true);
-				} else {
-					callback(false);
-				}
+				if (result) console.log("avm : Set option send immediate is " + avmSendImmediate);
+
+				avmoption_exit(result);
 			});
+
+		} else {
+			avmoption_exit(true);
 		}
 	};
 
 
-	// AvalonMMƒyƒŠƒtƒFƒ‰ƒ‹ƒŠ[ƒh(IORD)
+	// AvalonMMãƒšãƒªãƒ•ã‚§ãƒ©ãƒ«ãƒªãƒ¼ãƒ‰(IORD)
 	//	avmiord(uint address, int offset,
 	//					function callback(bool result, uint readdata));
 
@@ -814,7 +847,7 @@ var Canarium = function() {
 		}
 
 		var regaddr = ((address & 0xfffffffc)>>> 0) + (offset << 2);
-		var writepacket = new avmPacket(0x10, 4, regaddr, 0);	// ƒVƒ“ƒOƒ‹ƒŠ[ƒhƒpƒPƒbƒg‚ğ¶¬ 
+		var writepacket = new avmPacket(0x10, 4, regaddr, 0);	// ã‚·ãƒ³ã‚°ãƒ«ãƒªãƒ¼ãƒ‰ãƒ‘ã‚±ãƒƒãƒˆã‚’ç”Ÿæˆ 
 
 		avmtrans(writepacket, function (result, readpacket) {
 			var res = false;
@@ -827,10 +860,12 @@ var Canarium = function() {
 						(readpacket_arr[3] << 24) |
 						(readpacket_arr[2] << 16) |
 						(readpacket_arr[1] <<  8) |
-						(readpacket_arr[0] <<  0) )>>> 0;		// •„†‚È‚µ32bit®” 
+						(readpacket_arr[0] <<  0) )>>> 0;		// ç¬¦å·ãªã—32bitæ•´æ•° 
 					res = true;
 
-					console.log("avm : iord(0x" + ("00000000"+address.toString(16)).slice(-8) + ", " + offset + ") = 0x" + ("00000000"+readdata.toString(16)).slice(-8));
+					if (debug_message_avm) {
+						console.log("avm : iord(0x" + ("00000000"+address.toString(16)).slice(-8) + ", " + offset + ") = 0x" + ("00000000"+readdata.toString(16)).slice(-8));
+					}
 				}
 			}
 
@@ -839,7 +874,7 @@ var Canarium = function() {
 	};
 
 
-	// AvalonMMƒyƒŠƒtƒFƒ‰ƒ‹ƒ‰ƒCƒg(IOWR)
+	// AvalonMMãƒšãƒªãƒ•ã‚§ãƒ©ãƒ«ãƒ©ã‚¤ãƒˆ(IOWR)
 	//	avmiowr(uint address, int offset, uint writedata,
 	//					function callback(bool result));
 
@@ -850,10 +885,10 @@ var Canarium = function() {
 		}
 
 		var regaddr = ((address & 0xfffffffc)>>> 0) + (offset << 2);
-		var writepacket = new avmPacket(0x00, 4, regaddr, 4);	// ƒVƒ“ƒOƒ‹ƒ‰ƒCƒgƒpƒPƒbƒg‚ğ¶¬ 
+		var writepacket = new avmPacket(0x00, 4, regaddr, 4);	// ã‚·ãƒ³ã‚°ãƒ«ãƒ©ã‚¤ãƒˆãƒ‘ã‚±ãƒƒãƒˆã‚’ç”Ÿæˆ 
 		var writepacket_arr = new Uint8Array(writepacket);
 
-		writepacket_arr[8]  = (writedata >>>  0) & 0xff;		// •„†‚È‚µ32bit®” 
+		writepacket_arr[8]  = (writedata >>>  0) & 0xff;		// ç¬¦å·ãªã—32bitæ•´æ•° 
 		writepacket_arr[9]  = (writedata >>>  8) & 0xff;
 		writepacket_arr[10] = (writedata >>> 16) & 0xff;
 		writepacket_arr[11] = (writedata >>> 24) & 0xff;
@@ -868,7 +903,9 @@ var Canarium = function() {
 				if (readpacket_arr[0] == 0x80 && size == 4) {
 					res = true;
 
-					console.log("avm : iowr(0x" + ("00000000"+address.toString(16)).slice(-8) + ", " + offset + ", 0x" + ("00000000"+writedata.toString(16)).slice(-8) + ")");
+					if (debug_message_avm) {
+						console.log("avm : iowr(0x" + ("00000000"+address.toString(16)).slice(-8) + ", " + offset + ", 0x" + ("00000000"+writedata.toString(16)).slice(-8) + ")");
+					}
 				}
 			}
 
@@ -877,7 +914,7 @@ var Canarium = function() {
 	};
 
 
-	// AvalonMMƒƒ‚ƒŠƒŠ[ƒh(IORD_DIRECT)
+	// AvalonMMãƒ¡ãƒ¢ãƒªãƒªãƒ¼ãƒ‰(IORD_DIRECT)
 	//	avmread(uint address, int bytenum,
 	//					function callback(bool result, arraybuffer readdata[]));
 
@@ -895,9 +932,13 @@ var Canarium = function() {
 			var bytenum = leftbytenum;
 			if (bytenum > avmTransactionMaxLength) bytenum = avmTransactionMaxLength;
 
-			var writepacket = new avmPacket(0x14, bytenum, address+byteoffset, 0);		// ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒŠ[ƒhƒpƒPƒbƒg‚ğ¶¬ 
+			var nextaddress = address + byteoffset;
+			var writepacket = new avmPacket(0x14, bytenum, nextaddress, 0);		// ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ãƒªãƒ¼ãƒ‰ãƒ‘ã‚±ãƒƒãƒˆã‚’ç”Ÿæˆ 
 
 			avmtrans(writepacket, function (result, readpacket) {
+				var res = false;
+				var resdata = null;
+
 				if (result) {
 					if (readpacket.byteLength == bytenum) {
 						var readpacket_arr = new Uint8Array(readpacket);
@@ -905,19 +946,20 @@ var Canarium = function() {
 						for(var i=0 ; i<bytenum ; i++) readdata_arr[byteoffset++] = readpacket_arr[i];
 						leftbytenum -= bytenum;
 
-						console.log("avm : read " + bytenum + "bytes from address 0x" + ("00000000"+address.toString(16)).slice(-8));
+						if (debug_message_avm) {
+							console.log("avm : read " + bytenum + "bytes from address 0x" + ("00000000"+nextaddress.toString(16)).slice(-8));
+						}
 
 						if (leftbytenum > 0) {
 							avmread_partial(leftbytenum);
 						} else {
-							callback(true, readdata);
+							res = true;
+							resdata = readdata;
 						}
-					} else {
-						callback(false, null);
 					}
-				} else {
-					callback(false, null);
 				}
+
+				callback(res, resdata);
 			});
 		};
 
@@ -925,7 +967,7 @@ var Canarium = function() {
 	};
 
 
-	// AvalonMMƒƒ‚ƒŠƒ‰ƒCƒg(IOWR_DIRECT)
+	// AvalonMMãƒ¡ãƒ¢ãƒªãƒ©ã‚¤ãƒˆ(IOWR_DIRECT)
 	//	avmwrite(uint address, arraybuffer writedata[],
 	//					function callback(bool result));
 
@@ -942,12 +984,15 @@ var Canarium = function() {
 			var bytenum = leftbytenum;
 			if (bytenum > avmTransactionMaxLength) bytenum = avmTransactionMaxLength;
 
-			var writepacket = new avmPacket(0x04, bytenum, address+byteoffset, bytenum);	// ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒ‰ƒCƒgƒpƒPƒbƒg‚ğ¶¬ 
+			var nextaddress = address + byteoffset;
+			var writepacket = new avmPacket(0x04, bytenum, nextaddress, bytenum);	// ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ãƒ©ã‚¤ãƒˆãƒ‘ã‚±ãƒƒãƒˆã‚’ç”Ÿæˆ 
 			var writepacket_arr = new Uint8Array(writepacket);
 
 			for(var i=0 ; i<bytenum ; i++) writepacket_arr[8+i] = writedata_arr[byteoffset++];
 
 			avmtrans(writepacket, function (result, readpacket) {
+				var res = false;
+
 				if (result) {
 					var readpacket_arr = new Uint8Array(readpacket);
 					var size = (readpacket_arr[2] << 8) | (readpacket_arr[3] << 0);
@@ -955,19 +1000,19 @@ var Canarium = function() {
 					if (readpacket_arr[0] == 0x84 && size == bytenum) {
 						leftbytenum -= bytenum;
 
-						console.log("avm : written " + bytenum + "bytes to address 0x" + ("00000000"+address.toString(16)).slice(-8));
+						if (debug_message_avm) {
+							console.log("avm : written " + bytenum + "bytes to address 0x" + ("00000000"+nextaddress.toString(16)).slice(-8));
+						}
 
 						if (leftbytenum > 0) {
 							avmwrite_partial(leftbytenum);
 						} else {
-							callback(true);
+							res = true;
 						}
-					} else {
-						callback(false);
 					}
-				} else {
-					callback(false);
 				}
+
+				callback(res);
 			});
 		};
 
@@ -977,15 +1022,15 @@ var Canarium = function() {
 
 
 	//////////////////////////////////////////////////
-	//  “à•”ƒƒ\ƒbƒh (ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“ƒRƒ}ƒ“ƒhŒQ)
+	//  å†…éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰ (ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ã‚³ãƒãƒ³ãƒ‰ç¾¤)
 	//////////////////////////////////////////////////
 
-	// ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒRƒ}ƒ“ƒh‚Ì‘—óM 
+	// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒãƒ³ãƒ‰ã®é€å—ä¿¡ 
 	//	commandtrans(int command, function callback(bool result, int response);
 	var commandBarrier = false;
 	var commandtrans = function(command, callback) {
 
-		///// ƒRƒ}ƒ“ƒh‘—óMŠ®—¹‚Ü‚ÅÄÀs‚ğ‘j~‚·‚é /////
+		///// ã‚³ãƒãƒ³ãƒ‰é€å—ä¿¡å®Œäº†ã¾ã§å†å®Ÿè¡Œã‚’é˜»æ­¢ã™ã‚‹ /////
 
 		if (commandBarrier) {
 			callback(false, null);
@@ -995,40 +1040,46 @@ var Canarium = function() {
 		commandBarrier = true;
 
 
-		///// ƒRƒ}ƒ“ƒh‚Ì¶¬‚Æ‘—óM /////
+		///// çµ‚äº†å‡¦ç†éƒ¨ /////
+
+		var commandtrans_exit = function(result, respbyte) {
+			commandBarrier = false;
+			callback(result, respbyte);
+		};
+
+
+		///// ã‚³ãƒãƒ³ãƒ‰ã®ç”Ÿæˆã¨é€å—ä¿¡ /////
 
 		var send_data = new ArrayBuffer(2);
 		var send_data_arr = new Uint8Array(send_data);
 
 		send_data_arr[0] = 0x3a;
 		send_data_arr[1] = command & 0xff;
-//		console.log("config : send config command = 0x" + ("0"+send_data_arr[1].toString(16)).slice(-2));
 
-		comm.write(send_data, function (result, bytes){
-			if (result) {
-				comm.read(1, function(result, readnum, readarraybuf) {
-					if (result) {
-						var resp_data_arr = new Uint8Array(readarraybuf);
-						var respbyte = resp_data_arr[0];
-//						console.log("config : recieve config response = 0x" + ("0"+respbyte.toString(16)).slice(-2));
-						commandtrans_exit(true, respbyte);
-					} else {
-						commandtrans_exit(false, null);
-					}
-				});
-			} else {
-				commandtrans_exit(false, null);
+		if (debug_message_cmd) {
+			console.log("cmd : send config command = 0x" + ("0"+send_data_arr[1].toString(16)).slice(-2));
+		}
+
+		// (ã“ã“ã‹ã‚‰é€æ¬¡å‡¦ç†è¨˜è¿°) 
+		comm.write(send_data, function (result, bytes) { if (result) {
+		comm.flush( function (result) { if (result) {
+
+		comm.read(1, function(result, readnum, readarraybuf) { if (result) {
+			var resp_data_arr = new Uint8Array(readarraybuf);
+			var respbyte = resp_data_arr[0];
+
+			if (debug_message_cmd) {
+				console.log("cmd : recieve config response = 0x" + ("0"+respbyte.toString(16)).slice(-2));
 			}
-		});
 
-		var commandtrans_exit = function(result, respbyte) {
-			commandBarrier = false;
-			callback(result, respbyte);
-		};
+		commandtrans_exit(true, respbyte);
+		} else { commandtrans_exit(false, null); } });
+		} else { commandtrans_exit(false, null); } });
+		} else { commandtrans_exit(false, null); } });
 	};
 
 
-	// AvalonMMƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“ƒpƒPƒbƒg‚ğì¬ 
+	// AvalonMMãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ 
 	// arraybuffer avmPacket(int command, uint size, uint address, int datasize);
 	var avmPacket = function(command, size, address, datasize) {
 		var packet = new ArrayBuffer(8 + datasize);
@@ -1047,13 +1098,13 @@ var Canarium = function() {
 	};
 
 
-	// ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“ƒpƒPƒbƒg‚Ì‘—óM 
+	// ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãƒ‘ã‚±ãƒƒãƒˆã®é€å—ä¿¡ 
 	//	avmtrans(arraybuffer writepacket[],
 	//						function callback(bool result, arraybuffer readpacket[]));
 	var avmBarrier = false;
 	var avmtrans = function(writepacket, callback) {
 
-		///// ƒpƒPƒbƒg‘—óMŠ®—¹‚Ü‚ÅÄÀs‚ğ‘j~‚·‚é /////
+		///// ãƒ‘ã‚±ãƒƒãƒˆé€å—ä¿¡å®Œäº†ã¾ã§å†å®Ÿè¡Œã‚’é˜»æ­¢ã™ã‚‹ /////
 
 		if (avmBarrier) {
 			callback(false, null);
@@ -1063,49 +1114,18 @@ var Canarium = function() {
 		avmBarrier = true;
 
 
-		///// ‘—MƒpƒPƒbƒg‘Oˆ— /////
+		///// çµ‚äº†å‡¦ç†éƒ¨ /////
 
-		var writepacket_arr = new Uint8Array(writepacket);
-		var sendarray = new Array();
-
-		sendarray.push(0x7a);		// SOP
-		sendarray.push(0x7c);		// CNI
-		sendarray.push(0x00);		// Ch.0 (ƒ_ƒ~[)
-
-		for(var i=0 ; i<writepacket.byteLength ; i++) {
-			// EOP‚Ì‘}“ü 
-			if (i == writepacket.byteLength-1) sendarray.push(0x7b);	// EOP 
-
-			// Byte to Packet Converter•”‚ÌƒoƒCƒgƒGƒXƒP[ƒv 
-			if (writepacket_arr[i] == 0x7a || writepacket_arr[i] == 0x7b || writepacket_arr[i] == 0x7c || writepacket_arr[i] == 0x7d) {
-				sendarray.push(0x7d);
-				sendarray.push(writepacket_arr[i] ^ 0x20);
-
-			// PERIDOT Configrator•”‚ÌƒoƒCƒgƒGƒXƒP[ƒv 
-			} else if (writepacket_arr[i] == 0x3a || writepacket_arr[i] == 0x3d) {
-				sendarray.push(0x3d);
-				sendarray.push(writepacket_arr[i] ^ 0x20);
-
-			// ‚»‚êˆÈŠO 
-			} else {
-				sendarray.push(writepacket_arr[i]);
-			}
-		}
-
-		var send_data = new ArrayBuffer(sendarray.length);
-		var send_data_arr = new Uint8Array(send_data);
-
-		for(var i=0 ; i<sendarray.length ; i++) send_data_arr[i] = sendarray[i];
-
-//		var sendstr = "";
-//		for(var i=0 ; i<send_data.byteLength ; i++) sendstr = sendstr + ("0"+send_data_arr[i].toString(16)).slice(-2) + " ";
-//		console.log("avm : sending data = " + sendstr);
+		var avmtrans_exit = function(result, readpacket) {
+			avmBarrier = false;
+			callback(result, readpacket);
+		};
 
 
-		///// ƒpƒPƒbƒgóMˆ— /////
+		///// ãƒ‘ã‚±ãƒƒãƒˆå—ä¿¡å‡¦ç†éƒ¨ /////
 
 		var resparray = new Array();
-		var recvlogarray = new Array();		// ƒƒO—p 
+		var recvlogarray = new Array();		// ãƒ­ã‚°ç”¨ 
 		var recvSOP = false;
 		var recvEOP = false;
 		var recvCNI = false;
@@ -1118,82 +1138,84 @@ var Canarium = function() {
 					var recvdata_arr = new Uint8Array(recvdata);
 					var recvbyte = recvdata_arr[0];
 
-					recvlogarray.push(recvbyte);		// óMƒf[ƒ^‚ğ‘S‚ÄƒƒO(ƒeƒXƒg—p) 
+					recvlogarray.push(recvbyte);		// å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å…¨ã¦ãƒ­ã‚°(ãƒ†ã‚¹ãƒˆç”¨) 
 
-					// ƒpƒPƒbƒgƒtƒŒ[ƒ€‚ÌŠO‘¤‚Ìˆ— 
+					// ãƒ‘ã‚±ãƒƒãƒˆãƒ•ãƒ¬ãƒ¼ãƒ ã®å¤–å´ã®å‡¦ç† 
 					if (!recvSOP) {
-						if (recvCNI) {				// CNI‚Ì‚QƒoƒCƒg–Ú‚Ìê‡‚Í“Ç‚İÌ‚Ä‚é 
+						if (recvCNI) {				// CNIã®ï¼’ãƒã‚¤ãƒˆç›®ã®å ´åˆã¯èª­ã¿æ¨ã¦ã‚‹ 
 							recvCNI = false;
 						} else {
 							switch(recvbyte) {
-							case 0x7a:				// SOP‚ğóM 
+							case 0x7a:				// SOPã‚’å—ä¿¡ 
 								recvSOP = true;
 								break;
 
-							case 0x7c:				// CNI‚ğóM 
+							case 0x7c:				// CNIã‚’å—ä¿¡ 
 								recvCNI = true;
 								break;
 							}
 						}
 
-					// ƒpƒPƒbƒgƒtƒŒ[ƒ€‚Ì“à‘¤‚Ìˆ— 
+					// ãƒ‘ã‚±ãƒƒãƒˆãƒ•ãƒ¬ãƒ¼ãƒ ã®å†…å´ã®å‡¦ç† 
 					} else {
-						if (recvCNI) {				// CNI‚Ì‚QƒoƒCƒg–Ú‚Ìê‡‚Í“Ç‚İÌ‚Ä‚é 
+						if (recvCNI) {				// CNIã®ï¼’ãƒã‚¤ãƒˆç›®ã®å ´åˆã¯èª­ã¿æ¨ã¦ã‚‹ 
 							recvCNI = false;
 
-						} else if (recvESC) {		// ESC‚Ì‚QƒoƒCƒg–Ú‚Ìê‡‚ÍƒoƒCƒg•œŒ³‚µ‚Ä’Ç‰Á 
+						} else if (recvESC) {		// ESCã®ï¼’ãƒã‚¤ãƒˆç›®ã®å ´åˆã¯ãƒã‚¤ãƒˆå¾©å…ƒã—ã¦è¿½åŠ  
 							recvESC = false;
 							resparray.push(recvbyte ^ 0x20);
 
-							if (recvEOP) {			// ESC‚ªEOP‚Ì‚QƒoƒCƒg–Ú‚¾‚Á‚½ê‡‚Í‚±‚±‚ÅI—¹ 
+							if (recvEOP) {			// ESCãŒEOPã®ï¼’ãƒã‚¤ãƒˆç›®ã ã£ãŸå ´åˆã¯ã“ã“ã§çµ‚äº† 
 								recvEOP = false;
 								recvSOP = false;
 								recvexit = true;
 							}
 
-						} else if (recvEOP) {		// EOP‚Ì‚QƒoƒCƒg–Ú‚Ìê‡‚Ìˆ— 
-							if (recvbyte == 0x7d) {		// Œã‘±‚ªƒoƒCƒgƒGƒXƒP[ƒv‚³‚ê‚Ä‚¢‚éê‡‚Í‘±s 
+						} else if (recvEOP) {		// EOPã®ï¼’ãƒã‚¤ãƒˆç›®ã®å ´åˆã®å‡¦ç† 
+							if (recvbyte == 0x7d) {		// å¾Œç¶šãŒãƒã‚¤ãƒˆã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ç¶šè¡Œ 
 								recvESC = true;
-							} else {					// ƒGƒXƒP[ƒv‚Å‚È‚¯‚ê‚ÎƒoƒCƒg’Ç‰Á‚µ‚ÄI—¹ 
+							} else {					// ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã§ãªã‘ã‚Œã°ãƒã‚¤ãƒˆè¿½åŠ ã—ã¦çµ‚äº† 
 								resparray.push(recvbyte);
 								recvEOP = false;
 								recvSOP = false;
 								recvexit = true;
 							}
 
-						} else {					// æsƒoƒCƒg‚ªƒpƒPƒbƒgw¦q‚Å‚Í‚È‚¢ê‡ 
+						} else {					// å…ˆè¡Œãƒã‚¤ãƒˆãŒãƒ‘ã‚±ãƒƒãƒˆæŒ‡ç¤ºå­ã§ã¯ãªã„å ´åˆ 
 							switch(recvbyte) {
-							case 0x7a:				// SOPóM 
-								break;				// ƒpƒPƒbƒg’†‚É‚ÍSOP‚ÍoŒ»‚µ‚È‚¢‚Ì‚ÅƒGƒ‰[‚É‚·‚×‚«H 
+							case 0x7a:				// SOPå—ä¿¡ 
+								break;				// ãƒ‘ã‚±ãƒƒãƒˆä¸­ã«ã¯SOPã¯å‡ºç¾ã—ãªã„ã®ã§ã‚¨ãƒ©ãƒ¼ã«ã™ã¹ãï¼Ÿ 
 
-							case 0x7b:				// EOPóM 
+							case 0x7b:				// EOPå—ä¿¡ 
 								recvEOP = true;
 								break;
 
-							case 0x7c:				// CNIóM 
+							case 0x7c:				// CNIå—ä¿¡ 
 								recvCNI = true;
 								break;
 
-							case 0x7d:				// ESCóM 
+							case 0x7d:				// ESCå—ä¿¡ 
 								recvESC = true;
 								break;
 
-							default:				// ‚»‚êˆÈŠO‚ÍƒoƒCƒg’Ç‰Á  
+							default:				// ãã‚Œä»¥å¤–ã¯ãƒã‚¤ãƒˆè¿½åŠ   
 								resparray.push(recvbyte);
 							}
 						}
 					}
 
 					if (recvexit) {
-						// ƒŒƒXƒ|ƒ“ƒXƒpƒPƒbƒg‚Ì¬Œ` 
+						// ãƒ¬ã‚¹ãƒãƒ³ã‚¹ãƒ‘ã‚±ãƒƒãƒˆã®æˆå½¢ 
 						var readpacket = new ArrayBuffer(resparray.length);
 						var readpacket_arr = new Uint8Array(readpacket);
 
 						for(var i=0 ; i<resparray.length ; i++) readpacket_arr[i] = resparray[i];
 
-//						var recvstr = "";
-//						for(var i=0 ; i<recvlogarray.length ; i++) recvstr = recvstr + ("0"+recvlogarray[i].toString(16)).slice(-2) + " ";
-//						console.log("avm : received data = " + recvstr);
+						if (debug_message_avm && debug_message_avmpacket) {
+							var recvstr = "";
+							for(var i=0 ; i<recvlogarray.length ; i++) recvstr = recvstr + ("0"+recvlogarray[i].toString(16)).slice(-2) + " ";
+							console.log("avm : received data = " + recvstr);
+						}
 
 						avmtrans_exit(true, readpacket);
 					} else {
@@ -1201,46 +1223,92 @@ var Canarium = function() {
 					}
 
 				} else {
-					// ƒoƒCƒgƒf[ƒ^‚ÌóM‚É¸”s‚µ‚½ê‡ 
+					// ãƒã‚¤ãƒˆãƒ‡ãƒ¼ã‚¿ã®å—ä¿¡ã«å¤±æ•—ã—ãŸå ´åˆ 
 					avmtrans_exit(false, null);
 				}
 			});
 		};
 
 
-		///// ƒpƒPƒbƒg‚Ì‘—óM /////
+		///// é€ä¿¡ãƒ‘ã‚±ãƒƒãƒˆå‰å‡¦ç† /////
+
+		var writepacket_arr = new Uint8Array(writepacket);
+		var sendarray = new Array();
+
+		sendarray.push(0x7a);		// SOP
+		sendarray.push(0x7c);		// CNI
+		sendarray.push(0x00);		// Ch.0 (ãƒ€ãƒŸãƒ¼)
+
+		for(var i=0 ; i<writepacket.byteLength ; i++) {
+			// EOPã®æŒ¿å…¥ 
+			if (i == writepacket.byteLength-1) sendarray.push(0x7b);	// EOP 
+
+			// Byte to Packet Converteréƒ¨ã®ãƒã‚¤ãƒˆã‚¨ã‚¹ã‚±ãƒ¼ãƒ— 
+			if (writepacket_arr[i] == 0x7a || writepacket_arr[i] == 0x7b || writepacket_arr[i] == 0x7c || writepacket_arr[i] == 0x7d) {
+				sendarray.push(0x7d);
+				sendarray.push(writepacket_arr[i] ^ 0x20);
+
+			// PERIDOT Configratoréƒ¨ã®ãƒã‚¤ãƒˆã‚¨ã‚¹ã‚±ãƒ¼ãƒ— 
+			} else if (writepacket_arr[i] == 0x3a || writepacket_arr[i] == 0x3d) {
+				sendarray.push(0x3d);
+				sendarray.push(writepacket_arr[i] ^ 0x20);
+
+			// ãã‚Œä»¥å¤– 
+			} else {
+				sendarray.push(writepacket_arr[i]);
+			}
+		}
+
+		var send_data = new ArrayBuffer(sendarray.length);
+		var send_data_arr = new Uint8Array(send_data);
+
+		for(var i=0 ; i<sendarray.length ; i++) send_data_arr[i] = sendarray[i];
+
+		if (debug_message_avm && debug_message_avmpacket) {
+			var sendstr = "";
+			for(var i=0 ; i<send_data.byteLength ; i++) sendstr = sendstr + ("0"+send_data_arr[i].toString(16)).slice(-2) + " ";
+			console.log("avm : sending data = " + sendstr);
+		}
+
+
+		///// ãƒ‘ã‚±ãƒƒãƒˆã®é€å—ä¿¡ /////
 
 		comm.write(send_data, function (result, bytes) {
 			if (result) {
-				avmtrans_recv();
+				if (avmSendImmediate) {
+					comm.flush( function (result) {
+						if (result) {
+							avmtrans_recv();
+						} else {
+							avmtrans_exit(false, null);
+						}
+					});
+				} else {
+					avmtrans_recv();
+				}
 			} else {
 				avmtrans_exit(false, null);
 			}
 		});
-
-		var avmtrans_exit = function(result, readpacket) {
-			avmBarrier = false;
-			callback(result, readpacket);
-		};
 	};
 
 
 
 	//////////////////////////////////////////////////
-	//  “à•”ƒƒ\ƒbƒh (I2CƒRƒ}ƒ“ƒhŒQ)
+	//  å†…éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰ (I2Cã‚³ãƒãƒ³ãƒ‰ç¾¤)
 	//////////////////////////////////////////////////
 
 	var i2cBarrier = false;
 
-	// 1bitƒf[ƒ^‚ğ“Ç‚ŞƒTƒuƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ (•K‚¸SCL='L'‚ªæs‚µ‚Ä‚¢‚é‚à‚Ì‚Æ‚·‚é) 
+	// 1bitãƒ‡ãƒ¼ã‚¿ã‚’èª­ã‚€ã‚µãƒ–ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ (å¿…ãšSCL='L'ãŒå…ˆè¡Œã—ã¦ã„ã‚‹ã‚‚ã®ã¨ã™ã‚‹) 
 	// i2cbitread(function callback(bool result, int readbit));
 	var i2cbitread = function(callback) {
 		var readbit = 0;
 		var timeout = 0;
 		var setup = function() {
-			commandtrans(0x3b, function(result, respbyte) {		// SDA='Z',SCL='H',‘¦‰“š 
+			commandtrans(0x3b, function(result, respbyte) {		// SDA='Z',SCL='H',å³æ™‚å¿œç­” 
 				if (result) {
-					if ((respbyte & 0x10)== 0x10) {				// SCL‚ª—§‚¿ã‚ª‚Á‚½‚çSDA‚ğ“Ç‚Ş 
+					if ((respbyte & 0x10)== 0x10) {				// SCLãŒç«‹ã¡ä¸ŠãŒã£ãŸã‚‰SDAã‚’èª­ã‚€ 
 						if ((respbyte & 0x20)== 0x20) readbit = 1;
 						change();
 					} else {
@@ -1259,7 +1327,7 @@ var Canarium = function() {
 		};
 
 		var change = function() {
-			commandtrans(0x2b, function(result, respbyte) {		// SDA='Z',SCL='L',‘¦‰“š 
+			commandtrans(0x2b, function(result, respbyte) {		// SDA='Z',SCL='L',å³æ™‚å¿œç­” 
 				if (result) {
 					callback(true, readbit);
 				} else {
@@ -1271,12 +1339,12 @@ var Canarium = function() {
 		setup();
 	};
 
-	// 1bitƒf[ƒ^‚ğ‘‚­ƒTƒuƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ (•K‚¸SCL='L'‚ªæs‚µ‚Ä‚¢‚é‚à‚Ì‚Æ‚·‚é) 
+	// 1bitãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãã‚µãƒ–ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ (å¿…ãšSCL='L'ãŒå…ˆè¡Œã—ã¦ã„ã‚‹ã‚‚ã®ã¨ã™ã‚‹) 
 	// i2cbitwrite(int writebit, function callback(bool result));
 	var i2cbitwrite = function(writebit, callback) {
 		var setup = function() {
 			var com = (writebit << 5) | 0x0b;
-			commandtrans(com, function(result, respbyte) {		// SDA=writebit,SCL='L',‘¦‰“š 
+			commandtrans(com, function(result, respbyte) {		// SDA=writebit,SCL='L',å³æ™‚å¿œç­” 
 				if (result) {
 					hold();
 				} else {
@@ -1288,9 +1356,9 @@ var Canarium = function() {
 		var timeout = 0;
 		var hold = function() {
 			var com = (writebit << 5) | 0x1b;
-			commandtrans(com, function(result, respbyte) {		// SDA=writebit,SCL='H',‘¦‰“š 
+			commandtrans(com, function(result, respbyte) {		// SDA=writebit,SCL='H',å³æ™‚å¿œç­” 
 				if (result) {
-					if ((respbyte & 0x30) == (com & 0x30)) {	// SCL‚ª—§‚¿ã‚ª‚Á‚½‚çŸ‚Ö 
+					if ((respbyte & 0x30) == (com & 0x30)) {	// SCLãŒç«‹ã¡ä¸ŠãŒã£ãŸã‚‰æ¬¡ã¸ 
 						change();
 					} else {
 						if (timeout < i2cTimeoutCycle) {
@@ -1309,7 +1377,7 @@ var Canarium = function() {
 
 		var change = function() {
 			var com = (writebit << 5) | 0x0b;
-			commandtrans(com, function(result, respbyte) {		// SDA=writebit,SCL='L',‘¦‰“š 
+			commandtrans(com, function(result, respbyte) {		// SDA=writebit,SCL='L',å³æ™‚å¿œç­” 
 				if (result) {
 					callback(true);
 				} else {
@@ -1321,7 +1389,7 @@ var Canarium = function() {
 		setup();
 	};
 
-	// ƒXƒ^[ƒgƒRƒ“ƒfƒBƒVƒ‡ƒ“‚Ì‘—M 
+	// ã‚¹ã‚¿ãƒ¼ãƒˆã‚³ãƒ³ãƒ‡ã‚£ã‚·ãƒ§ãƒ³ã®é€ä¿¡ 
 	// i2cstart(function callback(bool result));
 	var i2cstart = function(callback) {
 		if (i2cBarrier) {
@@ -1333,7 +1401,7 @@ var Canarium = function() {
 
 		var timeout = 0;
 		var setup = function() {
-			commandtrans(0x3b, function(result, respbyte) {		// SDA='H',SCL='H',‘¦‰“š 
+			commandtrans(0x3b, function(result, respbyte) {		// SDA='H',SCL='H',å³æ™‚å¿œç­” 
 				if (result) {
 					if ((respbyte & 0x30)== 0x30) {
 						sendstart();
@@ -1353,7 +1421,7 @@ var Canarium = function() {
 		};
 
 		var sendstart = function() {
-			commandtrans(0x1b, function(result, respbyte) {		// SDA='L',SCL='H',‘¦‰“š 
+			commandtrans(0x1b, function(result, respbyte) {		// SDA='L',SCL='H',å³æ™‚å¿œç­” 
 				if (result) {
 					sclassert();
 				} else {
@@ -1363,9 +1431,10 @@ var Canarium = function() {
 		};
 
 		var sclassert = function() {
-			commandtrans(0x0b, function(result, respbyte) {		// SDA='L',SCL='L',‘¦‰“š 
+			commandtrans(0x0b, function(result, respbyte) {		// SDA='L',SCL='L',å³æ™‚å¿œç­” 
 				if (result) {
-//					console.log("i2c : Start condition.");
+					if (debug_message_i2c) console.log("i2c : Start condition.");
+
 					i2cstart_exit(true);
 				} else {
 					i2cstart_exit(false);
@@ -1381,7 +1450,7 @@ var Canarium = function() {
 		setup();
 	};
 
-	// ƒXƒgƒbƒvƒRƒ“ƒfƒBƒVƒ‡ƒ“‚Ì‘—M (•K‚¸SCL='L'‚ªæs‚µ‚Ä‚¢‚é‚à‚Ì‚Æ‚·‚é) 
+	// ã‚¹ãƒˆãƒƒãƒ—ã‚³ãƒ³ãƒ‡ã‚£ã‚·ãƒ§ãƒ³ã®é€ä¿¡ (å¿…ãšSCL='L'ãŒå…ˆè¡Œã—ã¦ã„ã‚‹ã‚‚ã®ã¨ã™ã‚‹) 
 	// i2cstop(function callback(bool result));
 	var i2cstop = function(callback) {
 		if (i2cBarrier) {
@@ -1393,7 +1462,7 @@ var Canarium = function() {
 
 		var timeout = 0;
 		var setup = function() {
-			commandtrans(0x0b, function(result, respbyte) {		// SDA='L',SCL='L',‘¦‰“š 
+			commandtrans(0x0b, function(result, respbyte) {		// SDA='L',SCL='L',å³æ™‚å¿œç­” 
 				if (result) {
 					sclrelease();
 				} else {
@@ -1403,7 +1472,7 @@ var Canarium = function() {
 		};
 
 		var sclrelease = function() {
-			commandtrans(0x1b, function(result, respbyte) {		// SDA='L',SCL='H',‘¦‰“š 
+			commandtrans(0x1b, function(result, respbyte) {		// SDA='L',SCL='H',å³æ™‚å¿œç­” 
 				if (result) {
 					if ((respbyte & 0x30)== 0x10) {
 						timeout = 0;
@@ -1424,13 +1493,11 @@ var Canarium = function() {
 		};
 
 		var sendstop = function() {
-			var com = 0x39;
-			if (avmSendImmediate) com |= 0x02;					// ‘¦‰“šƒ‚[ƒhƒrƒbƒg 
-
-			commandtrans(com, function(result, respbyte) {		// SDA='H',SCL='H' 
+			commandtrans(0x3b, function(result, respbyte) {		// SDA='H',SCL='H',å³æ™‚å¿œç­” 
 				if (result) {
 					if ((respbyte & 0x30)== 0x30) {
-//						console.log("i2c : Stop condition.");
+						if (debug_message_i2c) console.log("i2c : Stop condition.");
+
 						i2cstop_exit(true);
 					} else {
 						if (timeout < i2cTimeoutCycle) {
@@ -1448,14 +1515,19 @@ var Canarium = function() {
 		};
 
 		var i2cstop_exit = function(result) {
-			i2cBarrier = false;
-			callback(result);
+			var com = 0x39;
+			if (avmSendImmediate) com |= 0x02;
+
+			commandtrans(com, function(res, respbyte) {		// å³æ™‚å¿œç­”ãƒ“ãƒƒãƒˆã‚’å¾©å…ƒ 
+				i2cBarrier = false;
+				callback(result && res);
+			});
 		};
 
 		setup();
 	};
 
-	// ƒoƒCƒgƒŠ[ƒh (•K‚¸SCL='L'‚ªæs‚µ‚Ä‚¢‚é‚à‚Ì‚Æ‚·‚é) 
+	// ãƒã‚¤ãƒˆãƒªãƒ¼ãƒ‰ (å¿…ãšSCL='L'ãŒå…ˆè¡Œã—ã¦ã„ã‚‹ã‚‚ã®ã¨ã™ã‚‹) 
 	// i2cread(bool ack, function callback(bool result, int readbyte));
 	var i2cread = function(ack, callback) {
 		if (i2cBarrier) {
@@ -1493,9 +1565,11 @@ var Canarium = function() {
 			i2cbitwrite(ackbit, function(result) {
 				if (result) {
 
-//					var str = " ACK";
-//					if (!ack) str = " NACK";
-//					console.log("i2c : read 0x" + ("0"+readbyte.toString(16)).slice(-2) + str);
+					if (debug_message_i2c) {
+						var str = " ACK";
+						if (!ack) str = " NACK";
+						console.log("i2c : read 0x" + ("0"+readbyte.toString(16)).slice(-2) + str);
+					}
 
 					i2cread_exit(true, readbyte);
 				} else {
@@ -1513,7 +1587,7 @@ var Canarium = function() {
 		byteread();
 	};
 
-	// ƒoƒCƒgƒ‰ƒCƒg (•K‚¸SCL='L'‚ªæs‚µ‚Ä‚¢‚é‚à‚Ì‚Æ‚·‚é) 
+	// ãƒã‚¤ãƒˆãƒ©ã‚¤ãƒˆ (å¿…ãšSCL='L'ãŒå…ˆè¡Œã—ã¦ã„ã‚‹ã‚‚ã®ã¨ã™ã‚‹) 
 	// i2cwrite(int writebyte, function callback(bool result, bool ack));
 	var i2cwrite = function(writebyte, callback) {
 		if (i2cBarrier) {
@@ -1550,9 +1624,11 @@ var Canarium = function() {
 					var ack = true;
 					if (readbit != 0) ack = false;
 
-//					var str = " ACK";
-//					if (!ack) str = " NACK";
-//					console.log("i2c : write 0x" + ("0"+writebyte.toString(16)).slice(-2) + str);
+					if (debug_message_i2c) {
+						var str = " ACK";
+						if (!ack) str = " NACK";
+						console.log("i2c : write 0x" + ("0"+writebyte.toString(16)).slice(-2) + str);
+					}
 
 					i2cwrite_exit(true, ack);
 				} else {
@@ -1570,7 +1646,7 @@ var Canarium = function() {
 	};
 
 
-	// ƒ{[ƒh‚ÌEEPROM‚ğ“Ç‚İo‚· 
+	// ãƒœãƒ¼ãƒ‰ã®EEPROMã‚’èª­ã¿å‡ºã™ 
 	// eepromread(int startaddr, int readbytes, function callback(bool result, arraybuffer readdata[]));
 	var eepromBarrier = false;
 	var eepromread = function(startaddr, readbytes, callback) {
@@ -1580,8 +1656,6 @@ var Canarium = function() {
 		}
 
 		eepromBarrier = true;
-		var si_backup = avmSendImmediate;
-		avmSendImmediate = true;
 
 		var deviceaddr = 0xa0;
 		var readdata = new ArrayBuffer(readbytes);
@@ -1603,9 +1677,14 @@ var Canarium = function() {
 			var devwriteopen = function() {
 				i2cwrite((deviceaddr | 0), function(result, ack) {
 					if (result && ack) {
+						if (debug_message_i2c) {
+							console.log("i2c : Open device 0x" + ("0"+deviceaddr.toString(16)).slice(-2));
+						}
+
 						setaddr();
 					} else {
 						console.log("i2c : [!] Device 0x" + ("0"+deviceaddr.toString(16)).slice(-2) + " is not found.");
+
 						devclose();
 					}
 				});
@@ -1687,7 +1766,6 @@ var Canarium = function() {
 
 		var eepromread_exit = function(result, databuf) {
 			eepromBarrier = false;
-			avmSendImmediate = si_backup;
 			callback(result, databuf);
 		};
 

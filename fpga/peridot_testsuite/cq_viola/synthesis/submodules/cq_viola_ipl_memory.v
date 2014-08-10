@@ -67,6 +67,7 @@ module cq_viola_ipl_memory (
 
   defparam the_altsyncram.byte_size = 8,
            the_altsyncram.init_file = INIT_FILE,
+           the_altsyncram.lpm_hint = "ENABLE_RUNTIME_MOD=YES, INSTANCE_NAME=IPL",
            the_altsyncram.lpm_type = "altsyncram",
            the_altsyncram.maximum_depth = 4096,
            the_altsyncram.numwords_a = 4096,

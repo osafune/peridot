@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_e' in SOPC Builder design 'cq_viola'
  * SOPC Builder design path: C:/PROJECT/Physicaloid/c85_peridot/fpga/peridot_testsuite/cq_viola.sopcinfo
  *
- * Generated: Wed Nov 06 08:46:03 JST 2013
+ * Generated: Fri Jul 04 16:11:46 JST 2014
  */
 
 /*
@@ -357,12 +357,12 @@
 
 #define ALT_MODULE_CLASS_sysid altera_avalon_sysid_qsys
 #define SYSID_BASE 0x10000000
-#define SYSID_ID -1609365225
+#define SYSID_ID -1609300444
 #define SYSID_IRQ -1
 #define SYSID_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_NAME "/dev/sysid"
 #define SYSID_SPAN 8
-#define SYSID_TIMESTAMP 1382497617
+#define SYSID_TIMESTAMP 1404457538
 #define SYSID_TYPE "altera_avalon_sysid_qsys"
 
 
@@ -387,7 +387,7 @@
 #define SYSTIMER_RESET_OUTPUT 0
 #define SYSTIMER_SNAPSHOT 1
 #define SYSTIMER_SPAN 32
-#define SYSTIMER_TICKS_PER_SEC 1000.0
+#define SYSTIMER_TICKS_PER_SEC 1000
 #define SYSTIMER_TIMEOUT_PULSE_OUTPUT 0
 #define SYSTIMER_TYPE "altera_avalon_timer"
 

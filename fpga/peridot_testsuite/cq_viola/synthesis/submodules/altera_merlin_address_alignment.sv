@@ -1,4 +1,4 @@
-// (C) 2001-2013 Altera Corporation. All rights reserved.
+// (C) 2001-2014 Altera Corporation. All rights reserved.
 // Your use of Altera Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files any of the foregoing (including device programming or simulation 
@@ -65,18 +65,20 @@ typedef enum bit [1:0]
     // being transferred.
     // ---------------------------------------------------
 
-function reg[7:0] bytes_in_transfer;
-    input [2:0] axsize;
+function reg[9:0] bytes_in_transfer;
+    input [SIZE_W-1:0] axsize;
     case (axsize)
-        3'b000: bytes_in_transfer = 8'b00000001;
-        3'b001: bytes_in_transfer = 8'b00000010;
-        3'b010: bytes_in_transfer = 8'b00000100;
-        3'b011: bytes_in_transfer = 8'b00001000;
-        3'b100: bytes_in_transfer = 8'b00010000;
-        3'b101: bytes_in_transfer = 8'b00100000;
-        3'b110: bytes_in_transfer = 8'b01000000;
-        3'b111: bytes_in_transfer = 8'b10000000;
-        default:bytes_in_transfer = 8'b00000001;
+        4'b0000: bytes_in_transfer = 10'b0000000001;
+        4'b0001: bytes_in_transfer = 10'b0000000010;
+        4'b0010: bytes_in_transfer = 10'b0000000100;
+        4'b0011: bytes_in_transfer = 10'b0000001000;
+        4'b0100: bytes_in_transfer = 10'b0000010000;
+        4'b0101: bytes_in_transfer = 10'b0000100000;
+        4'b0110: bytes_in_transfer = 10'b0001000000;
+        4'b0111: bytes_in_transfer = 10'b0010000000;
+        4'b1000: bytes_in_transfer = 10'b0100000000;
+        4'b1001: bytes_in_transfer = 10'b1000000000;
+        default: bytes_in_transfer = 10'b0000000001;
     endcase
 endfunction
 
@@ -196,7 +198,7 @@ endfunction
                 reg [ADDR_W-1 : 0] out_aligned_address_burst;
                 reg [ADDR_W-1 : 0] address_burst;
                 reg [ADDR_W-1 : 0] base_address;
-                reg [7 : 0]        number_bytes_transfer;
+                reg [9 : 0]        number_bytes_transfer;
                 reg [ADDR_W-1 : 0] burstwrap_mask;
                 reg [ADDR_W-1 : 0] burst_address_high;
                 reg [ADDR_W-1 : 0] burst_address_low;

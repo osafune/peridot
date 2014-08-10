@@ -1,4 +1,4 @@
-// (C) 2001-2013 Altera Corporation. All rights reserved.
+// (C) 2001-2014 Altera Corporation. All rights reserved.
 // Your use of Altera Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files any of the foregoing (including device programming or simulation 
@@ -24,10 +24,10 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.1/ip/merlin/altera_reset_controller/altera_reset_controller.v#2 $
-// $Revision: #2 $
-// $Date: 2013/09/27 $
-// $Author: kevtan $
+// $Id: //acds/rel/14.0/ip/merlin/altera_reset_controller/altera_reset_controller.v#1 $
+// $Revision: #1 $
+// $Date: 2014/02/16 $
+// $Author: swbranch $
 
 // --------------------------------------
 // Reset controller

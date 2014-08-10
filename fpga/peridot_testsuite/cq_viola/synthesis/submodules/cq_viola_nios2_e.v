@@ -3166,6 +3166,7 @@ endmodule
 module cq_viola_nios2_e (
                           // inputs:
                            clk,
+                           cpu_resetrequest,
                            d_irq,
                            d_readdata,
                            d_waitrequest,
@@ -3181,6 +3182,7 @@ module cq_viola_nios2_e (
                            reset_req,
 
                           // outputs:
+                           cpu_resettaken,
                            d_address,
                            d_byteenable,
                            d_read,
@@ -3196,6 +3198,7 @@ module cq_viola_nios2_e (
                         )
 ;
 
+  output           cpu_resettaken;
   output  [ 28: 0] d_address;
   output  [  3: 0] d_byteenable;
   output           d_read;
@@ -3209,6 +3212,7 @@ module cq_viola_nios2_e (
   output           jtag_debug_module_waitrequest;
   output           no_ci_readra;
   input            clk;
+  input            cpu_resetrequest;
   input   [ 31: 0] d_irq;
   input   [ 31: 0] d_readdata;
   input            d_waitrequest;
@@ -3770,6 +3774,7 @@ module cq_viola_nios2_e (
   reg              av_ld_waiting_for_data;
   wire             av_ld_waiting_for_data_nxt;
   wire             av_sign_bit;
+  wire             cpu_resettaken;
   wire    [ 28: 0] d_address;
   reg     [  3: 0] d_byteenable;
   reg              d_read;
@@ -4161,8 +4166,11 @@ module cq_viola_nios2_e (
     (F_pc_sel_nxt == 2'b10)? E_arith_result[27 : 2] :
     F_pc_plus_one;
 
-  assign F_pc_nxt = F_pc_no_crst_nxt;
+  assign F_pc_nxt = R_ctrl_crst ? 62914560: 
+    F_pc_no_crst_nxt;
+
   assign F_pcb_nxt = {F_pc_nxt, 2'b00};
+  assign cpu_resettaken = R_ctrl_crst & E_valid;
   assign F_pc_en = W_valid;
   assign F_pc_plus_one = F_pc + 1;
   always @(posedge clk or negedge reset_n)
@@ -4214,7 +4222,7 @@ module cq_viola_nios2_e (
   assign intr_req = W_status_reg_pie & (W_ipending_reg != 0);
   assign F_av_iw = i_readdata;
   assign F_iw = hbreak_req     ? 4040762 :
-    1'b0   ? 127034 :
+    (cpu_resetrequest & hbreak_enabled)   ? 127034 :
     intr_req       ? 3926074 : 
     F_av_iw;
 
@@ -5618,6 +5626,7 @@ defparam cq_viola_nios2_e_register_bank_b.lpm_file = "cq_viola_nios2_e_rf_ram_b.
     (F_op_srai)? 56'h20202073726169 :
     (F_op_sra)? 56'h20202020737261 :
     (F_op_intr)? 56'h202020696e7472 :
+    (F_op_crst)? 56'h20202063727374 :
     56'h20202020424144;
 
   assign D_inst = (D_op_call)? 56'h20202063616c6c :
@@ -5706,6 +5715,7 @@ defparam cq_viola_nios2_e_register_bank_b.lpm_file = "cq_viola_nios2_e_rf_ram_b.
     (D_op_srai)? 56'h20202073726169 :
     (D_op_sra)? 56'h20202020737261 :
     (D_op_intr)? 56'h202020696e7472 :
+    (D_op_crst)? 56'h20202063727374 :
     56'h20202020424144;
 
   assign F_vinst = F_valid ? F_inst : {7{8'h2d}};

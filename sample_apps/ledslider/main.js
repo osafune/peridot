@@ -1,36 +1,36 @@
 //////////////////////////////////////////////////
-//  physicaloid.js ƒTƒ“ƒvƒ‹ 
+//  physicaloid.js ã‚µãƒ³ãƒ—ãƒ« 
 //////////////////////////////////////////////////
 
-// ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“‚·‚éRBFæ 
+// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã™ã‚‹RBFå…ˆ 
 var rbfurl = "https://dl.dropboxusercontent.com/u/68933379/peridot/lib/peridot/sample_ledslider/sample_ledslider_top.rbf";
 
-// PERIDOTƒIƒuƒWƒFƒNƒg‚ğ¶¬ 
+// PERIDOTã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ 
 var myps = new Canarium();
 
 
-// ŠJn‚ÉŒÄ‚Ño‚³‚ê‚é 
+// é–‹å§‹æ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ 
 var select;
 
 window.onload = function() {
 
 	select = document.getElementById('ports');
 
-	// ƒVƒŠƒAƒ‹ƒ|[ƒg‚Ìæ“¾ 
+	// ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆã®å–å¾— 
 	var scanport = function() {
 		chrome.serial.getDevices(function (ports) {
-			// ƒGƒŒƒƒ“ƒg‚ğ‘S‚Äíœ 
+			// ã‚¨ãƒ¬ãƒ¡ãƒ³ãƒˆã‚’å…¨ã¦å‰Šé™¤ 
 			while(select.firstChild){
 				select.removeChild(select.firstChild);
 			}
 
-			// ƒXƒLƒƒƒ“Œ‹‰Ê‚ğ’Ç‰Á 
+			// ã‚¹ã‚­ãƒ£ãƒ³çµæœã‚’è¿½åŠ  
 			for (var i=0; i<ports.length; i++) {
 				var port = ports[i].path;
 				select.appendChild(new Option(port, port));
 			}
 
-			// ‘I‘ğ‚Å‚«‚éƒ|[ƒg‚ª‚ ‚é‚© 
+			// é¸æŠã§ãã‚‹ãƒãƒ¼ãƒˆãŒã‚ã‚‹ã‹ 
 			if (select.firstChild) {
 				document.getElementById('connect').disabled = false;
 			} else {
@@ -49,7 +49,7 @@ window.onload = function() {
 }
 
 
-// ƒVƒŠƒAƒ‹ƒ|[ƒg‚ÌÚ‘±‚ÆØ’f 
+// ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆã®æ¥ç¶šã¨åˆ‡æ–­ 
 var onConnect = false;
 
 function connectPort() {
@@ -90,14 +90,14 @@ function connectPort() {
 }
 
 
-// FPGA‚ÌƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ 
+// FPGAã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ 
 function configSetup() {
 	var retry = false;
 
-	// ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“Às 
+	// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³å®Ÿè¡Œ 
 	var doconfig = function(rbf) {
 		if (rbf == null) {
-			rbf = new sample_ledslider_rbf();			// ƒ[ƒJƒ‹RBFƒf[ƒ^‚ğ—˜—p‚·‚é 
+			rbf = new sample_ledslider_rbf();			// ãƒ­ãƒ¼ã‚«ãƒ«RBFãƒ‡ãƒ¼ã‚¿ã‚’åˆ©ç”¨ã™ã‚‹ 
 			retry = true;
 		}
 
@@ -118,7 +118,7 @@ function configSetup() {
 		});
 	};
 
-	// SysID‚ğ•\¦ 
+	// SysIDã‚’è¡¨ç¤º 
 	var getsysid = function() {
 		var address = 0x10000000;
 		myps.avm.iord(address, 0, function(result, data) {
@@ -129,7 +129,7 @@ function configSetup() {
 		});
 	};
 
-	// RBF‚ğ“Ç‚İ‚Ş 
+	// RBFã‚’èª­ã¿è¾¼ã‚€ 
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', rbfurl, true);
 	xhr.responseType = "arraybuffer";
@@ -146,15 +146,15 @@ function configSetup() {
 		document.getElementById('configicon').src="img/close03-001-24.png";
 	};
 
-	// Às 
+	// å®Ÿè¡Œ 
 	document.getElementById('configicon').src="img/loading02_r2_c4.gif";
-	xhr.send();
+//	xhr.send();
 
-//	doconfig(null);
+	doconfig(null);
 }
 
 
-// ƒXƒ‰ƒCƒ_[‚ª“®‚¢‚½‚ç’l‚ğPWMƒŒƒWƒXƒ^‚É‘‚«‚Ş 
+// ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ãŒå‹•ã„ãŸã‚‰å€¤ã‚’PWMãƒ¬ã‚¸ã‚¹ã‚¿ã«æ›¸ãè¾¼ã‚€ 
 function iowrite() {
 	var address = 0x10000100;
 	var data = parseInt(document.getElementById('ledrange').value);

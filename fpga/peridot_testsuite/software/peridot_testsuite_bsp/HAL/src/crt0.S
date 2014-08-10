@@ -457,6 +457,13 @@ _start:
 #endif /* ALT_SIM_OPTIMIZE */
 
 /*
+ * Turn off the use of r1 (the assembler temporary register)
+ * so that call instructions can be safely relaxed across a
+ * 256MB boundary if needed
+ */
+    .set at
+
+/*
  * The alt_load() facility is normally used when there is no bootloader.
  * It copies some sections into RAM so it acts like a mini-bootloader.
  */

@@ -1,16 +1,21 @@
-﻿{
-  "name": "PERIDOT Moniter",
-  "description": "PERIDOT CRAFT",
-  "version": "0.9",
-  "icons": {
-	"128": "img/peridotcraft_icon.png"
-  },
-  "app": {
-    "background": {
-      "scripts": ["background.js"]
-    }
-  },
-  "permissions": [
-    "serial"
-  ]
+{
+	"manifest_version": 2,
+	"minimum_chrome_version": "33",
+
+	"name": "PERIDOT Moniter",
+	"description": "PERIDOTボードのコンフィギュレーションやI/Oアクセスを行います",
+	"icons": {
+		"128": "img/peridotcraft_icon.png"
+	},
+	"version": "0.93",
+
+	"app": {
+		"background": {
+			"scripts": ["background.js"]
+		}
+	},
+
+	"permissions": [
+    	"serial"
+  	]
 }

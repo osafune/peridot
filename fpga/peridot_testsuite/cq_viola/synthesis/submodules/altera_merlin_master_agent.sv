@@ -1,4 +1,4 @@
-// (C) 2001-2013 Altera Corporation. All rights reserved.
+// (C) 2001-2014 Altera Corporation. All rights reserved.
 // Your use of Altera Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files any of the foregoing (including device programming or simulation 
@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_master_agent/altera_merlin_master_agent.sv#1 $
+// $Id: //acds/rel/14.0/ip/merlin/altera_merlin_master_agent/altera_merlin_master_agent.sv#1 $
 // $Revision: #1 $
-// $Date: 2013/08/11 $
+// $Date: 2014/02/16 $
 // $Author: swbranch $
 
 // --------------------------------------
@@ -96,7 +96,8 @@ module altera_merlin_master_agent
               PKT_DATA_W      = PKT_DATA_H - PKT_DATA_L + 1,
               PKT_BYTEEN_W    = PKT_BYTEEN_H - PKT_BYTEEN_L + 1,
               PKT_SRC_ID_W    = PKT_SRC_ID_H - PKT_SRC_ID_L + 1,
-              PKT_DEST_ID_W   = PKT_DEST_ID_H - PKT_DEST_ID_L + 1
+              PKT_DEST_ID_W   = PKT_DEST_ID_H - PKT_DEST_ID_L + 1,
+              PKT_BURST_SIZE_W= PKT_BURST_SIZE_H - PKT_BURST_SIZE_L + 1
 )
 (
     // -------------------
@@ -176,8 +177,8 @@ module altera_merlin_master_agent
 
     wire [31:0] burstwrap_value_int = BURSTWRAP_VALUE;
     wire [31:0] id_int              = ID; 
-    wire [2:0]  burstsize_sig       = BURST_SIZE[2:0];
-    wire [1:0]  bursttype_value     = burstwrap_value_int[PKT_BURSTWRAP_W-1] ? INCR : WRAP;
+    wire [PKT_BURST_SIZE_W-1:0] burstsize_sig = BURST_SIZE[PKT_BURST_SIZE_W-1:0];
+    wire [1:0] bursttype_value = burstwrap_value_int[PKT_BURSTWRAP_W-1] ? INCR : WRAP;
 
     // --------------------------------------
     // Address alignment

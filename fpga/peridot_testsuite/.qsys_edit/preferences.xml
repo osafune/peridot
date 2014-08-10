@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <preferences>
  <debug showDebugMenu="0" showDebugLogEntries="0" />
- <systemtable filter="AvalonMM and Conduit">
+ <systemtable filter="All Interfaces">
   <columns>
-   <connections preferredWidth="95" />
+   <connections preferredWidth="207" />
    <irq preferredWidth="34" />
    <baseaddress preferredWidth="109" />
    <endaddress preferredWidth="84" />
@@ -21,7 +21,8 @@
   </columns>
  </clocktable>
  <window width="1404" height="998" x="263" y="14" />
- <library expandedCategories="Library,Project/Bridges,Project" />
+ <library
+   expandedCategories="Library,Library/Processors and Peripherals,Project,Library/Processors and Peripherals/Peripherals" />
  <hdlexample language="VHDL" />
  <generation synthesis="VERILOG" />
 </preferences>

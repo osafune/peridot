@@ -37,15 +37,15 @@
  * Linker defined symbols.
  */
 
-extern void __flash_rwdata_start; 
-extern void __ram_rwdata_start;
-extern void __ram_rwdata_end;
-extern void __flash_rodata_start; 
-extern void __ram_rodata_start;
-extern void __ram_rodata_end;
-extern void __flash_exceptions_start; 
-extern void __ram_exceptions_start;
-extern void __ram_exceptions_end;
+extern alt_u32 __flash_rwdata_start; 
+extern alt_u32 __ram_rwdata_start;
+extern alt_u32 __ram_rwdata_end;
+extern alt_u32 __flash_rodata_start; 
+extern alt_u32 __ram_rodata_start;
+extern alt_u32 __ram_rodata_end;
+extern alt_u32 __flash_exceptions_start; 
+extern alt_u32 __ram_exceptions_start;
+extern alt_u32 __ram_exceptions_end;
 
 /*
  * alt_load() is called when the code is executing from flash. In this case
@@ -60,8 +60,8 @@ void alt_load (void)
    */
 
   alt_load_section (&__flash_rwdata_start, 
-		                &__ram_rwdata_start,
-		                &__ram_rwdata_end);
+		               &__ram_rwdata_start,
+		               &__ram_rwdata_end);
 
   /*
    * Copy the exception handler.

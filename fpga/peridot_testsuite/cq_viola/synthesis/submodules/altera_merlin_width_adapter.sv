@@ -1,4 +1,4 @@
-// (C) 2001-2013 Altera Corporation. All rights reserved.
+// (C) 2001-2014 Altera Corporation. All rights reserved.
 // Your use of Altera Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files any of the foregoing (including device programming or simulation 
@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/13.1/ip/merlin/altera_merlin_width_adapter/altera_merlin_width_adapter.sv#1 $
+// $Id: //acds/rel/14.0/ip/merlin/altera_merlin_width_adapter/altera_merlin_width_adapter.sv#1 $
 // $Revision: #1 $
-// $Date: 2013/08/11 $
+// $Date: 2014/02/16 $
 // $Author: swbranch $
 
 // -----------------------------------------------------
@@ -71,7 +71,11 @@ module altera_merlin_width_adapter
 
     parameter PACKING                       = 1,    // 1: default packing with avalon slave
     parameter CONSTANT_BURST_SIZE           = 1,    // 1: This is to optimize for Avalon only system as Avalon always send full size transaction
-    parameter RESPONSE_PATH     = 0     // 0: this is WA on command path response always merged, 1: this WA is on response path
+    parameter RESPONSE_PATH                 = 0,    // 0: this is WA on command path response always merged, 1: this WA is on response path
+
+    // Address alignment can be turned off (an optimisation) if all connected
+    // masters only issue aligned addresses.
+    parameter ENABLE_ADDRESS_ALIGNMENT = 1
 )
 ( 
     input                            clk,
@@ -164,7 +168,7 @@ module altera_merlin_width_adapter
 
     function reg [clogb2(RATIO)-1:0] mask_to_select_correct_segments_for_size;
         input [clogb2(RATIO)-1:0] select_output_segment;
-        input [7:0]     size_ratio;
+        input [9:0]     size_ratio;
         input int       msb_select_bit;
 
         integer         i;
@@ -176,7 +180,7 @@ module altera_merlin_width_adapter
     endfunction 
   
     function reg [ADDRESS_W-1:0] choose_packed_address_base_on_size;
-        input [7:0]     size_ratio;
+        input [9:0]     size_ratio;
         input int       msb_select_bit;
         
         integer         i;
@@ -187,19 +191,21 @@ module altera_merlin_width_adapter
         end
     endfunction
 
-    function reg[7:0] bytes_in_transfer;
-        input [2:0] axsize;
+    function reg[9:0] bytes_in_transfer;
+        input [BURST_SIZE_W-1:0] axsize;
     
         case (axsize)
-            3'b000: bytes_in_transfer = 8'b00000001;
-            3'b001: bytes_in_transfer = 8'b00000010;
-            3'b010: bytes_in_transfer = 8'b00000100;
-            3'b011: bytes_in_transfer = 8'b00001000;
-            3'b100: bytes_in_transfer = 8'b00010000;
-            3'b101: bytes_in_transfer = 8'b00100000;
-            3'b110: bytes_in_transfer = 8'b01000000;
-            3'b111: bytes_in_transfer = 8'b10000000;
-            default:bytes_in_transfer = 8'b00000001;
+            4'b0000: bytes_in_transfer = 10'b0000000001;
+            4'b0001: bytes_in_transfer = 10'b0000000010;
+            4'b0010: bytes_in_transfer = 10'b0000000100;
+            4'b0011: bytes_in_transfer = 10'b0000001000;
+            4'b0100: bytes_in_transfer = 10'b0000010000;
+            4'b0101: bytes_in_transfer = 10'b0000100000;
+            4'b0110: bytes_in_transfer = 10'b0001000000;
+            4'b0111: bytes_in_transfer = 10'b0010000000;
+            4'b1000: bytes_in_transfer = 10'b0100000000;
+            4'b1001: bytes_in_transfer = 10'b1000000000;            
+            default: bytes_in_transfer = 10'b0000000001;
         endcase
 
     endfunction
@@ -348,23 +354,20 @@ module altera_merlin_width_adapter
     // Process unaligned address for first address of the burst
     // ----------------------------------------
 generate
-    // ----------------------------------------
-    // Do generate here, in case AVALON system then just bypass this
-    // as the address will be aligned
-    // ----------------------------------------
-if ((!CONSTANT_BURST_SIZE) & (IN_NUMSYMBOLS > OUT_NUMSYMBOLS)) begin // this needs for Wide-Narrow
-    reg [ADDRESS_W + (BWRAP_W-1) + 4:0]         address_for_alignment;
+if (IN_NUMSYMBOLS > OUT_NUMSYMBOLS && ENABLE_ADDRESS_ALIGNMENT) begin
+    reg [ADDRESS_W + (BWRAP_W-1) + BURST_SIZE_W + BURST_TYPE_W - 1 :0] address_for_alignment;
     reg [ADDRESS_W + clogb2(IN_NUMSYMBOLS)-1:0] address_after_aligned;
 
     assign address_for_alignment = {address_from_packet, in_size_field};
-    assign address_for_adaptation       = address_after_aligned[ADDRESS_W-1:0];
+    assign address_for_adaptation = address_after_aligned[ADDRESS_W-1:0];
     
     altera_merlin_address_alignment
         #(
           .ADDR_W            (ADDRESS_W),
           .BURSTWRAP_W       (BWRAP_W),
           .INCREMENT_ADDRESS (0),
-          .NUMSYMBOLS        (IN_NUMSYMBOLS)
+          .NUMSYMBOLS        (IN_NUMSYMBOLS),
+          .SIZE_W            (BURST_SIZE_W)
           ) check_and_align_address_to_size
             (
              .clk(clk),
@@ -376,7 +379,7 @@ if ((!CONSTANT_BURST_SIZE) & (IN_NUMSYMBOLS > OUT_NUMSYMBOLS)) begin // this nee
              .in_eop(),
              .out_ready()
              );
-end else begin // Narrow-Wide: it process base on address, so we dont need do alignment
+end else begin
     assign address_for_adaptation       = address_from_packet;
 end
 endgenerate
@@ -735,7 +738,7 @@ endgenerate
          wire [31:0] int_in_numsymbols = IN_NUMSYMBOLS;
          wire [BYTE_CNT_W-1:0] byte_cnt_sized_in_num_symbols = 
             int_in_numsymbols[BYTE_CNT_W-1:0];
-         reg [7:0]  cmd_burst_size;
+         reg [9:0]  cmd_burst_size;
          wire [31:0] out_numsymbols_wire = LOG_OUT_NUMSYMBOLS;
          wire [31:0]        int_encoded_burstsize = NW_BITFORSELECT_R; //NW_BITFORSELECT_R is the log2 of IN_NUMSYMBOLS
          wire [BURST_SIZE_W-1:0] encoded_burstsize = int_encoded_burstsize[BURST_SIZE_W-1:0];      
@@ -762,7 +765,7 @@ endgenerate
 			in_ori_size_field        = in_data[IN_PKT_ORI_BURST_SIZE_H :IN_PKT_ORI_BURST_SIZE_L ];
 		end
 		
-        reg [7:0]   size_ratio;
+        reg [9:0]   size_ratio;
          // --------------------------------------------
          // Stage 0: buffer the input cycle if read burst 
          // uncompression is going to happen.
@@ -912,7 +915,8 @@ endgenerate
             .ADDR_W      (ADDRESS_W),
             .BURSTWRAP_W (BWRAP_W),
             .BYTE_CNT_W  (BYTE_CNT_W),
-            .PKT_SYMBOLS (IN_NUMSYMBOLS)
+            .PKT_SYMBOLS (IN_NUMSYMBOLS),
+            .BURST_SIZE_W(BURST_SIZE_W)
          ) uncompressor (
             .clk                  (clk),
             .reset                (reset),

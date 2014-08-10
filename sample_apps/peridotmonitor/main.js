@@ -1,33 +1,33 @@
 //////////////////////////////////////////////////
-//  ƒpƒlƒ‹‚Ì‰Šú‰» 
+//  ãƒ‘ãƒãƒ«ã®åˆæœŸåŒ– 
 //////////////////////////////////////////////////
 
-var testps = new Canarium();		// ƒAƒNƒZƒXƒIƒuƒWƒFƒNƒg‚ğ¶¬ 
+var testps = new Canarium();		// ã‚¢ã‚¯ã‚»ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ 
 
-// ŠJn‚ÉŒÄ‚Ño‚³‚ê‚é 
+// é–‹å§‹æ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ 
 var select = null;
 
 window.onload = function() {
 
-	// Chrome Package Apps ‚ğ‘O’ñ‚Æ‚·‚é‚Ì‚ÅFileAPI‚Ìƒ`ƒFƒbƒN‚ÍÈ—ª //
+	// Chrome Package Apps ã‚’å‰æã¨ã™ã‚‹ã®ã§FileAPIã®ãƒã‚§ãƒƒã‚¯ã¯çœç•¥ //
 
     select = document.getElementById('ports');
 
-	// ƒVƒŠƒAƒ‹ƒ|[ƒg‚Ìæ“¾ 
+	// ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆã®å–å¾— 
 	var scanport = function() {
 		chrome.serial.getDevices(function (ports) {
-			// ƒGƒŒƒƒ“ƒg‚ğ‘S‚Äíœ 
+			// ã‚¨ãƒ¬ãƒ¡ãƒ³ãƒˆã‚’å…¨ã¦å‰Šé™¤ 
 			while(select.firstChild){
 				select.removeChild(select.firstChild);
 			}
 
-			// ƒXƒLƒƒƒ“Œ‹‰Ê‚ğ’Ç‰Á 
+			// ã‚¹ã‚­ãƒ£ãƒ³çµæœã‚’è¿½åŠ  
 			for (var i=0; i<ports.length; i++) {
 				var port = ports[i].path;
 				select.appendChild(new Option(port, port));
 			}
 
-			// ‘I‘ğ‚Å‚«‚éƒ|[ƒg‚ª‚ ‚é‚© 
+			// é¸æŠã§ãã‚‹ãƒãƒ¼ãƒˆãŒã‚ã‚‹ã‹ 
 			if (select.firstChild) {
 				document.getElementById('connect').disabled = false;
 			} else {
@@ -51,7 +51,7 @@ window.onload = function() {
 }
 
 
-// ƒVƒŠƒAƒ‹ƒ|[ƒg‚ÌÚ‘±‚ÆØ’f 
+// ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆã®æ¥ç¶šã¨åˆ‡æ–­ 
 var onConnect = false;
 
 function connectPort () {
@@ -90,8 +90,8 @@ function connectPort () {
 }
 
 
-// RBFƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ 
-var confdata = null;		// “Ç‚İ‚ñ‚¾RBFƒf[ƒ^ 
+// RBFãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ 
+var confdata = null;		// èª­ã¿è¾¼ã‚“ã RBFãƒ‡ãƒ¼ã‚¿ 
 
 function handleFileSelect(evt) {
 	var rbf = evt.target.files[0];
@@ -99,7 +99,7 @@ function handleFileSelect(evt) {
 	if (rbf == null) {
 		console.log("config : [!] rbf file not selected.");
 		confdata = null;
-		document.getElementById('config').disabled = true;		// ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒ{ƒ^ƒ“‚ğ–³Œø‰» 
+		document.getElementById('config').disabled = true;		// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒœã‚¿ãƒ³ã‚’ç„¡åŠ¹åŒ– 
 		return;
 	}
 
@@ -108,15 +108,15 @@ function handleFileSelect(evt) {
 		confdata = e.target.result;
 		console.log("config : rbffile = " + rbf.name + ", " + e.loaded + "bytes loaded.");
 
-		// ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒ{ƒ^ƒ“‚ğ—LŒø‰» 
+		// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒœã‚¿ãƒ³ã‚’æœ‰åŠ¹åŒ– 
 		if (onConnect) document.getElementById('config').disabled = false;
 	}
 
-	rbfreader.readAsArrayBuffer(rbf);		// ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚ğŠJn 
+	rbfreader.readAsArrayBuffer(rbf);		// ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã‚’é–‹å§‹ 
 }
 
 
-// FPGA‚ÌƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ 
+// FPGAã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ 
 function configSetup() {
 
 	var boardinfo = null;
@@ -125,7 +125,7 @@ function configSetup() {
 //			serialcode : "xxxxxx-yyyyyy-zzzzzz"
 //		};
 
-	// SysID‚ğ•\¦ 
+	// SysIDã‚’è¡¨ç¤º 
 	var getsysid = function(result) {
 		var sysid_addr = 0x10000000 >>> 0;
 		var sysid_str = "SYSID :";
@@ -161,7 +161,7 @@ function configSetup() {
 }
 
 
-// QsysƒyƒŠƒtƒFƒ‰ƒ‹‚Ì“Ç‚İo‚µ 
+// Qsysãƒšãƒªãƒ•ã‚§ãƒ©ãƒ«ã®èª­ã¿å‡ºã— 
 function readqsysio() {
 	var address = (parseInt(document.getElementById('avm_address').value, 16))>>>0;
 
@@ -174,7 +174,7 @@ function readqsysio() {
 	}
 }
 
-// QsysƒyƒŠƒtƒFƒ‰ƒ‹‚Ì‘‚«‚İ 
+// Qsysãƒšãƒªãƒ•ã‚§ãƒ©ãƒ«ã®æ›¸ãè¾¼ã¿ 
 function writeqsysio() {
 	var address = (parseInt(document.getElementById('avm_address').value, 16))>>>0;
 	var data = (parseInt(document.getElementById('avm_data').value, 16))>>>0;
@@ -185,7 +185,7 @@ function writeqsysio() {
 	}
 }
 
-// ƒƒ‚ƒŠƒ_ƒ“ƒv 
+// ãƒ¡ãƒ¢ãƒªãƒ€ãƒ³ãƒ— 
 function memdump() {
 	var address = (parseInt(document.getElementById('mem_address').value, 16))>>>0;
 
@@ -219,7 +219,7 @@ function memdump() {
 	}
 }
 
-// ƒƒ‚ƒŠ‚ÉƒeƒXƒgƒf[ƒ^‚ğ‘‚«‚Ş 
+// ãƒ¡ãƒ¢ãƒªã«ãƒ†ã‚¹ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€ 
 function memwrite() {
 	var address = (parseInt(document.getElementById('mem_address').value, 16))>>>0;
 
