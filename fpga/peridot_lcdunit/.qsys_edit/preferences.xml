@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preferences>
+ <debug showDebugMenu="0" />
+ <systemtable filter="Avalon-MM Interfaces">
+  <columns>
+   <connections preferredWidth="79" />
+   <irq preferredWidth="34" />
+  </columns>
+ </systemtable>
+ <clocktable>
+  <columns>
+   <clockname preferredWidth="279" />
+   <clocksource preferredWidth="278" />
+   <frequency preferredWidth="260" />
+  </columns>
+ </clocktable>
+ <window width="1475" height="819" x="158" y="67" />
+ <library
+   expandedCategories="Library,Library/Interface Protocols/Serial,Project,Library/Interface Protocols" />
+</preferences>

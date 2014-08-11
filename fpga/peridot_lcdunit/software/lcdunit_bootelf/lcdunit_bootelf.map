@@ -1,0 +1,521 @@
+Archive member included because of file (symbol)
+
+c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+                              obj/default/pff.o (__udivsi3)
+../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+                              obj/default/nd_elf3.o (alt_dcache_flush_all)
+../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+                              obj/default/nd_elf3.o (alt_icache_flush_all)
+../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+                              ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o (alt_load)
+../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+                              ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o (alt_main)
+../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+                              ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o) (alt_irq_init)
+../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+                              ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o) (alt_icache_flush)
+../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+                              ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o) (altera_nios2_qsys_irq_init)
+
+Allocating common symbols
+Common symbol       size              file
+
+g_fatfs_work        0x2c              obj/default/nd_elf3.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+sdram_BEFORE_EXCEPTION 0x00000000         0x00000020
+sdram            0x00000020         0x007fffe0
+reset            0x0f000000         0x00000020
+ipl_memory       0x0f000020         0x00001fe0
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+LOAD obj/default/mmc.o
+LOAD obj/default/mmc_spi.o
+LOAD obj/default/nd_elf3.o
+LOAD obj/default/pff.o
+LOAD c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-mingw32/nios2-elf/lib\libstdc++.a
+LOAD c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-mingw32/nios2-elf/lib\libm.a
+LOAD c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a
+START GROUP
+LOAD c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3/../../../../../H-i686-mingw32/nios2-elf/lib\libsmallc.a
+LOAD c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a
+LOAD ../lcdunit_bootelf_bsp/\libhal_bsp.a
+END GROUP
+LOAD c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a
+                0x00000000                __alt_mem_sdram = 0x0
+                0x0f000000                __alt_mem_ipl_memory = 0xf000000
+
+.entry          0x0f000000       0x20
+ *(.entry)
+ .entry         0x0f000000       0x20 ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+                0x0f000000                __reset
+                0x0f00001c                _exit
+
+.exceptions     0x00000020        0x0
+                0x00000020                PROVIDE (__ram_exceptions_start, ABSOLUTE (.))
+                0x00000020                . = ALIGN (0x20)
+ *(.irq)
+ *(.exceptions.entry.label)
+ *(.exceptions.entry.user)
+ *(.exceptions.entry.ecc_fatal)
+ *(.exceptions.entry)
+ *(.exceptions.irqtest.user)
+ *(.exceptions.irqtest)
+ *(.exceptions.irqhandler.user)
+ *(.exceptions.irqhandler)
+ *(.exceptions.irqreturn.user)
+ *(.exceptions.irqreturn)
+ *(.exceptions.notirq.label)
+ *(.exceptions.notirq.user)
+ *(.exceptions.notirq)
+ *(.exceptions.soft.user)
+ *(.exceptions.soft)
+ *(.exceptions.unknown.user)
+ *(.exceptions.unknown)
+ *(.exceptions.exit.label)
+ *(.exceptions.exit.user)
+ *(.exceptions.exit)
+ *(.exceptions)
+                0x00000020                PROVIDE (__ram_exceptions_end, ABSOLUTE (.))
+                0x00000020                PROVIDE (__flash_exceptions_start, LOADADDR (.exceptions))
+
+.text           0x0f000020     0x1744
+                0x0f000020                PROVIDE (stext, ABSOLUTE (.))
+ *(.interp)
+ *(.hash)
+ *(.dynsym)
+ *(.dynstr)
+ *(.gnu.version)
+ *(.gnu.version_d)
+ *(.gnu.version_r)
+ *(.rel.init)
+ *(.rela.init)
+ *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+ *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+ *(.rel.fini)
+ *(.rela.fini)
+ *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+ *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+ *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+ *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+ *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+ *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+ *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+ *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+ *(.rel.ctors)
+ *(.rela.ctors)
+ *(.rel.dtors)
+ *(.rela.dtors)
+ *(.rel.got)
+ *(.rela.got)
+ *(.rel.sdata .rel.sdata.* .rel.gnu.linkonce.s.*)
+ *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
+ *(.rel.sbss .rel.sbss.* .rel.gnu.linkonce.sb.*)
+ *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
+ *(.rel.sdata2 .rel.sdata2.* .rel.gnu.linkonce.s2.*)
+ *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
+ *(.rel.sbss2 .rel.sbss2.* .rel.gnu.linkonce.sb2.*)
+ *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
+ *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+ *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+ *(.rel.plt)
+ *(.rela.plt)
+ *(.rel.dyn)
+ *(.init)
+ *(.plt)
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x0f000020       0x3c ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+                0x0f000020                _start
+ .text          0x0f00005c      0x3c4 obj/default/mmc.o
+                0x0f000150                disk_initialize
+                0x0f000304                disk_readp
+ .text          0x0f000420      0x15c obj/default/mmc_spi.o
+                0x0f000420                mmc_spi_SetCardSelect
+                0x0f000434                mmc_spi_SetCardDeselect
+                0x0f00044c                mmc_spi_Sendbyte
+                0x0f000470                mmc_spi_Recvbyte
+                0x0f0004a0                mmc_spi_CheckCardDetect
+                0x0f0004b4                mmc_spi_CheckWritePortect
+                0x0f0004e8                mmc_spi_SetIdentClock
+                0x0f0004f8                mmc_spi_SetTransClock
+                0x0f000508                mmc_spi_SetTimer
+                0x0f00051c                mmc_spi_CheckTimer
+                0x0f00052c                mmc_spi_Wait100us
+                0x0f000548                mmc_spi_InitSocket
+ .text          0x0f00057c       0x1c obj/default/nd_elf3.o
+                0x0f00057c                dgb_printf
+ .text.startup  0x0f000598      0x338 obj/default/nd_elf3.o
+                0x0f000598                main
+ .text          0x0f0008d0      0xbc0 obj/default/pff.o
+                0x0f000bfc                pf_mount
+                0x0f000e50                pf_open
+                0x0f0011c4                pf_read
+                0x0f00134c                pf_lseek
+ .text          0x0f001490      0x130 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+                0x0f001504                __divsi3
+                0x0f001554                __modsi3
+                0x0f0015b0                __udivsi3
+                0x0f0015b8                __umodsi3
+ .text          0x0f0015c0        0x4 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+                0x0f0015c0                alt_dcache_flush_all
+ .text          0x0f0015c4        0xc ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+                0x0f0015c4                alt_icache_flush_all
+ .text          0x0f0015d0      0x104 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+                0x0f0015d0                alt_load
+ .text          0x0f0016d4       0x2c ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+                0x0f0016d4                alt_main
+ .text          0x0f001700       0x24 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+                0x0f001700                alt_irq_init
+                0x0f001720                alt_sys_init
+ .text          0x0f001724       0x38 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+                0x0f001724                alt_icache_flush
+ .text          0x0f00175c        0x8 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+                0x0f00175c                altera_nios2_qsys_irq_init
+ *(.gnu.warning.*)
+ *(.fini)
+                0x0f001764                PROVIDE (__etext, ABSOLUTE (.))
+                0x0f001764                PROVIDE (_etext, ABSOLUTE (.))
+                0x0f001764                PROVIDE (etext, ABSOLUTE (.))
+ *(.eh_frame_hdr)
+                0x0f001764                . = ALIGN (0x4)
+                0x0f001764                PROVIDE (__preinit_array_start, ABSOLUTE (.))
+ *(.preinit_array)
+                0x0f001764                PROVIDE (__preinit_array_end, ABSOLUTE (.))
+                0x0f001764                PROVIDE (__init_array_start, ABSOLUTE (.))
+ *(.init_array)
+                0x0f001764                PROVIDE (__init_array_end, ABSOLUTE (.))
+                0x0f001764                PROVIDE (__fini_array_start, ABSOLUTE (.))
+ *(.fini_array)
+                0x0f001764                PROVIDE (__fini_array_end, ABSOLUTE (.))
+ *(.eh_frame)
+ *(.gcc_except_table .gcc_except_table.*)
+ *(.dynamic)
+                0x0f001764                PROVIDE (__CTOR_LIST__, ABSOLUTE (.))
+ *(.ctors)
+ *(SORT(.ctors.*))
+                0x0f001764                PROVIDE (__CTOR_END__, ABSOLUTE (.))
+                0x0f001764                PROVIDE (__DTOR_LIST__, ABSOLUTE (.))
+ *(.dtors)
+ *(SORT(.dtors.*))
+                0x0f001764                PROVIDE (__DTOR_END__, ABSOLUTE (.))
+ *(.jcr)
+                0x0f001764                . = ALIGN (0x4)
+
+.rodata         0x0f001764       0x14
+                0x0f001764                PROVIDE (__ram_rodata_start, ABSOLUTE (.))
+                0x0f001764                . = ALIGN (0x4)
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata.str1.4
+                0x0f001764       0x14 obj/default/nd_elf3.o
+ *(.rodata1)
+                0x0f001778                . = ALIGN (0x4)
+                0x0f001778                PROVIDE (__ram_rodata_end, ABSOLUTE (.))
+                0x0f001764                PROVIDE (__flash_rodata_start, LOADADDR (.rodata))
+
+.rwdata         0x0f001778        0x4
+                0x0f001778                PROVIDE (__ram_rwdata_start, ABSOLUTE (.))
+                0x0f001778                . = ALIGN (0x4)
+ *(.got.plt)
+ *(.got)
+ *(.data1)
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x0f001778        0x0 ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+ .data          0x0f001778        0x0 obj/default/mmc.o
+ .data          0x0f001778        0x0 obj/default/mmc_spi.o
+ .data          0x0f001778        0x0 obj/default/nd_elf3.o
+ .data          0x0f001778        0x0 obj/default/pff.o
+ .data          0x0f001778        0x0 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .data          0x0f001778        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .data          0x0f001778        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .data          0x0f001778        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .data          0x0f001778        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .data          0x0f001778        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .data          0x0f001778        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .data          0x0f001778        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+                0x0f009778                _gp = ABSOLUTE ((. + 0x8000))
+                0x0f009778                PROVIDE (gp, _gp)
+ *(.rwdata .rwdata.*)
+ *(.sdata .sdata.* .gnu.linkonce.s.*)
+ .sdata         0x0f001778        0x4 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+                0x0f001778                jtag_uart
+ *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+                0x0f00177c                . = ALIGN (0x4)
+                0x0f00177c                _edata = ABSOLUTE (.)
+                0x0f00177c                PROVIDE (edata, ABSOLUTE (.))
+                0x0f00177c                PROVIDE (__ram_rwdata_end, ABSOLUTE (.))
+                0x0f001778                PROVIDE (__flash_rwdata_start, LOADADDR (.rwdata))
+
+.bss            0x0f00177c       0x9c
+                0x0f00177c                __bss_start = ABSOLUTE (.)
+                0x0f00177c                PROVIDE (__sbss_start, ABSOLUTE (.))
+                0x0f00177c                PROVIDE (___sbss_start, ABSOLUTE (.))
+ *(.dynsbss)
+ *(.sbss .sbss.* .gnu.linkonce.sb.*)
+ .sbss          0x0f00177c        0x1 obj/default/mmc.o
+ *fill*         0x0f00177d        0x3 
+ .sbss          0x0f001780        0x8 obj/default/mmc_spi.o
+ .sbss          0x0f001788        0x4 obj/default/pff.o
+ .sbss          0x0f00178c        0xc ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+                0x0f00178c                alt_envp
+                0x0f001790                alt_argv
+                0x0f001794                alt_argc
+ *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+ *(.scommon)
+                0x0f001798                PROVIDE (__sbss_end, ABSOLUTE (.))
+                0x0f001798                PROVIDE (___sbss_end, ABSOLUTE (.))
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x0f001798        0x0 ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+ .bss           0x0f001798        0x0 obj/default/mmc.o
+ .bss           0x0f001798        0x0 obj/default/mmc_spi.o
+ .bss           0x0f001798       0x54 obj/default/nd_elf3.o
+ .bss           0x0f0017ec        0x0 obj/default/pff.o
+ .bss           0x0f0017ec        0x0 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .bss           0x0f0017ec        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .bss           0x0f0017ec        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .bss           0x0f0017ec        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .bss           0x0f0017ec        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .bss           0x0f0017ec        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .bss           0x0f0017ec        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .bss           0x0f0017ec        0x0 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+ *(COMMON)
+ COMMON         0x0f0017ec       0x2c obj/default/nd_elf3.o
+                0x0f0017ec                g_fatfs_work
+                0x0f001818                . = ALIGN (0x4)
+                0x0f001818                __bss_end = ABSOLUTE (.)
+
+.sdram          0x00000020        0x0
+                0x00000020                PROVIDE (_alt_partition_sdram_start, ABSOLUTE (.))
+ *(.sdram .sdram. sdram.*)
+                0x00000020                . = ALIGN (0x4)
+                0x00000020                PROVIDE (_alt_partition_sdram_end, ABSOLUTE (.))
+                0x00000020                PROVIDE (_alt_partition_sdram_load_addr, LOADADDR (.sdram))
+
+.ipl_memory     0x0f001818        0x0
+                0x0f001818                PROVIDE (_alt_partition_ipl_memory_start, ABSOLUTE (.))
+ *(.ipl_memory .ipl_memory. ipl_memory.*)
+                0x0f001818                . = ALIGN (0x4)
+                0x0f001818                PROVIDE (_alt_partition_ipl_memory_end, ABSOLUTE (.))
+                0x0f001818                _end = ABSOLUTE (.)
+                0x0f001818                end = ABSOLUTE (.)
+                0x0f001818                __alt_stack_base = ABSOLUTE (.)
+                0x0f001818                PROVIDE (_alt_partition_ipl_memory_load_addr, LOADADDR (.ipl_memory))
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x23
+ *(.comment)
+ .comment       0x00000000       0x23 obj/default/mmc.o
+                                 0x24 (size before relaxing)
+ .comment       0x00000000       0x24 obj/default/mmc_spi.o
+ .comment       0x00000000       0x24 obj/default/nd_elf3.o
+ .comment       0x00000000       0x24 obj/default/pff.o
+ .comment       0x00000000       0x24 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .comment       0x00000000       0x24 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .comment       0x00000000       0x24 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .comment       0x00000000       0x24 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .comment       0x00000000       0x24 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .comment       0x00000000       0x24 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .comment       0x00000000       0x24 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .comment       0x00000000       0x24 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x1b0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x28 ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+ .debug_aranges
+                0x00000028       0x20 obj/default/mmc.o
+ .debug_aranges
+                0x00000048       0x20 obj/default/mmc_spi.o
+ .debug_aranges
+                0x00000068       0x28 obj/default/nd_elf3.o
+ .debug_aranges
+                0x00000090       0x20 obj/default/pff.o
+ .debug_aranges
+                0x000000b0       0x20 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .debug_aranges
+                0x000000d0       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_aranges
+                0x000000f0       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_aranges
+                0x00000110       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_aranges
+                0x00000130       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_aranges
+                0x00000150       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_aranges
+                0x00000170       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_aranges
+                0x00000190       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0x25ba
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000       0x89 ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+ .debug_info    0x00000089      0x5d5 obj/default/mmc.o
+ .debug_info    0x0000065e      0x210 obj/default/mmc_spi.o
+ .debug_info    0x0000086e      0x6ec obj/default/nd_elf3.o
+ .debug_info    0x00000f5a      0xc19 obj/default/pff.o
+ .debug_info    0x00001b73      0x289 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .debug_info    0x00001dfc       0x8f ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_info    0x00001e8b       0xcd ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_info    0x00001f58      0x1b5 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_info    0x0000210d      0x194 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_info    0x000022a1      0x1af ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_info    0x00002450       0xdb ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_info    0x0000252b       0x8f ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+
+.debug_abbrev   0x00000000      0xe04
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0x12 ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+ .debug_abbrev  0x00000012      0x221 obj/default/mmc.o
+ .debug_abbrev  0x00000233      0x122 obj/default/mmc_spi.o
+ .debug_abbrev  0x00000355      0x243 obj/default/nd_elf3.o
+ .debug_abbrev  0x00000598      0x2af obj/default/pff.o
+ .debug_abbrev  0x00000847      0x112 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .debug_abbrev  0x00000959       0x42 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_abbrev  0x0000099b       0x8a ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_abbrev  0x00000a25       0xd6 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_abbrev  0x00000afb      0x120 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_abbrev  0x00000c1b      0x10c ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_abbrev  0x00000d27       0x9b ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_abbrev  0x00000dc2       0x42 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+
+.debug_line     0x00000000      0xbea
+ *(.debug_line)
+ .debug_line    0x00000000       0x6c ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+ .debug_line    0x0000006c      0x18e obj/default/mmc.o
+ .debug_line    0x000001fa       0xb7 obj/default/mmc_spi.o
+ .debug_line    0x000002b1      0x140 obj/default/nd_elf3.o
+ .debug_line    0x000003f1      0x2d7 obj/default/pff.o
+ .debug_line    0x000006c8       0xd3 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .debug_line    0x0000079b       0x4e ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_line    0x000007e9       0x87 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_line    0x00000870       0xd6 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_line    0x00000946       0xbd ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_line    0x00000a03      0x11a ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_line    0x00000b1d       0x7d ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_line    0x00000b9a       0x50 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+
+.debug_frame    0x00000000      0x424
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x70 obj/default/mmc.o
+ .debug_frame   0x00000070       0xe0 obj/default/mmc_spi.o
+ .debug_frame   0x00000150       0x4c obj/default/nd_elf3.o
+ .debug_frame   0x0000019c      0x110 obj/default/pff.o
+ .debug_frame   0x000002ac       0x70 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .debug_frame   0x0000031c       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_frame   0x0000033c       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_frame   0x0000035c       0x28 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_frame   0x00000384       0x28 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_frame   0x000003ac       0x38 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_frame   0x000003e4       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_frame   0x00000404       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+
+.debug_str      0x00000000      0xa43
+ *(.debug_str)
+ .debug_str     0x00000000      0x203 obj/default/mmc.o
+                                0x246 (size before relaxing)
+ .debug_str     0x00000203       0x77 obj/default/mmc_spi.o
+                                0x209 (size before relaxing)
+ .debug_str     0x0000027a      0x2da obj/default/nd_elf3.o
+                                0x41c (size before relaxing)
+ .debug_str     0x00000554       0xb6 obj/default/pff.o
+                                0x2ed (size before relaxing)
+ .debug_str     0x0000060a      0x104 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+                                0x15b (size before relaxing)
+ .debug_str     0x0000070e       0x74 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+                                0x127 (size before relaxing)
+ .debug_str     0x00000782       0x30 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+                                0x140 (size before relaxing)
+ .debug_str     0x000007b2       0xe9 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+                                0x20e (size before relaxing)
+ .debug_str     0x0000089b       0x8a ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+                                0x187 (size before relaxing)
+ .debug_str     0x00000925       0xe3 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+                                0x22e (size before relaxing)
+ .debug_str     0x00000a08       0x1b ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+                                0x12d (size before relaxing)
+ .debug_str     0x00000a23       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(altera_nios2_qsys_irq.o)
+                                0x12e (size before relaxing)
+
+.debug_loc      0x00000000     0x141b
+ *(.debug_loc)
+ .debug_loc     0x00000000      0x283 obj/default/mmc.o
+ .debug_loc     0x00000283       0x82 obj/default/mmc_spi.o
+ .debug_loc     0x00000305      0x159 obj/default/nd_elf3.o
+ .debug_loc     0x0000045e      0xbb2 obj/default/pff.o
+ .debug_loc     0x00001010      0x338 c:/develop/altera/13.1/nios2eds/bin/gnu/h-i686-mingw32/bin/../lib/gcc/nios2-elf/4.7.3\libgcc.a(lib2-divmod.o)
+ .debug_loc     0x00001348       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_loc     0x00001368       0x20 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_loc     0x00001388       0x41 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_loc     0x000013c9       0x52 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_icache_flush.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_alt_sim_info
+                0x00000000       0x20
+ *(.debug_alt_sim_info)
+ .debug_alt_sim_info
+                0x00000000       0x20 ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+                0x0f002000                __alt_data_end = 0xf002000
+                0x0f002000                PROVIDE (__alt_stack_pointer, __alt_data_end)
+                0x0f001818                PROVIDE (__alt_stack_limit, __alt_stack_base)
+                0x0f001818                PROVIDE (__alt_heap_start, end)
+                0x0f002000                PROVIDE (__alt_heap_limit, 0xf002000)
+OUTPUT(lcdunit_bootelf.elf elf32-littlenios2)
+
+.debug_ranges   0x00000000      0x238
+ .debug_ranges  0x00000000       0x20 ../lcdunit_bootelf_bsp//obj/HAL/src/crt0.o
+ .debug_ranges  0x00000020       0x18 obj/default/mmc.o
+ .debug_ranges  0x00000038       0x18 obj/default/nd_elf3.o
+ .debug_ranges  0x00000050      0x1a0 obj/default/pff.o
+ .debug_ranges  0x000001f0       0x48 ../lcdunit_bootelf_bsp/\libhal_bsp.a(alt_load.o)

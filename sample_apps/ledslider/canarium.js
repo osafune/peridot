@@ -2,8 +2,8 @@
 //  PERIDOT Chrome Package Apps Driver - 'Canarium.js'                 //
 // ------------------------------------------------------------------- //
 //
-//  ver 0.9.3
-//		2014/08/10	s.osafune@gmail.com
+//  ver 0.9.4
+//		2014/08/11	s.osafune@gmail.com
 //
 // ******************************************************************* //
 //     Copyright (C) 2014, J-7SYSTEM Works.  All rights Reserved.      //
@@ -38,6 +38,10 @@ var Canarium = function() {
 	//  公開オブジェクト 
 	//////////////////////////////////////////////////
 
+	// ライブラリのバージョン 
+	// This library version
+	self.version = "0.9.4";
+
 	// 接続しているボードの情報 
 	// Information of the board that this object is connected
 	self.boardInfo = null;
@@ -47,7 +51,7 @@ var Canarium = function() {
 //	};
 
 	// デフォルトのビットレート 
-	// The default bitrate
+	// Default bitrate
 	self.serialBitrate = 115200;
 
 
@@ -105,18 +109,15 @@ var Canarium = function() {
 	var configTimeoutCycle = 100;
 
 	// AvalonMMトランザクションパケットの最大長 
-	// The maximum length of the Avalon-MM Transaction packets
+	// The maximum length of the Avalon-MM Transaction packet bytes
 	var avmTransactionMaxLength = 32768;
 
 
-	// コマンドデバッグメッセージを抑止 
+	// デバッグメッセージを抑止 
+	// Disabled debug messages 
 	var debug_message_cmd = false;
-
-	// AVMデバッグメッセージを抑止 
 	var debug_message_avm = false;
 	var debug_message_avmpacket = false;
-
-	// I2Cデバッグメッセージを抑止 
 	var debug_message_i2c = false;
 
 

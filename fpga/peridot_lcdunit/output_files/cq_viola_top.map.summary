@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Wed May 14 00:58:57 2014
+Quartus II 64-Bit Version : 13.1.0 Build 162 10/23/2013 SJ Web Edition
+Revision Name : cq_viola_top
+Top-level Entity Name : cq_viola_top
+Family : Cyclone IV E
+Total logic elements : 7,515
+    Total combinational functions : 5,705
+    Dedicated logic registers : 4,553
+Total registers : 4553
+Total pins : 59
+Total virtual pins : 0
+Total memory bits : 156,416
+Embedded Multiplier 9-bit elements : 18
+Total PLLs : 1

@@ -1,43 +1,54 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>'PERIDOT' - Simple & Compact FPGA board</title>
 
-<STYLE type="text/css">
-body {
-	margin: 15px;
-	padding: 0;
-	line-height: 1.3;
-	color: #232;
-}
-h1 {
-	font-size: 200%;
-	color: #006b6b;
-	text-shadow: 5px 5px 10px #d0d0d0;
-}
+<style type="text/css">
+	body {
+		width: 700px;
+		margin: 15px;
+		padding: 0;
+		line-height: 1.4;
+		color: #303830;
+	}
+	h1 {
+		font-size: 200%;
+		color: #006b6b;
+		text-shadow: 5px 5px 10px #d0d0d0;
+	}
+	img {
+		border: none;
+	}
+	p {
+		padding: 3px 10px 3px 15px;
+	}
+	li {
+		margin: 0.5em 0 0 0;
+	}
 
-div.heading {
-	width: 700px;						/* 見出しエリアの幅 */
-	margin-bottom: 1em;
-	padding: 4px 0px;					/* 見出しエリアのパディング（上下、左右） */
-	border-bottom: 1px #4c4c4c solid;	/* 見出しエリアの下境界線 */
-}
-div.heading h2 {						/* 見出し文字の設定 */
-	margin: 0;
-	padding: 3px 3px 0px 5px;			/* 見出しのパディング（上右下左） */
-	border-left: 10px #a4c639 solid;	/* 見出しの左境界線 */
-	font-size: 150%;					/* 見出しの文字サイズ */
-	color: #006b6b;
-	line-height: 100%;
-}
-</STYLE>
+	div.heading {
+		width: 100%;						/* 見出しエリアの幅 */
+		margin-bottom: 1em;
+		padding: 4px 0px;					/* 見出しエリアのパディング（上下、左右） */
+		border-bottom: 1px #4c4c4c solid;	/* 見出しエリアの下境界線 */
+	}
+	div.heading h2 {						/* 見出し文字の設定 */
+		margin: 0;
+		padding: 3px 3px 0px 5px;			/* 見出しのパディング（上右下左） */
+		border-left: 10px #a4c639 solid;	/* 見出しの左境界線 */
+		font-size: 150%;					/* 見出しの文字サイズ */
+		color: #006b6b;
+		line-height: 100%;
+	}
+</style>
 </head>
 <body>
 
 <h1>'PERIDOT' - Simple & Compact FPGA board</h1>
 
 <div class="heading"><h2>Overview</h2></div>
-<p><img src="https://lh3.googleusercontent.com/-yCNcTx9NGoA/U-LL8LLfGTI/AAAAAAAAHC4/eYjyNouEk0w/w600-h316-no/DSC02498_3.jpg" alt="Welcome to Physicaloid" /></p>
+<img src="https://lh3.googleusercontent.com/-yCNcTx9NGoA/U-LL8LLfGTI/AAAAAAAAHC4/eYjyNouEk0w/w600-h316-no/DSC02498_3.jpg" alt="Welcome to Physicaloid" />
 <p>PERIDOT(ペリドット)プロジェクトとは、シンプル＆コンパクトをコンセプトに開発中の新しいFPGAボードと、その統合開発環境です。<br />
 開発環境はWebベースのクラウドコンパイラとChromeアプリケーションで構築されており、OSを問わない新しい開発スタイルを提供します。<br />
 また、FPGAボードには標準で通信ブロックも組み込まれています。
@@ -46,7 +57,7 @@ div.heading h2 {						/* 見出し文字の設定 */
 <br />
 
 <div class="heading"><h2>Features</h2></div>
-<p><img src="https://lh4.googleusercontent.com/-w47r5-Wg1KY/U-LL8LEMTKI/AAAAAAAAHC8/dp4UBKBEsj4/w600-h316-no/DSC02730_2.jpg" alt="Use to Physicaloid" /></p>
+<img src="https://lh4.googleusercontent.com/-w47r5-Wg1KY/U-LL8LEMTKI/AAAAAAAAHC8/dp4UBKBEsj4/w600-h316-no/DSC02730_2.jpg" alt="Use to Physicaloid" />
 <p><ul>
 <li>Chromeアプリケーションからの直接コンフィグレーション</li>
 <li>JavaScriptからFPGA内部へのアクセス可能(Chrome Package Apps利用)</li>
@@ -62,43 +73,44 @@ div.heading h2 {						/* 見出し文字の設定 */
 <br />
 
 <div class="heading"><h2>Board pinout</h2></div>
-<p><img src="https://lh3.googleusercontent.com/-XxlwNOIA3iY/U6i-dM-9mwI/AAAAAAAAHAc/RHRm6UER750/w700-h565-no/PERIDOT_PINOUT.png" alt="PERIDOT Pinout diagram" /><br />
-<a href="https://lh3.googleusercontent.com/-XxlwNOIA3iY/U6i-dM-9mwI/AAAAAAAAHAc/RHRm6UER750/w1560-h1260-no/PERIDOT_PINOUT.png" target=_blank>Large size</a>
+<img src="https://lh3.googleusercontent.com/-XxlwNOIA3iY/U6i-dM-9mwI/AAAAAAAAHAc/RHRm6UER750/w700-h565-no/PERIDOT_PINOUT.png" alt="PERIDOT Pinout diagram" />
+<p><a href="https://lh3.googleusercontent.com/-XxlwNOIA3iY/U6i-dM-9mwI/AAAAAAAAHAc/RHRm6UER750/w1560-h1260-no/PERIDOT_PINOUT.png" target=_blank>Large size</a>
 </p>
 <br />
 
 <div class="heading"><h2>Interface</h2></div>
-<p><img src="https://lh3.googleusercontent.com/-mjnC-a-mvtM/UnhcuaqQL0I/AAAAAAAAFso/zZeyUkh4efw/w600-h468-no/peridot_board_connector.png" alt="PERIDOT Board Connector" /></p>
+<img src="https://lh3.googleusercontent.com/-mjnC-a-mvtM/UnhcuaqQL0I/AAAAAAAAFso/zZeyUkh4efw/w600-h468-no/peridot_board_connector.png" alt="PERIDOT Board Connector" />
 <p><ul>
 <li>Manual RESET Key</li>
-システム全体のマニュアルリセットを行います。</p>
-<p><li>JTAG Connector</li>
+システム全体のマニュアルリセットを行います。<br />
+<li>JTAG Connector</li>
 FPGAのJTAGピンが配置されています。<br />
-※v1.1ではJTAGを使ったjicファイルの書き込みはできません。EPCS FlashROMへの書き込みは別途Chromeアプリケーションを使用します。</p>
-<p><li>Config MODE Selector</li>
-ボードのコンフィグモードを切り替えます。スタンドアロンで動作させる場合はAS側に、ホストからPhysicaloidライブラリでコンフィグを行う場合はPS側にセットします。</p>
-<p><li>Power supply and RESET</li>
-シールドへの電源供給とリセット信号が出力されます。電源は3.3V/100mA、USB 5V/100mAが使用できます。最大電流はUSBホストで制限されます。</p>
-<p><li>Digital I/O</li>
-FPGAのI/Oピンが配置されています。3.3Vを超える電圧を加えないで下さい。</p>
+※v1.1ではJTAGを使ったjicファイルの書き込みはできません。EPCS FlashROMへの書き込みは別途Chromeアプリケーションを使用します。<br />
+<li>Config MODE Selector</li>
+ボードのコンフィグモードを切り替えます。スタンドアロンで動作させる場合はAS側に、ホストからPhysicaloidライブラリでコンフィグを行う場合はPS側にセットします。<br />
+<li>Power supply and RESET</li>
+シールドへの電源供給とリセット信号が出力されます。電源は3.3V/100mA、USB 5V/100mAが使用できます。最大電流はUSBホストで制限されます。<br />
+<li>Digital I/O</li>
+FPGAのI/Oピンが配置されています。3.3Vを超える電圧を加えないで下さい。<br />
 </ul></p>
 <br />
 
 <div class="heading"><h2>Board block diagram</h2></div>
-<p><img src="https://lh3.googleusercontent.com/-XpoVXE45BRU/UnhcutSOYOI/AAAAAAAAFss/-6QsIh6Is40/w700-h327-no/peridot_block.png" alt="PERIDOT Block diagram" /></p>
+<img src="https://lh3.googleusercontent.com/-XpoVXE45BRU/UnhcutSOYOI/AAAAAAAAFss/-6QsIh6Is40/w700-h327-no/peridot_block.png" alt="PERIDOT Block diagram" />
 <p>(*1) ASDIはスタンドアロンモードでのみ有効になります。<br />
-(*2) スタンドアロンモードではリコンフィグキーになります。<br /></p>
+(*2) スタンドアロンモードではリコンフィグキーになります。<br />
+</p>
 <br />
 
 <div class="heading"><h2>Download</h2></div>
 <p>PERIDOTプロジェクトのソースコードは下記のリポジトリからダウンロードできます。<br />
 <a href="https://github.com/osafune/peridot" target=_blank>
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpFNTE3OEEyQTk5QTAxMUUyOUExNUJDMTA0NkE4OTA0RCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpFNTE3OEEyQjk5QTAxMUUyOUExNUJDMTA0NkE4OTA0RCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkU1MTc4QTI4OTlBMDExRTI5QTE1QkMxMDQ2QTg5MDREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkU1MTc4QTI5OTlBMDExRTI5QTE1QkMxMDQ2QTg5MDREIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+m4QGuQAAAyRJREFUeNrEl21ojWEYx895TDPbMNlBK46IUiNmPvHBSUjaqc0H8pF5+aDUKPEBqU2NhRQpX5Rv5jWlDIWlMCv7MMSWsWwmb3tpXub4XXWdPHvc9/Gc41nu+nedc7/8r/99PffLdYdDPsvkwsgkTBwsA/PADJCnzX2gHTwBt8Hl7p537/3whn04XoDZDcpBlk+9P8AFcAghzRkJwPF4zGGw0Y9QS0mAM2AnQj77FqCzrtcwB1Hk81SYojHK4DyGuQ6mhIIrBWB9Xm7ug/6B/nZrBHBegrkFxoVGpnwBMSLR9EcEcC4qb8pP14BWcBcUgewMnF3T34VqhWMFkThLJAalwnENOAKiHpJq1FZgI2AT6HZtuxZwR9GidSHtI30jOrbawxlVX78/AbNfhHlomEUJJI89O2MqeE79T8/nk8nMBm/dK576hZgmA3cp/R4l9/UeSxiHLVIlNm4nFfT0bxyuIj7LHRTKai+zdJobwMKzcZSJb0ePV5PKN+BqAAKE47UlMnERELMM3EdYP/yrd+XYb2mOiYBiQ8OQnoRBlXrl9JZix7D1pHTazu4MoyBcnYamqAjIMTR8G4FT8LuhLsexXYYjICBiqhQBvYb6fLZIJCjPypVvaOoVAW2WcasCnL2Nq82xHJNSqlCeFcDshaPK0twkAhosjZL31QYw+1rlMpWGMArl23SBsZZO58F2tlJXmjOXS+s4WGvpMiBJT/I2PInZ6lIs9/hBsNS1hS6BG0DSqmYEDRlCXQrmy50P1oDRKTSegmNbUsA0zDMwRhPJXeCE3vWLPQMvan6X8AgIa1vcR4AkGZkDR4ejJ1UHpsaVI0g2LInpOsNFUud1rhxSV+fzC9Woz2EZkWQuja7/B+jUrgtIMpy9YCW4n4K41YfzRneW5E1KJTe4B2Zq1Q5EHEtj4U3AfEzR5SVY4l7QYQPJdN2as7RKBF0BPZqqH4VgMAMBL8Byxr7y8zCZiDlnOcEKIPmUpgB5Z2ww5RdOiiRiNajUmWda5IG6WbhsyY2fx6m8gLcoJDJFkH219M3We1+cnda93pfycZpIJEL/s/wSYADmOAwAQgdpBAAAAABJRU5ErkJggg==" alt="GitHub-Mark" />
+<img alt="GitHub-Mark" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpFNTE3OEEyQTk5QTAxMUUyOUExNUJDMTA0NkE4OTA0RCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpFNTE3OEEyQjk5QTAxMUUyOUExNUJDMTA0NkE4OTA0RCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkU1MTc4QTI4OTlBMDExRTI5QTE1QkMxMDQ2QTg5MDREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkU1MTc4QTI5OTlBMDExRTI5QTE1QkMxMDQ2QTg5MDREIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+m4QGuQAAAyRJREFUeNrEl21ojWEYx895TDPbMNlBK46IUiNmPvHBSUjaqc0H8pF5+aDUKPEBqU2NhRQpX5Rv5jWlDIWlMCv7MMSWsWwmb3tpXub4XXWdPHvc9/Gc41nu+nedc7/8r/99PffLdYdDPsvkwsgkTBwsA/PADJCnzX2gHTwBt8Hl7p537/3whn04XoDZDcpBlk+9P8AFcAghzRkJwPF4zGGw0Y9QS0mAM2AnQj77FqCzrtcwB1Hk81SYojHK4DyGuQ6mhIIrBWB9Xm7ug/6B/nZrBHBegrkFxoVGpnwBMSLR9EcEcC4qb8pP14BWcBcUgewMnF3T34VqhWMFkThLJAalwnENOAKiHpJq1FZgI2AT6HZtuxZwR9GidSHtI30jOrbawxlVX78/AbNfhHlomEUJJI89O2MqeE79T8/nk8nMBm/dK576hZgmA3cp/R4l9/UeSxiHLVIlNm4nFfT0bxyuIj7LHRTKai+zdJobwMKzcZSJb0ePV5PKN+BqAAKE47UlMnERELMM3EdYP/yrd+XYb2mOiYBiQ8OQnoRBlXrl9JZix7D1pHTazu4MoyBcnYamqAjIMTR8G4FT8LuhLsexXYYjICBiqhQBvYb6fLZIJCjPypVvaOoVAW2WcasCnL2Nq82xHJNSqlCeFcDshaPK0twkAhosjZL31QYw+1rlMpWGMArl23SBsZZO58F2tlJXmjOXS+s4WGvpMiBJT/I2PInZ6lIs9/hBsNS1hS6BG0DSqmYEDRlCXQrmy50P1oDRKTSegmNbUsA0zDMwRhPJXeCE3vWLPQMvan6X8AgIa1vcR4AkGZkDR4ejJ1UHpsaVI0g2LInpOsNFUud1rhxSV+fzC9Woz2EZkWQuja7/B+jUrgtIMpy9YCW4n4K41YfzRneW5E1KJTe4B2Zq1Q5EHEtj4U3AfEzR5SVY4l7QYQPJdN2as7RKBF0BPZqqH4VgMAMBL8Byxr7y8zCZiDlnOcEKIPmUpgB5Z2ww5RdOiiRiNajUmWda5IG6WbhsyY2fx6m8gLcoJDJFkH219M3We1+cnda93pfycZpIJEL/s/wSYADmOAwAQgdpBAAAAABJRU5ErkJggg==" />
 <span style="font-size:200%;">https://github.com/osafune/peridot</span></a>
 </p>
 <p>PERIDOTボードの回路図は下記のリンクからダウンロードできます。<br />
 <a href="https://drive.google.com/file/d/0Bw0BfOQoAOEEQVNYVk9Ga09zV0U/edit?usp=sharing" target=_blank>
-<img src="data:image/png;base64,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" alt="GoogleDrive-Mark" />
+<img alt="GoogleDrive-Mark" src="data:image/png;base64,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" />
 <span style="font-size:200%;">peridot_pcb_ver1.0.pdf</span></a>
 </p>
 <br />
@@ -107,6 +119,6 @@ FPGAのI/Oピンが配置されています。3.3Vを超える電圧を加えな
 <p>PERIDOT Hardware is released under the <a href="http://creativecommons.org/licenses/by/2.1/jp/legalcode">Creative Commons,CC BY 2.1 JP</a></p>
 <p><img src="http://creativecommons.jp/wp/wp-content/uploads/2009/10/by.png" alt="CC BY" /></p>
 
-<div align=right style="color:#006b6b;"><strong>(C)2014 J-7SYSTEM Works</strong></div>
+<div align=right style="color:#006b6b;"><strong>&copy;2014 J-7SYSTEM Works</strong></div>
 </body>
 </html>
