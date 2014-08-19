@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>PERIDOT RBF-WRITER</title>
+
+		<style type="text/css">
+			body {
+				margin: 8px;
+				padding: 0;
+
+				font-family: 'Segoe UI', Arial, Meiryo, 'MS PGothic', sans-serif;
+				font-size: 10pt;
+				color: #202020;
+			}
+			h1 {font-size: 140%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
+			h2 {font-size: 120%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
+			h3 {font-size: 100%; color: #4c4c4c;}
+			img {border: none;}
+
+			#configstatus {font-size: 90%; color: #707070;}
+
+			/* ファイル選択ボタンをドラッグ＆ドロップエリアに偽装 */ 
+			.filebutton {
+				position: relative;
+				overflow: hidden;
+				height: 150px;
+				border: 3px #e0e0e0 dotted;
+				text-align: center;
+			}
+			.filebutton input[type=file] {
+				position: absolute;
+				top: 0; left: 0;
+				width: 100%; height: 100%;
+				opacity: 0;
+			}
+
+			/* 進捗バーグラフ */
+			.progress_base {
+				-webkit-border-radius: 8px;
+				margin: 12px auto 6px auto;
+				width: 95%;
+				height: 20px;
+				background: -webkit-gradient(linear, left top, left bottom,
+									from(rgba(96, 96, 96,1)),
+									to(rgba(180, 180, 180,1))
+							);
+			}
+			.progress_bar {
+				-webkit-border-radius: 8px;
+				width: 50%;
+				height: 100%;
+				background: -webkit-gradient(linear, left top, left bottom,
+									from(rgba(200, 240, 170,1)),
+									to(rgba(128, 180, 72,1))
+							);
+			}
+		</style>
+
+		<script type="text/javascript" src="canarium.js"></script>
+		<script type="text/javascript" src="peridot_rbfwriter_rbf.js"></script>
+		<script type="text/javascript" src="main.js"></script>
+	</head>
+	<body>
+		<img src="img/peridotcraft_banner.png" align=right id="banner" />
+		<h1>RBF-WRITER</h1>
+		<br />
+
+		<div style="margin: 0 0 20px 0;">
+			<img id="waitingicon" src="img/dummy_1x1.png" width=24 height=24 align=top />
+			<select id="ports" style="width: 120px"></select>
+			<input type="button" id="connect" value="" style="width: 60px"/>
+			<input type="button" id="scanport" value="ポートを再検索" style="width: 100px"/><br />
+			<img src="img/dummy_1x1.png" width=24 height=1 />
+			<span id="configstatus"></span><br />
+		</div>
+
+		<div>
+			<div class="filebutton" id="droparea">
+				<input type="file" id="dropfile" />
+				<img id="icicon" src="img/ic_empty_80x80.png" style="margin:20px;" /><br />
+				<span id="rbfstatus"></span><br />
+			</div>
+			<div class="progress_base" id="pbase"><div class="progress_bar" id="pgauge"></div></div>
+		</div>
+
+  </body>
+</html>
+

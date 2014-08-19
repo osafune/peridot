@@ -4,7 +4,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
 			width : 320,
 			height : 320
 		},
-		resizable : false
+		resizable : true
 	}
 
 	chrome.app.window.create('main.html', windowoption, function() {

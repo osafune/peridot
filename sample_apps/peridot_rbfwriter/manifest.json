@@ -1,0 +1,21 @@
+{
+	"manifest_version": 2,
+	"minimum_chrome_version": "35",
+
+	"name": "PERIDOT RBF-WRITER",
+	"description": "PERIDOTボード上のコンフィギュレーションメモリに起動用のデータを書き込むツールです",
+	"icons": {
+		"128": "img/icon_logo_128x128.png"
+	},
+	"version": "0.2",
+
+	"app": {
+		"background": {
+			"scripts": ["background.js"]
+		}
+	},
+
+	"permissions": [
+		"serial"
+	]
+}

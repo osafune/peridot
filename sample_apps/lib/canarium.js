@@ -2,8 +2,8 @@
 //  PERIDOT Chrome Package Apps Driver - 'Canarium.js'                 //
 // ------------------------------------------------------------------- //
 //
-//  ver 0.9.4
-//		2014/08/11	s.osafune@gmail.com
+//  ver 0.9.5
+//		2014/08/20	s.osafune@gmail.com
 //
 // ******************************************************************* //
 //     Copyright (C) 2014, J-7SYSTEM Works.  All rights Reserved.      //
@@ -23,7 +23,7 @@
 //	.open(port portname, function callback(bool result));
 //	.close(function callback(bool result));
 //	.config(obj boardInfo, arraybuffer rbfdata[], function callback(bool result));
-//	.reset(function callback(bool result));
+//	.reset(function callback(bool result, int respbyte));
 //	.getinfo(function callback(bool result));
 //	.avm.read(uint address, int bytenum, function callback(bool result, arraybuffer readdata[]));
 //	.avm.write(uint address, arraybuffer writedata[], function callback(bool result));
@@ -40,7 +40,7 @@ var Canarium = function() {
 
 	// ライブラリのバージョン 
 	// This library version
-	self.version = "0.9.4";
+	self.version = "0.9.5";
 
 	// 接続しているボードの情報 
 	// Information of the board that this object is connected
@@ -100,6 +100,14 @@ var Canarium = function() {
 	var avmSendImmediate = false;
 
 
+	// 一度にSerial送信する最大長 
+	// The maximum length of the serial send bytes
+	var serialSendMaxLength = 1024;
+
+	// シリアル受信がタイムアウトしたと判定するまでの試行回数（1Cycle = 100ms） 
+	// Number of attempts to determine serial recieve has timed out
+	var serialRecvTimeoutCycle = 50;
+
 	// I2Cバスがタイムアウトしたと判定するまでの試行回数 
 	// Number of attempts to determine I2C has timed out
 	var i2cTimeoutCycle = 100;
@@ -108,8 +116,8 @@ var Canarium = function() {
 	// Number of attempts to determine FPGA-Configuration has timed out
 	var configTimeoutCycle = 100;
 
-	// AvalonMMトランザクションパケットの最大長 
-	// The maximum length of the Avalon-MM Transaction packet bytes
+	// AvalonMMトランザクションパケットの最大データ長 
+	// The maximum data byte length of the Avalon-MM Transaction packet
 	var avmTransactionMaxLength = 32768;
 
 
@@ -129,11 +137,12 @@ var Canarium = function() {
 	// serialio.open(portname, options, callback(result))
 	// serialio.close(callback(result))
 	// serialio.write(wirtearraybuf, callback(result, bytesSend))
+	// serialio.getbyte(callback(result, bytedata))
 	// serialio.read(bytenum, callback(result, bytesRecv, readarraybuf))
 	// serialio.flush(callback(result))
 
-	var serialReadbufferMaxLength = 4096;
-	var serialReadbufferTimeoutms = 200;
+	var serialReadbufferMaxLength = 8192;
+	var serialReadRetryWaitms = 100;
 
 	var serialio = function() {
 		var self = this;
@@ -145,11 +154,49 @@ var Canarium = function() {
 		var readbuff = new ringbuffer(serialReadbufferMaxLength);
 
 		var onReceiveCallback = function(info) {
-			if (info.connectionId == connectionId) {
-				var data_arr = new Uint8Array(info.data);
 
-				for(var i=0 ; i<data_arr.byteLength ; i++) {
-					if ( !readbuff.add(data_arr[i]) ) break;
+			var data_arr = new Uint8Array(info.data);
+			var leftbytes = info.data.byteLength;
+			var datanum = 0;
+
+			var _setbufferloop = function() {
+				var setlength = readbuff.getfree();
+
+				if (setlength == 0) {						// 空きが無い場合 
+//					console.log("serial : readbuffer full wait...");
+
+					setTimeout(function() { _setbufferloop(); }, serialReadRetryWaitms*10);
+
+				} else {									// バッファに空きがある場合 
+//					console.log("serial : readbuffer " + setlength + "bytes free, recieve data " + leftbytes + "bytes left.");
+
+					if (setlength > leftbytes) setlength = leftbytes;
+
+					for(var i=0 ; i<setlength ; i++) {
+						readbuff.add(data_arr[datanum++]);
+						leftbytes--;
+					}
+
+					if (leftbytes > 0) {
+						setTimeout(function() { _setbufferloop(); }, serialReadRetryWaitms);
+					} else {
+						chrome.serial.setPaused(info.connectionId, false, function() {
+//							console.log("serial : Recieve " + info.data.byteLength + "bytes done.");
+
+						});
+					}
+				}
+			};
+
+			if (info.connectionId == connectionId) {
+				if (readbuff.getfree() > leftbytes) {		// バッファに十分な余裕がある場合 
+					for(var i=0 ; i<leftbytes ; i++) readbuff.add(data_arr[i]);
+//					console.log("serial : Recieve " + info.data.byteLength + "bytes done.");
+
+				} else {									// バッファが埋まっている場合 
+					chrome.serial.setPaused(info.connectionId, true, function() {
+						_setbufferloop();
+					});
 				}
 			}
 		};
@@ -164,7 +211,7 @@ var Canarium = function() {
 				return;
 			}
 
-			chrome.serial.connect(portname, options, function (openInfo) {
+			chrome.serial.connect(portname, options, function(openInfo) {
 				if (openInfo.connectionId > 0) {
 					connectionId = openInfo.connectionId;
 					console.log("serial : Open connectionId = " + connectionId + " (" + portname + ", " + options.bitrate + "bps)");
@@ -192,7 +239,7 @@ var Canarium = function() {
 				return;
 			}
 
-		    chrome.serial.disconnect(connectionId, function () {
+		    chrome.serial.disconnect(connectionId, function() {
 				console.log("serial : Close connectionId = " + connectionId);
 				connectionId = null;
 
@@ -210,21 +257,76 @@ var Canarium = function() {
 				return;
 			}
 
-		    chrome.serial.send(connectionId, wirtearraybuf, function (writeInfo){
-				var leftbytes = wirtearraybuf.byteLength - writeInfo.bytesSent;
-				var bool_witten = true;
+			var sendsize, i, offset = 0;
+			var writebuffer_arr = new Uint8Array(wirtearraybuf);
 
-				if (leftbytes != 0) {
-					bool_witten = false;
-					console.log("serial : [!] write " + writeInfo.bytesSent + "bytes written, " + leftbytes + "bytes left.");
+			var _blobsend = function() {
+				if (offset+serialSendMaxLength > wirtearraybuf.byteLength) {
+					sendsize = wirtearraybuf.byteLength - offset;
+				} else {
+					sendsize = serialSendMaxLength;
 				}
+				var sendbuffer = new ArrayBuffer(sendsize);
+				var sendbuffer_arr = new Uint8Array(sendbuffer);
 
-				callback(bool_witten, writeInfo.bytesSent);
-			});
+				for(i=0 ; i<sendsize ; i++) sendbuffer_arr[i] = writebuffer_arr[offset+i];
+
+			    chrome.serial.send(connectionId, sendbuffer, function(writeInfo) {
+					if (writeInfo.bytesSent != sendsize) {
+						var sb = offset + writeInfo.bytesSent;
+						var lb = sb - writeInfo.bytesSent;
+
+						console.log("serial : [!] write " + sb + "bytes written, " + lb + "bytes left.");
+						callback(false, sentbytes);
+
+					} else {
+//						console.log("serial : Split send " + (offset+sendsize) + "bytes written.");
+						offset += serialSendMaxLength;
+						if (offset < wirtearraybuf.byteLength) {
+							setTimeout(function() { _blobsend(); }, 1);		// 1msの送信遅延 
+						} else {
+							callback(true, wirtearraybuf.byteLength);
+						}
+					}
+				});
+			};
+
+			_blobsend();
 		};
 
 
-		// シリアルデータ受信 
+		// シリアルデータ受信(シングルバイト) 
+
+		self.getbyte = function(callback) {
+			if (connectionId == null) {
+				console.log("serial : [!] Serial read port is not open.");
+				callback(false);
+				return;
+			}
+
+			var retry = 0;							// ポーリングリトライ回数 
+
+			var _byteread = function() {
+				var data = readbuff.get();
+
+				if (data == null) {					// 受信バッファが空の状態 
+					if (retry < serialRecvTimeoutCycle) {
+						retry++;
+						setTimeout(function() { _byteread(); }, serialReadRetryWaitms);
+					} else {
+						console.log("serial : [!] getbyte is timeout.");
+						callback(false, null);		// タイムアウト 
+					}
+				} else {
+					callback(true, data);
+				}
+			};
+
+			_byteread();
+		};
+
+
+		// シリアルデータ受信(マルチバイト) 
 
 		self.read = function(bytenum, callback) {
 			if (connectionId == null) {
@@ -235,37 +337,24 @@ var Canarium = function() {
 
 			var readarraybuf = new ArrayBuffer(bytenum);
 			var readarraybuf_arr = new Uint8Array(readarraybuf);
-			var readarraybuf_num = 0;
+			var readnum = 0;
 
-			var blobread = function(leftbytes, callback) {
-				var datacount = readbuff.getcount();
-
-				if (datacount == 0) {			// バッファが空の場合は次を待つ 
-					setTimeout( function() {
-						if (readbuff.getcount() == 0) {
-							console.log("serial : [!] read is timeout.");
-							callback(false, readarraybuf_num, readarraybuf);	// タイムアウト 
+			var _blobread = function() {
+				self.getbyte(function(res, data) {
+					if (res) {
+						readarraybuf_arr[readnum++] = data;
+						if (readnum == bytenum) {
+							callback(true, readnum, readarraybuf);
 						} else {
-							blobread(leftbytes, callback);						// リトライ 
+							_blobread();
 						}
-					}, serialReadbufferTimeoutms);
-
-				} else {
-					if (datacount >= leftbytes) datacount = leftbytes;
-
-					for(var i=0 ; i<datacount ; i++) readarraybuf_arr[readarraybuf_num++] = readbuff.get();
-					leftbytes -= datacount;
-
-					if (leftbytes > 0) {
-						blobread(leftbytes, callback);
 					} else {
-						callback(true, readarraybuf_num, readarraybuf);
+						callback(false, readnum, readarraybuf);
 					}
-
-				}
+				});
 			};
 
-			blobread(bytenum, callback);
+			_blobread();
 		};
 
 
@@ -296,6 +385,7 @@ var Canarium = function() {
 		self.overrun = false;		// バッファオーバーランエラー 
 
 		var buffer = new ArrayBuffer(bufferlength);
+		var buff_arr = new Uint8Array(buffer);
 		var writeindex = 0;
 		var readindex = 0;
 
@@ -303,7 +393,6 @@ var Canarium = function() {
 		// データ書き込み 
 
 		self.add = function(indata) {
-			var buff_arr = new Uint8Array(buffer);
 
 			// バッファオーバーランのチェック 
 			var nextindex = writeindex + 1;
@@ -311,14 +400,13 @@ var Canarium = function() {
 
 			if (nextindex == readindex) {
 				self.overrun = true;
-				cosnole.log("serial : [!] Readbuffer overrun.");
+				console.log("serial : [!] Readbuffer overrun.");
 				return false;
 			}
 
 			// バッファへ書き込み 
 			buff_arr[writeindex] = indata;
 			writeindex = nextindex;
-//			console.log("serial : inqueue 0x" + ("0"+indata.toString(16)).slice(-2));
 
 			return true;
 		};
@@ -329,7 +417,6 @@ var Canarium = function() {
 		self.get = function() {
 			if (readindex == writeindex) return null;
 
-			var buff_arr = new Uint8Array(buffer);
 			var data = buff_arr[readindex];
 
 			readindex++;
@@ -342,12 +429,17 @@ var Canarium = function() {
 		// キューされているデータ数の取得 
 
 		self.getcount = function() {
-			var buff_arr = new Uint8Array(buffer);
 			var len = writeindex - readindex;
-
 			if (len < 0) len += buff_arr.byteLength;
 
 			return len;
+		};
+
+
+		// キューできるデータ数の取得 
+
+		self.getfree = function() {
+			return (buff_arr.byteLength - self.getcount() - 1);
 		};
 	};
 
@@ -484,7 +576,7 @@ var Canarium = function() {
 
 		// FPGAのコンフィグレーション開始処理 
 		var setup = function() {
-			commandtrans(0x3b, function (result, respbyte) {	// モードチェック、即時応答 
+			commandtrans(0x3b, function(result, respbyte) {	// モードチェック、即時応答 
 				if (result) {
 					if ((respbyte & 0x01)== 0x00) {		// PSモード 
 						console.log("config : configuration is started.");
@@ -503,7 +595,7 @@ var Canarium = function() {
 
 		// コンフィグレーション開始リクエスト発行 
 		var sendinit = function() {
-			commandtrans(0x32, function (result, respbyte) {	// コンフィグモード、nCONFIGアサート、即時応答 
+			commandtrans(0x32, function(result, respbyte) {	// コンフィグモード、nCONFIGアサート、即時応答 
 				if (result) {
 					if (sendretry < configTimeoutCycle) {
 						if ((respbyte & 0x06)== 0x00) {		// nSTATUS = L, CONF_DONE = L
@@ -526,7 +618,7 @@ var Canarium = function() {
 
 		// FPGAからの応答を待つ 
 		var sendready = function() {
-			commandtrans(0x33, function (result, respbyte) {	// コンフィグモード、nCONFIGネゲート、即時応答 
+			commandtrans(0x33, function(result, respbyte) {	// コンフィグモード、nCONFIGネゲート、即時応答 
 				if (result) {
 					if (sendretry < configTimeoutCycle) {
 						if ((respbyte & 0x06)== 0x02) {		// nSTATUS = H, CONF_DONE = L
@@ -549,7 +641,8 @@ var Canarium = function() {
 
 		// コンフィグファイル送信 
 		var sendrbf = function() {
-			comm.write(rbfescapebuf, function (result, bytewritten) {
+			console.log("config : RBF data send.");
+			comm.write(rbfescapebuf, function(result, bytewritten) {
 				if (result) {
 					console.log("config : " + bytewritten + "bytes of configuration data was sent.");
 					checkstatus();
@@ -561,7 +654,7 @@ var Canarium = function() {
 
 		// コンフィグ完了チェック 
 		var checkstatus = function() {
-			commandtrans(0x33, function (result, respbyte) {	// コンフィグモード、ステータスチェック、即時応答 
+			commandtrans(0x33, function(result, respbyte) {	// コンフィグモード、ステータスチェック、即時応答 
 				if (result) {
 					if ((respbyte & 0x06)== 0x06) {		// nSTATUS = H, CONF_DONE = H
 						switchuser();
@@ -577,7 +670,7 @@ var Canarium = function() {
 
 		// コンフィグ完了 
 		var switchuser = function() {
-			commandtrans(0x39, function (result, respbyte) {	// ユーザーモード 
+			commandtrans(0x39, function(result, respbyte) {	// ユーザーモード 
 				if (result) {
 					console.log("config : configuration completion.");
 					confrun = true;
@@ -660,7 +753,7 @@ var Canarium = function() {
 
 
 	// ボードのマニュアルリセット 
-	//	devreset(function callback(bool result));
+	//	devreset(function callback(bool result, int respbyte));
 
 	var mresetBarrier = false;
 	var devreset = function(callback) {
@@ -672,30 +765,30 @@ var Canarium = function() {
 		mresetBarrier = true;
 
 		var resetassert = function() {
-			commandtrans(0x31, function (result, respbyte) {
+			commandtrans(0x31, function(result, respbyte) {
 				if (result) {
 					setTimeout(function(){ resetnegate(); }, 100);	// 100ms後にリセットを解除する 
 				} else {
-					mreset_exit(false);
+					reset_exit(false, null);
 				}
 			});
 		};
 
 		var resetnegate = function() {
-			commandtrans(0x39, function (result, respbyte) {
+			commandtrans(0x39, function(result, respbyte) {
 				if (result) {
 					console.log("mreset : The issue complete.");
 					avmSendImmediate = false;
-					reset_exit(true);
+					reset_exit(true, respbyte);
 				} else {
-					reset_exit(false);
+					reset_exit(false, null);
 				}
 			});
 		};
 
-		var reset_exit = function(result) {
+		var reset_exit = function(result, respbyte) {
 			mresetBarrier = false;
-			callback(result);
+			callback(result, respbyte);
 		};
 
 		resetassert();
@@ -825,7 +918,7 @@ var Canarium = function() {
 			var com = 0x39;
 			if (avmSendImmediate) com |= 0x02;	// 即時応答モードビットのセット 
 
-			commandtrans(com, function (result, respbyte) {
+			commandtrans(com, function(result, respbyte) {
 				if (result) console.log("avm : Set option send immediate is " + avmSendImmediate);
 
 				avmoption_exit(result);
@@ -849,26 +942,25 @@ var Canarium = function() {
 
 		var regaddr = ((address & 0xfffffffc)>>> 0) + (offset << 2);
 		var writepacket = new avmPacket(0x10, 4, regaddr, 0);	// シングルリードパケットを生成 
+		var readdata = null;
 
-		avmtrans(writepacket, function (result, readpacket) {
+		avmtrans(writepacket, function(result, readpacket) {
 			var res = false;
-			var readdata = null;
 
-			if (result) {
-				if (readpacket.byteLength == 4) {
-					var readpacket_arr = new Uint8Array(readpacket);
-					readdata = (
+			if (result && readpacket.byteLength == 4) {
+				var readpacket_arr = new Uint8Array(readpacket);
+				readdata = (
 						(readpacket_arr[3] << 24) |
 						(readpacket_arr[2] << 16) |
 						(readpacket_arr[1] <<  8) |
 						(readpacket_arr[0] <<  0) )>>> 0;		// 符号なし32bit整数 
-					res = true;
+				res = true;
 
-					if (debug_message_avm) {
-						console.log("avm : iord(0x" + ("00000000"+address.toString(16)).slice(-8) + ", " + offset + ") = 0x" + ("00000000"+readdata.toString(16)).slice(-8));
-					}
+				if (debug_message_avm) {
+					console.log("avm : iord(0x" + ("00000000"+address.toString(16)).slice(-8) + ", " + offset + ") = 0x" + ("00000000"+readdata.toString(16)).slice(-8));
 				}
 			}
+			if (!res) console.log("avm : [!] iord failed.");
 
 			callback(res, readdata);
 		});
@@ -894,7 +986,7 @@ var Canarium = function() {
 		writepacket_arr[10] = (writedata >>> 16) & 0xff;
 		writepacket_arr[11] = (writedata >>> 24) & 0xff;
 
-		avmtrans(writepacket, function (result, readpacket) {
+		avmtrans(writepacket, function(result, readpacket) {
 			var res = false;
 
 			if (result) {
@@ -909,6 +1001,7 @@ var Canarium = function() {
 					}
 				}
 			}
+			if (!res) console.log("avm : [!] iowr failed.");
 
 			callback(res);
 		});
@@ -928,20 +1021,18 @@ var Canarium = function() {
 		var readdata = new ArrayBuffer(readbytenum);
 		var readdata_arr = new Uint8Array(readdata);
 		var byteoffset = 0;
+		var leftbytenum = readbytenum;
 
-		var avmread_partial = function(leftbytenum) {
+		var _partialread_loop = function() {
 			var bytenum = leftbytenum;
 			if (bytenum > avmTransactionMaxLength) bytenum = avmTransactionMaxLength;
 
 			var nextaddress = address + byteoffset;
 			var writepacket = new avmPacket(0x14, bytenum, nextaddress, 0);		// インクリメンタルリードパケットを生成 
 
-			avmtrans(writepacket, function (result, readpacket) {
-				var res = false;
-				var resdata = null;
-
+			avmtrans(writepacket, function(result, readpacket) {
 				if (result) {
-					if (readpacket.byteLength == bytenum) {
+					if (bytenum == readpacket.byteLength) {
 						var readpacket_arr = new Uint8Array(readpacket);
 
 						for(var i=0 ; i<bytenum ; i++) readdata_arr[byteoffset++] = readpacket_arr[i];
@@ -952,19 +1043,28 @@ var Canarium = function() {
 						}
 
 						if (leftbytenum > 0) {
-							avmread_partial(leftbytenum);
+							_partialread_loop();
 						} else {
-							res = true;
-							resdata = readdata;
+							_partialread_exit(true);
 						}
+					} else {
+						_partialread_exit(false);
 					}
+				} else {
+					_partialread_exit(false);
 				}
-
-				callback(res, resdata);
 			});
 		};
+		var _partialread_exit = function(res) {
+			if (res) {
+				callback(true, readdata);
+			} else {
+				console.log("avm : [!] memrd failed.");
+				callback(false, null);
+			}
+		};
 
-		avmread_partial(readbytenum);
+		_partialread_loop();
 	};
 
 
@@ -980,8 +1080,9 @@ var Canarium = function() {
 
 		var writedata_arr = new Uint8Array(writedata);
 		var byteoffset = 0;
+		var leftbytenum = writedata.byteLength;
 
-		var avmwrite_partial = function(leftbytenum) {
+		var _partialwrite_loop = function() {
 			var bytenum = leftbytenum;
 			if (bytenum > avmTransactionMaxLength) bytenum = avmTransactionMaxLength;
 
@@ -991,9 +1092,7 @@ var Canarium = function() {
 
 			for(var i=0 ; i<bytenum ; i++) writepacket_arr[8+i] = writedata_arr[byteoffset++];
 
-			avmtrans(writepacket, function (result, readpacket) {
-				var res = false;
-
+			avmtrans(writepacket, function(result, readpacket) {
 				if (result) {
 					var readpacket_arr = new Uint8Array(readpacket);
 					var size = (readpacket_arr[2] << 8) | (readpacket_arr[3] << 0);
@@ -1006,18 +1105,29 @@ var Canarium = function() {
 						}
 
 						if (leftbytenum > 0) {
-							avmwrite_partial(leftbytenum);
+							_partialwrite_loop();
 						} else {
-							res = true;
+							_partialwrite_exit(true);
 						}
+					} else {
+						_partialwrite_exit(false);
 					}
+				} else {
+					_partialwrite_exit(false);
 				}
-
-				callback(res);
 			});
 		};
+		var _partialwrite_exit = function(res) {
+			if (res) {
+				callback(true);
+			} else {
+				console.log("avm : [!] memwr failed.");
+				callback(false);
+			}
+		};
 
-		avmwrite_partial(writedata.byteLength);
+
+		_partialwrite_loop();
 	};
 
 
@@ -1062,13 +1172,10 @@ var Canarium = function() {
 		}
 
 		// (ここから逐次処理記述) 
-		comm.write(send_data, function (result, bytes) { if (result) {
-		comm.flush( function (result) { if (result) {
+		comm.write(send_data, function(result, bytes) { if (result) {
+		comm.flush(function(result) { if (result) {
 
-		comm.read(1, function(result, readnum, readarraybuf) { if (result) {
-			var resp_data_arr = new Uint8Array(readarraybuf);
-			var respbyte = resp_data_arr[0];
-
+		comm.getbyte(function(result, respbyte) { if (result) {
 			if (debug_message_cmd) {
 				console.log("cmd : recieve config response = 0x" + ("0"+respbyte.toString(16)).slice(-2));
 			}
@@ -1117,7 +1224,13 @@ var Canarium = function() {
 
 		///// 終了処理部 /////
 
-		var avmtrans_exit = function(result, readpacket) {
+		var _recv_exit = function(result, readpacket) {
+			if (result) {
+//				console.log("avm : recieve transaction true, packet size " + readpacket.byteLength + "bytes.");
+			} else {
+				console.log("avm : [!] transaction failed.");
+			}
+
 			avmBarrier = false;
 			callback(result, readpacket);
 		};
@@ -1132,14 +1245,12 @@ var Canarium = function() {
 		var recvCNI = false;
 		var recvESC = false;
 
-		var avmtrans_recv = function() {
-			comm.read(1, function (result, readnum, recvdata) {
+		var _recv_loop = function() {
+			comm.getbyte(function(result, recvbyte) {
 				if (result) {
 					var recvexit = false;
-					var recvdata_arr = new Uint8Array(recvdata);
-					var recvbyte = recvdata_arr[0];
 
-					recvlogarray.push(recvbyte);		// 受信データを全てログ(テスト用) 
+					recvlogarray.push(recvbyte);	// 受信データを全てログ(テスト用) 
 
 					// パケットフレームの外側の処理 
 					if (!recvSOP) {
@@ -1153,6 +1264,9 @@ var Canarium = function() {
 
 							case 0x7c:				// CNIを受信 
 								recvCNI = true;
+								break;
+
+							default:				// それ以外は無視する  
 								break;
 							}
 						}
@@ -1205,8 +1319,8 @@ var Canarium = function() {
 						}
 					}
 
-					if (recvexit) {
-						// レスポンスパケットの成形 
+					// レスポンスパケットの成形 
+					if (recvexit) {	
 						var readpacket = new ArrayBuffer(resparray.length);
 						var readpacket_arr = new Uint8Array(readpacket);
 
@@ -1218,14 +1332,13 @@ var Canarium = function() {
 							console.log("avm : received data = " + recvstr);
 						}
 
-						avmtrans_exit(true, readpacket);
+						_recv_exit(true, readpacket);
 					} else {
-						avmtrans_recv();
+						_recv_loop();
 					}
 
 				} else {
-					// バイトデータの受信に失敗した場合 
-					avmtrans_exit(false, null);
+					_recv_exit(false, null);		// バイトデータの受信に失敗 
 				}
 			});
 		};
@@ -1274,21 +1387,23 @@ var Canarium = function() {
 
 		///// パケットの送受信 /////
 
-		comm.write(send_data, function (result, bytes) {
+		comm.write(send_data, function(result, bytes) {
 			if (result) {
+//				console.log("avm : send transaction true, packet size " + bytes + "bytes.");
+
 				if (avmSendImmediate) {
-					comm.flush( function (result) {
+					comm.flush( function(result) {
 						if (result) {
-							avmtrans_recv();
+							_recv_loop();
 						} else {
-							avmtrans_exit(false, null);
+							_recv_exit(false, null);
 						}
 					});
 				} else {
-					avmtrans_recv();
+					_recv_loop();
 				}
 			} else {
-				avmtrans_exit(false, null);
+				_recv_exit(false, null);
 			}
 		});
 	};
