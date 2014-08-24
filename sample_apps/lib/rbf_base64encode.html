@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>RBFファイルをJavaScriptソースに変換</title>
+
+		<style type="text/css">
+			body {
+				margin: 10px;
+				padding: 0;
+
+				font-family: 'Segoe UI', Arial, Meiryo, 'MS PGothic', sans-serif;
+				font-size: 10pt;
+				color: #202020;
+			}
+			h1 {font-size: 140%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
+			h2 {font-size: 120%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
+			h3 {font-size: 100%; color: #4c4c4c;}
+			img {border: none;}
+		</style>
+
+	</head>
+	<body>
+		<img src="https://lh6.googleusercontent.com/-Nzz0jOoC1W0/U_PdOeCCKlI/AAAAAAAAHDo/buJF906nn1s/w162-h50-no/peridotcraft_banner.png" width=162 height=50 align=right />
+		<h1>RBFファイル変換</h1>
+		<br />
+
+		<div>
+		<p>RBFファイルを選択すると、テキストエリアにJavaScriptソースが生成されます。<br />
+		ファイルは自動的にダウンロードされますが、開始されない場合はテキストエディタにコピーしてjsファイルとして保存してください。</p>
+		<p>BASE64デコードをするコンストラクタも付けているので、使うときはオブジェクトをnewすればRBFバイナリオブジェクトが復元されます。<br />
+		オブジェクトはArrayBufferタイプで返されるので、<a href="https://github.com/osafune/peridot/tree/master/sample_apps" target=_blank>Canarium.js</a>のコンフィグレーションデータとしてそのまま利用できます。</p>
+		<p>ソースコードは<a href="http://tociyuki.flop.jp/archive/base64.html" target=_blank>こちらを参考</a>にしました。</p>
+
+		<input type="file" id="rbffiles" name="file" /><br />
+		<textarea cols="110" rows="35" id="rbfsrc" wrap="off" readonly></textarea>
+
+		<p><small>本ライセンス表記はデコードソース部分のみです。このツールでエンコードしたバイナリファイルの権利は含みません。<br />
+		二次利用または商用を許可していないバイナリファイルを使う場合は、本体の権利範囲に基づきライセンス表記を変更してください。</small></p>
+		<p>&copy;2014 J-7SYSTEM Works</p>
+		</div>
+
+<script>
+
+// ロード時の初期化 
+var txtobj;
+var btnfile;
+
+window.onload = function() {
+	txtobj  = document.getElementById('rbfsrc');
+	btnfile = document.getElementById('rbffiles');
+
+	btnfile.addEventListener('change', handleFileSelect, false);
+}
+
+
+// BASE64のエンコードとデコードソース生成 
+
+var base64list = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+function base64encode(bin) {
+	var bin_arr = new Uint8Array(bin);
+	var str = "";
+	var i = 0, p = -6, a = 0, v = 0, c;
+
+	while ( (i < bin.byteLength) || (p > -6) ) {
+		if ( p < 0 ) {
+			if ( i < bin.byteLength ) {
+				c = bin_arr[i++];
+				v += 8;
+			} else {
+				c = 0;
+			}
+			a = ((a & 255)<< 8) | (c & 255);
+			p += 8;
+		}
+		str += base64list.charAt( ( v > 0 )? (a >> p)& 63 : 64 );
+		p -= 6;
+		v -= 6;
+	}
+
+	return str;
+}
+
+function makesrc(filename, rbfdata) {
+
+	var fname = filename.toLowerCase().replace(/\.|\-+|\s+/g, "_");
+
+	var srctxt = 
+		"// ------------------------------------------------------------------- //\n"+
+		"//  PERIDOT Project - Raw Binary File to base64                        //\n"+
+		"// ------------------------------------------------------------------- //\n"+
+		"//\n"+
+		"// ******************************************************************* //\n"+
+		"//     Copyright (C) 2014, J-7SYSTEM Works.  All rights Reserved.      //\n"+
+		"//                                                                     //\n"+
+		"// * This module is a free sourcecode and there is NO WARRANTY.        //\n"+
+		"// * No restriction on use. You can use, modify and redistribute it    //\n"+
+		"//   for personal, non-profit or commercial products UNDER YOUR        //\n"+
+		"//   RESPONSIBILITY.                                                   //\n"+
+		"// * Redistributions of source code must retain the above copyright    //\n"+
+		"//   notice.                                                           //\n"+
+		"//                                                                     //\n"+
+		"//         PERIDOT Project - https://github.com/osafune/peridot        //\n"+
+		"//                                                                     //\n"+
+		"// ******************************************************************* //\n"+
+		"//\n"+
+		"// Usage:\n"+
+		"//   var rbfdata = new " + fname + "();\n"+
+		"//\n"+
+		"\n"+
+		"var " + fname + " = function() {\n"+
+		"\n"+
+		"\tvar rbfdecode = function(str) {\n"+
+		"\t\tvar rbfsize = " + rbfdata.byteLength.toString() + ";\n"+
+		"\t\tvar rbf = new ArrayBuffer(rbfsize);\n"+
+		"\t\tvar rbf_arr = new Uint8Array(rbf);\n"+
+		"\t\tvar base64list = \'" + base64list + "\';\n"+
+		"\t\tvar p = -8, a = 0, c, d, n = 0;\n"+
+		"\n"+
+		"\t\tfor(var i=0 ; i<str.length ; i++) {\n"+
+		"\t\t\tif ( ( c = base64list.indexOf(str.charAt(i)) ) < 0 ) continue;\n"+
+		"\n"+
+		"\t\t\ta = (a << 6) | (c & 63);\n"+
+		"\t\t\tif ( ( p += 6 ) >= 0 ) {\n"+
+		"\t\t\t\td = (a >> p) & 0xff;\n"+
+		"\t\t\t\tif ( c != 64 ) rbf_arr[n++] = d;\n"+
+		"\t\t\t\ta &= 63;\n"+
+		"\t\t\t\tp -= 8;\n"+
+		"\t\t\t}\n"+
+		"\t\t}\n"+
+		"\n"+
+		"\t\tconsole.log(\'rbf : \' + n + \'bytes generated.\');\n"+
+		"\n"+
+		"\t\treturn rbf;\n"+
+		"\t};\n"+
+		"\n"+
+		"\tvar base64str = \n";
+
+	var strrbf = base64encode(rbfdata);
+	var linecharnum = 80;
+	var linenum = 0;
+
+	while(1) {
+		var line = strrbf.substr(linenum * linecharnum, linecharnum);
+		srctxt += "\t\t\'" + line + "\'";
+
+		if (line.length < 80) {
+			srctxt += ";\n";
+			break;
+		} else {
+			srctxt += "+\n";
+		}
+		linenum++;
+	}
+
+	srctxt +=
+		"\n"+
+		"\treturn rbfdecode(base64str);\n"+
+		"}\n";
+
+
+	setTimeout(function() { textsave(fname, srctxt); }, 1000);	// 1秒後にダウンロード開始 
+
+	return srctxt;
+}
+
+
+// RBFファイルの読み込みと変換 
+
+function handleFileSelect(evt) {
+	var rbf = evt.target.files[0];
+
+	if (rbf == null) {
+		rbfdata = null;
+		return;
+	}
+
+	var rbfreader = new FileReader();
+	rbfreader.onload = function(e) {
+		console.log("config : rbffile = " + rbf.name + ", " + e.loaded + "bytes loaded.");
+		txtobj.value = makesrc(rbf.name, e.target.result);
+	}
+
+	rbfreader.readAsArrayBuffer(rbf);		// ファイルの読み込みを開始 
+}
+
+
+// 生成されたデータのダウンロード 
+
+function textsave(fname, text) {
+	var blob = new Blob([ text ], { "type" : "application/x-msdownload" });
+
+    window.URL = window.URL || window.webkitURL;
+	var link = document.createElement('a');
+	link.href = window.URL.createObjectURL(blob);
+	link.download = fname + ".js";
+
+//	document.body.appendChild(link) // for Firefox 
+	link.click();
+//	document.body.removeChild(link) // for Firefox 
+}
+
+</script>
+
+	</body>
+</html>
+

@@ -2,8 +2,8 @@
 //  PERIDOT - RBF data writer                                          //
 // ------------------------------------------------------------------- //
 //
-//  ver 0.1
-//		2014/08/10	s.osafune@gmail.com
+//  ver 0.2
+//		2014/08/20	s.osafune@gmail.com
 //
 // ******************************************************************* //
 //     Copyright (C) 2014, J-7SYSTEM Works.  All rights Reserved.      //
@@ -83,7 +83,7 @@ function connectPort() {
 		confmes.innerHTML = "通信ポートを開いています...";
 
 		testps.open(selectedPort, function (result) { if (result) {
-			var rbf = new peridot_rbfwriter_rbf();
+			var rbf = new rbfwriter_rbf();
 			confmes.innerHTML = "PERIDOTボードをコンフィグレーションしています...";
 
 			testps.config(0, rbf, function (result) { if (result) {

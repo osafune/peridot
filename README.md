@@ -63,6 +63,12 @@ Board block diagram and schematic
 [Board schematic](https://github.com/osafune/peridot/blob/master/pcb/peridot_pcb_ver1.0.pdf)
 
 
+Tools
+-----
+PERIDOT用コンフィグレーションROM書き込みツール(Chromeパッケージアプリ)  
+[RBF-WRITER](https://github.com/osafune/peridot/tree/master/tools)
+
+
 Library
 -------
 Chromeパッケージアプリ用のJavascriptライブラリ  
