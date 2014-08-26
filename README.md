@@ -66,7 +66,8 @@ Board block diagram and schematic
 Tools
 -----
 PERIDOT用コンフィグレーションROM書き込みツール(Chromeパッケージアプリ)  
-[RBF-WRITER](https://github.com/osafune/peridot/tree/master/tools)
+[RBF-WRITER (Chromeウェブストア)](https://chrome.google.com/webstore/detail/peridot-rbf-writer/lchhhfhfikpnikljdaefcllbfblabibg)  
+[Source](https://github.com/osafune/peridot/tree/master/tools)
 
 
 Library

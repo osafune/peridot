@@ -11,12 +11,20 @@ Google Chrome 35以上で動作します。
 使い方
 ======
 
-Chrome Package Appsの登録
--------------------------
+Chromeウェブストアからのインストールの場合
+------------------------------------------
+1. [Chromeウェブストア](https://chrome.google.com/webstore/detail/peridot-rbf-writer/lchhhfhfikpnikljdaefcllbfblabibg)へアクセスします。
+2. 右上のインストールボタンをクリック。
+3. シリアルポートの使用の確認ウィンドウが出現するので、承認をクリックします。  
+4. アプリウィンドウにRBF-WRITERのアイコンが追加されているので、クリックして起動。
+
+Chromeアプリを手動で登録する場合
+--------------------------------
 1. Chromeの設定→拡張機能でデベロッパーモードにチェックを入れます。
 2. peridot_rbfwriterフォルダのperidot_rbfwriter_v0.2.crxをChromeにドラッグ＆ドロップします。  
 3. シリアルポートの使用の確認ウィンドウが出現するので、承認をクリックします。  
 4. アプリウィンドウにRBF-WRITERのアイコンが追加されているので、クリックして起動。
+
 
 RBF-WRITERの使い方
 ------------------
