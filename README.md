@@ -60,7 +60,7 @@ Board block diagram and schematic
 (\*1) ASDIはスタンドアロンモードでのみ有効になります。  
 (\*2) スタンドアロンモードではリコンフィグキーになります。  
 
-[Board schematic](https://github.com/osafune/peridot/blob/master/pcb/peridot_pcb_ver1.0.pdf)
+[Board schematic](https://github.com/osafune/peridot/blob/master/pcb/v1.1/peridot_pcb_schem_v1.1.pdf)
 
 
 Tools
