@@ -1,6 +1,8 @@
 'PERIDOT' - Simple & Compact FPGA board
 =======================================
 
+[PERIDOT Web](http://osafune.github.io/peridot.html)
+
 Overview
 --------
 ![Welcome to PERIDOT](https://lh3.googleusercontent.com/-yCNcTx9NGoA/U-LL8LLfGTI/AAAAAAAAHC4/eYjyNouEk0w/w600-h316-no/DSC02498_3.jpg)
