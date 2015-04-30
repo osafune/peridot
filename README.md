@@ -8,8 +8,9 @@ Overview
 ![Welcome to PERIDOT](https://lh3.googleusercontent.com/-yCNcTx9NGoA/U-LL8LLfGTI/AAAAAAAAHC4/eYjyNouEk0w/w600-h316-no/DSC02498_3.jpg)
 
 PERIDOT(ペリドット)プロジェクトとは、シンプル＆コンパクトをコンセプトに開発中の新しいFPGAボードと、その統合開発環境です。  
-開発環境はWebベースのクラウドコンパイラとChromeアプリケーションで構築されており、OSを問わない新しい開発スタイルを提供します（現在開発作業中）。  
-また、PERIDOTボードには標準で通信ブロックも組み込まれています。オープン・ソースで公開されているライブラリを利用して、ChromeアプリケーションやAndroidアプリケーションから簡単にアクセスすることができます。  
+FPGAの特性を生かしたハードウェアリコンフィギャラブルなアプリケーションを簡単に作成、配布することができます。  
+開発環境はChromeアプリで構築されており、OSを問わない新しい開発スタイルを提供します（現在開発作業中）。 
+また、PERIDOTボードには標準で通信ブロックも組み込まれています。オープン・ソースで公開されているライブラリを利用して、各OSのネイティブアプリケーションからも簡単にアクセスすることができます。  
 
 
 Features
@@ -80,6 +81,6 @@ Chromeパッケージアプリ用のJavascriptライブラリ
 
 License
 -------
-PERIDOT Hardware is released under the [Creative Commons,CC BY 2.1 JP](http://creativecommons.org/licenses/by/2.1/jp/legalcode)  
-![CC BY](http://creativecommons.jp/wp/wp-content/uploads/2009/10/by.png)  
+PERIDOT Hardware is released under the [Creative Commons,CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)  
+![CC BY](https://licensebuttons.net/l/by/4.0/88x31.png)  
 
