@@ -12,11 +12,14 @@ FPGAの特性を生かしたハードウェアリコンフィギャラブルな�
 開発環境はChromeアプリで構築されており、OSを問わない新しい開発スタイルを提供します（現在開発作業中）。 
 また、PERIDOTボードには標準で通信ブロックも組み込まれています。オープン・ソースで公開されているライブラリを利用して、各OSのネイティブアプリケーションからも簡単にアクセスすることができます。  
 
+PERIDOTボードは[PERIDOT CRAFTオンラインショップ](http://peridotcraft.buyshop.jp/items/2126611)で購入できます。
+
 
 Features
 --------
 ![Use to PERIDOT](https://lh4.googleusercontent.com/-w47r5-Wg1KY/U-LL8LEMTKI/AAAAAAAAHC8/dp4UBKBEsj4/w600-h316-no/DSC02730_2.jpg)
 
+* スクリプト実行環境「[Rubic](https://github.com/kimushu/rubic/)」に対応
 * Android/Chromeからのコンフィグレーション
 * USBインターフェース経由でのFPGA内部へのアクセス
 * ALTERA CycloneIV E (EP4CE6E22C8N)搭載
@@ -25,7 +28,7 @@ Features
 * スタンドアロン動作をサポート
 * USB給電のみで動作OK (過電流保護回路搭載)
 * Arduinoシールドの流用可能(動作条件あり)
-* オープンソース (クリエイティブコモンズ・CC BY 2.1)
+* オープンソース (クリエイティブコモンズ・CC BY 4.0)
 
 
 Pinout diagram
