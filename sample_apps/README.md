@@ -2,6 +2,8 @@ Canarium.js
 ==============
 Google Chrome Package Apps用のJavaScriptライブラリです。  
 
+v0.9.6以降は[こちら](https://github.com/kimushu/canarium/tree/master/js)でメンテナンスを行います。  
+
 
 利用環境
 ========

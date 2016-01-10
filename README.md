@@ -61,25 +61,25 @@ FPGAのI/Oピンが配置されています。3.3Vを超える電圧を加えな
 
 Board block diagram and schematic
 ---------------------------------
-![PERIDOT Block diagram](https://lh3.googleusercontent.com/-XpoVXE45BRU/UnhcutSOYOI/AAAAAAAAFss/-6QsIh6Is40/w700-h327-no/peridot_block.png)
+![PERIDOT Block diagram](https://lh3.googleusercontent.com/-XpoVXE45BRU/UnhcutSOYOI/AAAAAAAAFss/-6QsIh6Is40/w700-h327-no/peridot_block.png)  
 
 (\*1) ASDIはスタンドアロンモードでのみ有効になります。  
 (\*2) スタンドアロンモードではリコンフィグキーになります。  
 
-[Board schematic](https://github.com/osafune/peridot/blob/master/pcb/v1.1/peridot_pcb_schem_v1.1.pdf)
+[Board schematic](https://github.com/osafune/peridot/blob/master/pcb/v1.1/peridot_pcb_schem_v1.1.pdf)  
 
 
 Tools
 -----
 PERIDOT用コンフィグレーションROM書き込みツール(Chromeパッケージアプリ)  
 [RBF-WRITER (Chromeウェブストア)](https://chrome.google.com/webstore/detail/peridot-rbf-writer/lchhhfhfikpnikljdaefcllbfblabibg)  
-[Source](https://github.com/osafune/peridot/tree/master/tools)
 
 
 Library
 -------
 Chromeパッケージアプリ用のJavascriptライブラリ  
-[Canarium.js](https://github.com/osafune/peridot/tree/master/sample_apps)
+[Canarium.js](https://github.com/kimushu/canarium/tree/master/js)  
+[Canariumドキュメント](http://kimushu.github.io/canarium/#)  
 
 
 License
