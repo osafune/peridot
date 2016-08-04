@@ -100,4 +100,4 @@ v0.9.5
 ライセンス
 ==========
 
-[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+[MIT License](https://opensource.org/licenses/mit-license.php)

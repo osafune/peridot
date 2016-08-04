@@ -87,3 +87,4 @@ License
 PERIDOT Hardware is released under the [Creative Commons,CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)  
 ![CC BY](https://licensebuttons.net/l/by/4.0/88x31.png)  
 
+PERIDOT Software is released under the [MIT License](https://opensource.org/licenses/mit-license.php)
