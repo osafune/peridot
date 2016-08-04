@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>RPDファイルのビット順を入れ替える</title>
+
+		<style type="text/css">
+			body {
+				margin: 10px;
+				padding: 0;
+
+				font-family: 'MotoyaG04Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+				font-size: 10pt;
+				color: #202020;
+			}
+			h1 {font-size: 140%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
+			h2 {font-size: 120%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
+			h3 {font-size: 100%; color: #4c4c4c;}
+			img {border: none;}
+		</style>
+
+	</head>
+	<body>
+		<div class="toolheader">
+			<img src="https://lh6.googleusercontent.com/-Nzz0jOoC1W0/U_PdOeCCKlI/AAAAAAAAHDo/buJF906nn1s/w162-h50-no/peridotcraft_banner.png" width=162 height=50 align=right />
+			<h1>RPDファイル変換</h1>
+			<br style="clear:both;" />
+		</div>
+
+		<div>
+			<p>RPDファイルを選択すると、ビット順を入れ替えたファイルを生成します。<br />
+			ファイルの選択をする前に、入れ替える単位を8bitか32bitで選択してください。ファイルは自動的にダウンロードされます。</p>
+
+			<div style="width:fit-content; padding:10px; border: 1px solid;">
+				<p>入れ替え単位：
+				<input type="radio" name="symbolunit" value="8bit">8bit
+				<input type="radio" name="symbolunit" value="32bit" checked="checked">32bit
+				<p /><p>
+				<input type="file" id="rpdfiles" name="file" /><br />
+				<span id="status"></span><p />
+			</div>
+		</div>
+
+		<div class="toolfooter">
+			<p><small>本ライセンス表記はHTMLおよびソース部分のみです。このツールでエンコードしたバイナリファイルの権利は含みません。<br />
+			二次利用または商用を許可していないバイナリファイルを使う場合は、本体の権利範囲に基づきライセンス表記を変更してください。</small></p>
+			<p>&copy;2016 J-7SYSTEM WORKS LIMITED.</p>
+		</div>
+
+<script>
+
+// ロード時の初期化 
+var radiounit;
+var btnfile;
+
+window.onload = function() {
+	radiounit = document.getElementById('unit');
+	btnfile = document.getElementById('rpdfiles');
+
+	btnfile.addEventListener('change', handleFileSelect, false);
+}
+
+
+// RPDデータのビット順反転 
+
+function bitreverse(filename, rpddata) {
+
+	// 反転モード設定 
+
+	var radioList = document.getElementsByName('symbolunit');
+	var rvs8  = radioList[0].checked;
+	var rvs32 = radioList[1].checked;
+
+
+	// ビット順反転 
+
+	var _rvs_byte = function(byte) {
+		var res = 0;
+		res |= ((byte & 0x01) != 0)? 0x80 : 0;
+		res |= ((byte & 0x02) != 0)? 0x40 : 0;
+		res |= ((byte & 0x04) != 0)? 0x20 : 0;
+		res |= ((byte & 0x08) != 0)? 0x10 : 0;
+		res |= ((byte & 0x10) != 0)? 0x08 : 0;
+		res |= ((byte & 0x20) != 0)? 0x04 : 0;
+		res |= ((byte & 0x40) != 0)? 0x02 : 0;
+		res |= ((byte & 0x80) != 0)? 0x01 : 0;
+		return res;
+	}
+
+	var size = rpddata.byteLength;
+	if (rvs32) {
+		size = ((size + 3) >> 2) << 2;	// 32bitワードにアライン 
+	}
+	var rvsdata = new ArrayBuffer(size);
+	var rvsdata_arr = new Uint8Array(rvsdata);
+	var rpddata_arr = new Uint8Array(rpddata);
+
+	if (rvs32) {	// 32bit単位での入れ替え 
+		var i;
+		for(i=0 ; i<size-4 ; i+=4) {
+			rvsdata_arr[i+3] = _rvs_byte(rpddata_arr[i+0]);
+			rvsdata_arr[i+2] = _rvs_byte(rpddata_arr[i+1]);
+			rvsdata_arr[i+1] = _rvs_byte(rpddata_arr[i+2]);
+			rvsdata_arr[i+0] = _rvs_byte(rpddata_arr[i+3]);
+		}
+		rvsdata_arr[i+3] = _rvs_byte(rpddata_arr[i+0]);
+		rvsdata_arr[i+2] = (i+1 >= rpddata.byteLength)? 0xff : _rvs_byte(rpddata_arr[i+1]);
+		rvsdata_arr[i+1] = (i+2 >= rpddata.byteLength)? 0xff : _rvs_byte(rpddata_arr[i+2]);
+		rvsdata_arr[i+0] = (i+3 >= rpddata.byteLength)? 0xff : _rvs_byte(rpddata_arr[i+3]);
+
+	} else {		// 8bit単位での入れ替え 
+		for(var i=0 ; i<size ; i++) {
+			rvsdata_arr[i] = _rvs_byte(rpddata_arr[i]);
+		}
+	}
+
+
+	// 保存用ファイルネーム作成 
+
+	var fstrList = filename.split(".");
+	var fname = fstrList[0];
+	for(var i=1 ; i<fstrList.length-1 ; i++) {
+		fname = fname + "." + fstrList[i];
+	}
+	fname = fname + "_rvs.rpd";
+
+
+	// ファイル保存リクエスト 
+
+	document.getElementById('status').innerHTML = "ファイルをダウンロードします...";
+	setTimeout(function() { rpdsave(fname, rvsdata); }, 1000);	// 1秒後にダウンロード開始 
+}
+
+
+// RPDファイルの読み込みと変換 
+
+function handleFileSelect(evt) {
+	var rpd = evt.target.files[0];
+
+	if (rpd == null) {
+		return;
+	}
+
+	var rpdreader = new FileReader();
+	rpdreader.onload = function(e) {
+		document.getElementById('status').innerHTML = "処理中です... <progress></progress>";
+		setTimeout(function() { bitreverse(rpd.name, e.target.result); }, 1000);	// 1秒後に処理開始 
+	}
+
+	rpdreader.readAsArrayBuffer(rpd);		// ファイルの読み込みを開始 
+}
+
+
+// 生成されたデータのダウンロード 
+
+function rpdsave(fname, genrpd) {
+	var blob = new Blob([ genrpd ], { "type" : "application/x-msdownload" });
+
+    window.URL = window.URL || window.webkitURL;
+	var link = document.createElement('a');
+	link.href = window.URL.createObjectURL(blob);
+	link.download = fname;
+
+	document.body.appendChild(link) // for Firefox 
+	link.click();
+	document.body.removeChild(link) // for Firefox 
+
+	document.getElementById('status').innerHTML = "";
+}
+
+</script>
+
+	</body>
+</html>
+

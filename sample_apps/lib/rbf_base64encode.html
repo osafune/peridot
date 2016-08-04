@@ -9,7 +9,7 @@
 				margin: 10px;
 				padding: 0;
 
-				font-family: 'Segoe UI', Arial, Meiryo, 'MS PGothic', sans-serif;
+				font-family: 'MotoyaG04Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
 				font-size: 10pt;
 				color: #202020;
 			}
@@ -21,23 +21,27 @@
 
 	</head>
 	<body>
-		<img src="https://lh6.googleusercontent.com/-Nzz0jOoC1W0/U_PdOeCCKlI/AAAAAAAAHDo/buJF906nn1s/w162-h50-no/peridotcraft_banner.png" width=162 height=50 align=right />
-		<h1>RBFファイル変換</h1>
-		<br />
+		<div class="toolheader">
+			<img src="https://lh6.googleusercontent.com/-Nzz0jOoC1W0/U_PdOeCCKlI/AAAAAAAAHDo/buJF906nn1s/w162-h50-no/peridotcraft_banner.png" width=162 height=50 align=right />
+			<h1>RBFファイル変換</h1>
+			<br style="clear:both;" />
+		</div>
 
 		<div>
-		<p>RBFファイルを選択すると、テキストエリアにJavaScriptソースが生成されます。<br />
-		ファイルは自動的にダウンロードされますが、開始されない場合はテキストエディタにコピーしてjsファイルとして保存してください。</p>
-		<p>BASE64デコードをするコンストラクタも付けているので、使うときはオブジェクトをnewすればRBFバイナリオブジェクトが復元されます。<br />
-		オブジェクトはArrayBufferタイプで返されるので、<a href="https://github.com/osafune/peridot/tree/master/sample_apps" target=_blank>Canarium.js</a>のコンフィグレーションデータとしてそのまま利用できます。</p>
-		<p>ソースコードは<a href="http://tociyuki.flop.jp/archive/base64.html" target=_blank>こちらを参考</a>にしました。</p>
+			<p>RBFファイルを選択すると、テキストエリアにJavaScriptソースが生成されます。<br />
+			ファイルは自動的にダウンロードされますが、開始されない場合はテキストエディタにコピーしてjsファイルとして保存してください。</p>
+			<p>BASE64デコードをするコンストラクタも付けているので、使うときはオブジェクトをnewすればRBFバイナリオブジェクトが復元されます。<br />
+			オブジェクトはArrayBufferタイプで返されるので、<a href="https://github.com/osafune/peridot/tree/master/sample_apps" target=_blank>Canarium.js</a>のコンフィグレーションデータとしてそのまま利用できます。</p>
+			<p>ソースコードは<a href="http://tociyuki.flop.jp/archive/base64.html" target=_blank>こちらを参考</a>にしました。</p>
 
-		<input type="file" id="rbffiles" name="file" /><br />
-		<textarea cols="110" rows="35" id="rbfsrc" wrap="off" readonly></textarea>
+			<input type="file" id="rbffiles" name="file" /><br />
+			<textarea cols="110" rows="35" id="rbfsrc" wrap="off" readonly></textarea>
+		</div>
 
-		<p><small>本ライセンス表記はデコードソース部分のみです。このツールでエンコードしたバイナリファイルの権利は含みません。<br />
-		二次利用または商用を許可していないバイナリファイルを使う場合は、本体の権利範囲に基づきライセンス表記を変更してください。</small></p>
-		<p>&copy;2014 J-7SYSTEM Works</p>
+		<div class="toolfooter">
+			<p><small>本ライセンス表記はデコードソース部分のみです。このツールでエンコードしたバイナリファイルの権利は含みません。<br />
+			二次利用または商用を許可していないバイナリファイルを使う場合は、本体の権利範囲に基づきライセンス表記を変更してください。</small></p>
+			<p>&copy;2016 J-7SYSTEM WORKS LIMITED.</p>
 		</div>
 
 <script>
@@ -92,7 +96,7 @@ function makesrc(filename, rbfdata) {
 		"// ------------------------------------------------------------------- //\n"+
 		"//\n"+
 		"// ******************************************************************* //\n"+
-		"//     Copyright (C) 2014, J-7SYSTEM Works.  All rights Reserved.      //\n"+
+		"//     Copyright (C) 2016, J-7SYSTEM Works.  All rights Reserved.      //\n"+
 		"//                                                                     //\n"+
 		"// * This module is a free sourcecode and there is NO WARRANTY.        //\n"+
 		"// * No restriction on use. You can use, modify and redistribute it    //\n"+
@@ -196,9 +200,9 @@ function textsave(fname, text) {
 	link.href = window.URL.createObjectURL(blob);
 	link.download = fname + ".js";
 
-//	document.body.appendChild(link) // for Firefox 
+	document.body.appendChild(link) // for Firefox 
 	link.click();
-//	document.body.removeChild(link) // for Firefox 
+	document.body.removeChild(link) // for Firefox 
 }
 
 </script>

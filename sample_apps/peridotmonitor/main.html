@@ -6,10 +6,10 @@
 
 		<style type="text/css">
 			body {
-				margin: 8px;
+				margin: 0 8px 8px 8px;
 				padding: 0;
 
-				font-family: 'Segoe UI', Arial, Meiryo, 'MS PGothic', sans-serif;
+				font-family: 'MotoyaG04Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
 				font-size: 10pt;
 				color: #202020;
 			}
@@ -17,50 +17,101 @@
 			h2 {font-size: 120%; color: #006b6b; text-shadow: 3px 3px 5px #d0d0d0;}
 			h3 {font-size: 100%; color: #4c4c4c;}
 			img {border: none;}
+
+			/* ツールタイトル */
+			.tool_header {
+				height: 66px;
+			}
+
+			/* ファイル選択ボタンをドラッグ＆ドロップエリアに偽装 */ 
+			.filebutton {
+				position: relative;
+				overflow: hidden;
+				width: 434px; height: 264px;
+				border: 1px #808080 solid;
+			}
+			.filebutton textarea {
+				resize: none;
+				width: 100%; height: 100%;
+				font-family: monospace;
+				font-size: 13px;
+				line-height: 1.1;
+				border: none;
+			}
+			.filebutton input[type=file] {
+				position: absolute;
+				top: 0; left: 0;
+				width: 100%; height: 100%;
+				opacity: 0;
+			}
+			.filebutton #fileprogress {
+				position: absolute;
+				top: -45px; left: 4px;
+				padding: 10px;
+				-webkit-border-bottom-right-radius: 6px;
+				-webkit-border-bottom-left-radius: 6px;
+				border: 1px #707070 solid;
+				background-color: #f0f0f0;
+				opacity: 0.95;
+				transition-property: top;
+				transition-duration: 0.3s;
+				transition-timing-function: ease-out;
+			}
 		</style>
 
+<!--
 		<script type="text/javascript" src="canarium.js"></script>
+-->
+		<script type="text/javascript" src="canarium.min.js"></script>
 		<script type="text/javascript" src="main.js"></script>
 	</head>
 	<body>
-		<img src="img/peridotcraft_banner.png" border=0 align=right />
-		<h1>PERIDOT Monitor</h2>
-		<br />
+		<div class="tool_header">
+			<img src="img/peridotcraft_banner.png" align=right id="banner" />
+			<h1>PERIDOT Monitor</h1>
+			<small><a href="https://github.com/osafune/peridot/tree/master/sample_apps" target=_blank>Canarium.js</a> version <span id="lib_ver">0.0.0</span></small>
+		</div>
 
-		<h3>Serial Port</h3>
 		<div>
-			<img id="waitingicon" src="img/dummy_1x1.png" border=0 width=24 height=24 align=top />
+			<h3>Serial Port</h3>
+			<img id="waitingicon" src="img/dummy_1x1.png" width=24 height=24 align=top />
 			<select id="ports" style="width: 120px"></select>
 			<input type="button" id="connect" value="Connect" />
 			<input type="button" id="scanport" value="ReScan Port" /><br />
+
+			<img src="img/dummy_1x1.png" width=24 height=1 align=top />
+			<span id="boardid">Board Serial : </span><br />
 		</div>
 
-		<h3>Configuration</h3>
-		<div>
-			<img id="configicon" src="img/dummy_1x1.png" border=0 width=24 height=24 align=top />
+		<div disabled>
+			<h3>Configuration</h3>
+			<img id="configicon" src="img/dummy_1x1.png" width=24 height=24 align=top />
 			<input type="button" id="config" value="Configuration" disabled />
 			<input type="file" id="rbffiles" name="file" /><br />
 
-			<img src="img/dummy_1x1.png" border=0 width=24 height=1 align=top />
+			<img src="img/dummy_1x1.png" width=24 height=1 align=top />
 			<span id="sysid">SYSID : </span><br />
 		</div>
 
-		<h3>I/O Access</h3>
 		<div>
+			<h3>I/O Access</h3>
 			ADDRESS : 0x<input type="text" id="avm_address" size=8 maxlength=8 value="10000100" />
 			, DATA : 0x<input type="text" id="avm_data" size=8 maxlength=8 value="1" /><br />
 			<input type="button" id="avm_iord" value="I/O Read" />
 			<input type="button" id="avm_iowr" value="I/O Write" />
 		</div>
 
-		<h3>Memory Dump</h3>
 		<div>
+			<h3>Memory Dump</h3>
 			<div>
 				ADDRESS : 0x<input type="text" id="mem_address" size=8 maxlength=8 value="00000000" />
 				<input type="button" id="avm_read" value="Memory Dump" />
 				<input type="button" id="avm_write" value="Test Write" />
-			</div><div>
-				<textarea cols="63" rows="19" id="mem_dumpdata" readonly></textarea>
+			</div>
+			<div class="filebutton" id="droparea">
+				<textarea id="mem_dumpdata" readonly></textarea>
+				<input type="file" id="dropfile" />
+				<div id="fileprogress">ファイル転送中... <progress id="filesend"></progress></div>
 			</div>
 		</div>
 
